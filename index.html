@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Profik — Onboarding v2</title>
+<title>Profik — Easy. Trusted. Local.</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
@@ -12,13 +12,13 @@
    TOKENS — 8pt grid, semantic color
 ═══════════════════════════════════════ */
 :root {
-  /* Brand */
-  --o500: #FF5500;
-  --o400: #FF7033;
-  --o300: #FF9966;
-  --o100: #FFF2EC;
-  --o050: #FFF8F5;
-  --o-glow: rgba(255,85,0,.18);
+  /* Brand — from Profik brand foundation (#ED7D31 official) */
+  --o500: #ED7D31;
+  --o400: #F2984F;
+  --o300: #F7B980;
+  --o100: #FEF4EC;
+  --o050: #FFF9F5;
+  --o-glow: rgba(237,125,49,.18);
 
   /* Pro */
   --p900: #07071A;
@@ -638,11 +638,12 @@ body {
           </div>
         </div>
         <div class="splash-name">Profik</div>
-        <div class="splash-tagline">Any task. Any help.<br/>In your city. Today.</div>
+        <div class="splash-tagline" style="font-size:18px;font-weight:600;letter-spacing:.02em;">Easy. Trusted. Local.</div>
+        <div class="splash-tagline" style="margin-top:6px;font-size:14px;">Your button for everyday solutions.</div>
       </div>
       <div class="splash-foot">
-        <button class="btn btn-white-ghost" style="background:rgba(255,255,255,1);color:var(--o500);font-weight:800;" onclick="goTo('c2')">Get Started — it's free</button>
-        <button class="btn btn-text" style="color:rgba(255,255,255,.7);font-size:14px;" onclick="goTo('c5')">I already have an account</button>
+        <button class="btn btn-white-ghost" style="background:rgba(255,255,255,1);color:var(--o500);font-weight:800;" onclick="goTo('c2')">Get started — it's free</button>
+        <button class="btn btn-text" style="color:rgba(255,255,255,.65);font-size:14px;" onclick="goTo('c5')">I already have an account</button>
       </div>
     </div>
   </div>
@@ -666,11 +667,30 @@ body {
             <path d="M12 10V8C12 6.3 13.3 5 15 5H25C26.7 5 28 6.3 28 8V10" stroke="white" stroke-width="2.5" stroke-linecap="round" fill="none"/>
           </svg>
         </div>
-        <div class="sh a2" style="font-size:28px;">Need something done?<br/><span class="hl">Post it in 30 seconds.</span></div>
-        <div class="sub a3" style="margin-top:8px;">From cleaning and repairs to tutoring and pet care — local professionals are nearby, ready to help.</div>
+        <div class="sh a2" style="font-size:28px;">Solve everyday problems —<br/><span class="hl">from cleaning to tutoring —</span><br/>in just a few clicks.</div>
+        <div class="sub a3" style="margin-top:8px;">Everyday problems solved, for anyone, anywhere. Local professionals are ready right now.</div>
       </div>
 
-      <div class="a3" style="margin-bottom:var(--s2);">
+      <!-- Brand Pillars: EASY · TRUSTED · LOCAL -->
+      <div class="a3" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:var(--s2);">
+        <div style="background:var(--o100);border:1.5px solid rgba(237,125,49,.15);border-radius:16px;padding:14px 10px;text-align:center;">
+          <div style="font-size:20px;margin-bottom:6px;">⚡</div>
+          <div style="font-family:var(--fh);font-weight:800;font-size:13px;color:var(--o500);letter-spacing:.04em;margin-bottom:3px;">EASY</div>
+          <div style="font-size:11px;color:var(--ink-muted);line-height:1.4;">Two clicks,<br/>one solution</div>
+        </div>
+        <div style="background:#EDFFF5;border:1.5px solid #A8F0CD;border-radius:16px;padding:14px 10px;text-align:center;">
+          <div style="font-size:20px;margin-bottom:6px;">🛡️</div>
+          <div style="font-family:var(--fh);font-weight:800;font-size:13px;color:#065F35;letter-spacing:.04em;margin-bottom:3px;">TRUSTED</div>
+          <div style="font-size:11px;color:var(--ink-muted);line-height:1.4;">Real feedback,<br/>verified pros</div>
+        </div>
+        <div style="background:#EFF6FF;border:1.5px solid #BFDBFE;border-radius:16px;padding:14px 10px;text-align:center;">
+          <div style="font-size:20px;margin-bottom:6px;">📍</div>
+          <div style="font-family:var(--fh);font-weight:800;font-size:13px;color:#1D4ED8;letter-spacing:.04em;margin-bottom:3px;">LOCAL</div>
+          <div style="font-size:11px;color:var(--ink-muted);line-height:1.4;">People from<br/>your area</div>
+        </div>
+      </div>
+
+      <div class="a4" style="margin-bottom:var(--s2);">
         <div class="badge badge-free" style="margin-bottom:12px;">
           <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1L7.5 4.5H11L8.25 6.75L9.5 11L6 8.75L2.5 11L3.75 6.75L1 4.5H4.5L6 1Z" fill="#065F35"/></svg>
           Forever free for you
@@ -819,7 +839,7 @@ body {
       <!-- Social proof proximity: right above the CTA (research requirement) -->
       <div class="trust-line">
         <svg class="star" width="13" height="13" viewBox="0 0 14 14"><path d="M7 1L8.5 5H13L9.5 7.5L11 12L7 9.5L3 12L4.5 7.5L1 5H5.5L7 1Z" fill="#F59E0B"/></svg>
-        Join 2,000,000+ who solved their task with Profik
+        Everyday problems solved — for anyone, anywhere
       </div>
       <button class="btn btn-primary" onclick="goTo('c5')" style="font-size:17px;">Create free account →</button>
     </div>
@@ -886,7 +906,7 @@ body {
     <div class="scr-body" style="padding-bottom:96px;">
       <div class="a1" style="margin-bottom:var(--s3);">
         <div class="sh">What do you<br/><span class="hl">need today?</span></div>
-        <div class="sub">Thousands of pros are already nearby.</div>
+        <div class="sub">Local. Trusted. Two clicks, one solution.</div>
       </div>
 
       <div class="a2" style="margin-bottom:var(--s2);">
@@ -959,7 +979,8 @@ body {
           PROFIK PRO
         </div>
         <div class="splash-name">Profik Pro</div>
-        <div class="splash-tagline">Your professional business.<br/>Clients on demand.</div>
+        <div class="splash-tagline" style="font-size:18px;font-weight:600;letter-spacing:.02em;">Easy. Trusted. Local.</div>
+        <div class="splash-tagline" style="margin-top:6px;font-size:14px;">Your button for new clients — every day.</div>
       </div>
       <div class="splash-foot">
         <button class="btn" style="background:var(--o500);color:white;font-weight:800;box-shadow:0 4px 20px rgba(255,85,0,.4);" onclick="goTo('p2')">Start Getting Clients</button>
