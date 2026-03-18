@@ -1,0 +1,1436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Profik — Onboarding v2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+/* ═══════════════════════════════════════
+   TOKENS — 8pt grid, semantic color
+═══════════════════════════════════════ */
+:root {
+  /* Brand */
+  --o500: #FF5500;
+  --o400: #FF7033;
+  --o300: #FF9966;
+  --o100: #FFF2EC;
+  --o050: #FFF8F5;
+  --o-glow: rgba(255,85,0,.18);
+
+  /* Pro */
+  --p900: #07071A;
+  --p800: #0F0F2E;
+  --p700: #1A1A42;
+  --p-accent: #7C3AED;
+  --p-pale: #F3F0FF;
+  --coin: #F59E0B;
+  --coin-bg: #FFFBEB;
+  --coin-border: #FDE68A;
+
+  /* Neutral */
+  --ink: #0A0A0A;
+  --ink-mid: #3D3D3D;
+  --ink-muted: #8A8A8A;
+  --border: #E8E8E8;
+  --surface: #F6F6F6;
+  --white: #FFFFFF;
+  --success: #00BF6F;
+  --success-bg: #EDFFF5;
+  --success-border: #A8F0CD;
+
+  /* Spacing (8pt) */
+  --s1: 8px;  --s2: 16px;  --s3: 24px;
+  --s4: 32px; --s5: 40px;  --s6: 48px;
+
+  /* Typography */
+  --fh: 'Outfit', sans-serif;
+  --fb: 'Inter', sans-serif;
+
+  /* Motion */
+  --spring: cubic-bezier(.34,1.35,.64,1);
+  --ease-out: cubic-bezier(.22,1,.36,1);
+  --dur-fast: 200ms;
+  --dur-mid: 320ms;
+  --dur-slow: 480ms;
+
+  /* Radius */
+  --r-sm: 12px; --r-md: 18px; --r-lg: 24px; --r-xl: 32px;
+}
+
+/* ═══════════════════════════════════════
+   RESET & BASE
+═══════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html { -webkit-font-smoothing: antialiased; }
+body {
+  font-family: var(--fb);
+  background: #EDEDED;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 28px 16px 56px;
+  overflow-x: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+
+/* ═══════════════════════════════════════
+   STAGE CHROME
+═══════════════════════════════════════ */
+.switcher {
+  display: flex;
+  background: var(--white);
+  border-radius: 14px;
+  padding: 4px;
+  gap: 2px;
+  margin-bottom: 28px;
+  box-shadow: 0 1px 4px rgba(0,0,0,.08);
+}
+.sw-btn {
+  padding: 10px 28px;
+  border-radius: 10px;
+  border: none;
+  background: transparent;
+  font-family: var(--fh);
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--ink-muted);
+  cursor: pointer;
+  transition: all var(--dur-fast) var(--ease-out);
+  letter-spacing: .02em;
+}
+.sw-btn.on-c  { background: var(--o500); color: var(--white); }
+.sw-btn.on-p  { background: var(--p900); color: var(--white); }
+
+.stage { display: flex; align-items: center; gap: 20px; }
+.nav-arrow {
+  width: 44px; height: 44px; border-radius: 50%;
+  border: 2px solid rgba(0,0,0,.12);
+  background: var(--white);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; flex-shrink: 0;
+  transition: all var(--dur-fast) ease;
+  box-shadow: 0 2px 8px rgba(0,0,0,.06);
+}
+.nav-arrow:hover { border-color: var(--ink); background: var(--ink); color: var(--white); }
+.nav-arrow svg { pointer-events: none; transition: color var(--dur-fast) ease; }
+
+/* ═══════════════════════════════════════
+   PHONE SHELL  — Dynamic Island style
+═══════════════════════════════════════ */
+.phone {
+  width: 375px; height: 790px;
+  background: var(--white);
+  border-radius: 50px;
+  border: 10px solid #161616;
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+  box-shadow:
+    0 0 0 1px #222,
+    inset 0 0 0 1px rgba(255,255,255,.04),
+    0 40px 100px rgba(0,0,0,.28),
+    0 12px 30px rgba(0,0,0,.14);
+}
+/* Dynamic Island */
+.phone::before {
+  content: '';
+  position: absolute; top: 10px;
+  left: 50%; transform: translateX(-50%);
+  width: 126px; height: 34px;
+  background: #161616;
+  border-radius: 20px;
+  z-index: 20;
+}
+/* Home indicator */
+.phone::after {
+  content: '';
+  position: absolute; bottom: 8px;
+  left: 50%; transform: translateX(-50%);
+  width: 120px; height: 5px;
+  background: rgba(0,0,0,.18);
+  border-radius: 3px;
+  z-index: 20;
+}
+
+/* ═══════════════════════════════════════
+   SCREENS
+═══════════════════════════════════════ */
+.screen {
+  position: absolute; inset: 0;
+  overflow-y: auto; overflow-x: hidden;
+  display: flex; flex-direction: column;
+  opacity: 0; pointer-events: none;
+  transform: translateX(40px);
+  will-change: transform, opacity;
+}
+.screen::-webkit-scrollbar { display: none; }
+.screen { scrollbar-width: none; }
+
+.screen.s-active {
+  opacity: 1; pointer-events: all;
+  transform: translateX(0);
+  transition: opacity var(--dur-mid) var(--ease-out),
+              transform var(--dur-mid) var(--spring);
+}
+.screen.s-exit-left  {
+  opacity: 0; transform: translateX(-32px); pointer-events: none;
+  transition: opacity var(--dur-fast) ease, transform var(--dur-fast) ease-in;
+}
+.screen.s-exit-right {
+  opacity: 0; transform: translateX(32px); pointer-events: none;
+  transition: opacity var(--dur-fast) ease, transform var(--dur-fast) ease-in;
+}
+
+/* Stagger animation helpers */
+.a1 { animation: fadeUp var(--dur-mid) var(--ease-out) .04s both; }
+.a2 { animation: fadeUp var(--dur-mid) var(--ease-out) .12s both; }
+.a3 { animation: fadeUp var(--dur-mid) var(--ease-out) .20s both; }
+.a4 { animation: fadeUp var(--dur-mid) var(--ease-out) .28s both; }
+.a5 { animation: fadeUp var(--dur-mid) var(--ease-out) .36s both; }
+.a6 { animation: fadeUp var(--dur-mid) var(--ease-out) .44s both; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(.72); }
+  60%  { transform: scale(1.04); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@keyframes float {
+  0%,100% { transform: translateY(0px); }
+  50%     { transform: translateY(-6px); }
+}
+@keyframes pulse-ring {
+  0%   { transform: scale(.95); box-shadow: 0 0 0 0 var(--o-glow); }
+  70%  { transform: scale(1);   box-shadow: 0 0 0 16px rgba(255,85,0,0); }
+  100% { transform: scale(.95); box-shadow: 0 0 0 0 rgba(255,85,0,0); }
+}
+@keyframes countUp {
+  from { opacity: 0; transform: translateY(8px) scale(.9); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes shimmer {
+  0%   { background-position: -300px 0; }
+  100% { background-position: 300px 0; }
+}
+@keyframes checkDraw {
+  from { stroke-dashoffset: 40; }
+  to   { stroke-dashoffset: 0; }
+}
+@keyframes confettiFall {
+  0%   { transform: translateY(-20px) rotate(0deg); opacity:1; }
+  100% { transform: translateY(60px) rotate(360deg); opacity:0; }
+}
+
+/* ═══════════════════════════════════════
+   STATUS BAR
+═══════════════════════════════════════ */
+.sb {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 52px 24px 0;
+  flex-shrink: 0;
+}
+.sb-time {
+  font-family: var(--fh); font-size: 15px; font-weight: 700;
+  letter-spacing: -.02em;
+}
+.sb-icons { display: flex; gap: 5px; align-items: center; }
+.sb-dark .sb-time { color: rgba(255,255,255,.9); }
+.sb-dark .sb-icons path, .sb-dark .sb-icons rect, .sb-dark .sb-icons circle { fill: white; stroke: white; }
+
+/* ═══════════════════════════════════════
+   SHARED COMPONENTS
+═══════════════════════════════════════ */
+
+/* Top nav bar (non-splash) */
+.topnav {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 var(--s3);
+  height: 44px; flex-shrink: 0; margin-top: 4px;
+}
+.back-btn {
+  width: 36px; height: 36px; border-radius: 10px;
+  background: var(--surface); border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background var(--dur-fast) ease;
+}
+.back-btn:hover { background: var(--border); }
+.back-btn:active { transform: scale(.93); }
+.screen-progress {
+  font-family: var(--fh); font-size: 12px; font-weight: 600;
+  color: var(--ink-muted); letter-spacing: .04em;
+}
+.logo-pill {
+  display: flex; align-items: center; gap: 8px;
+  font-family: var(--fh); font-weight: 800; font-size: 16px;
+  color: var(--ink); letter-spacing: -.01em;
+}
+.logo-pill .mark {
+  width: 28px; height: 28px; border-radius: 8px;
+  background: var(--o500); display: flex; align-items: center; justify-content: center;
+}
+
+/* Scroll content wrapper */
+.scr-body {
+  flex: 1; padding: var(--s2) var(--s3) 100px;
+  display: flex; flex-direction: column;
+}
+
+/* Anchored CTA footer */
+.cta-footer {
+  position: sticky; bottom: 0;
+  padding: var(--s2) var(--s3) var(--s4);
+  background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 30%);
+  flex-shrink: 0;
+}
+.cta-footer-dark {
+  background: linear-gradient(to bottom, rgba(7,7,26,0) 0%, rgba(7,7,26,1) 30%);
+}
+
+/* Buttons */
+.btn {
+  width: 100%; height: 56px;
+  border: none; border-radius: var(--r-md);
+  font-family: var(--fh); font-weight: 700; font-size: 16px;
+  cursor: pointer; letter-spacing: .01em;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  transition: all var(--dur-fast) var(--ease-out);
+  position: relative; overflow: hidden;
+}
+.btn::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: rgba(0,0,0,0);
+  transition: background var(--dur-fast) ease;
+  border-radius: inherit;
+}
+.btn:hover::after { background: rgba(0,0,0,.06); }
+.btn:active { transform: scale(.97); }
+
+.btn-primary { background: var(--o500); color: var(--white); box-shadow: 0 4px 16px var(--o-glow); }
+.btn-primary:hover { box-shadow: 0 6px 24px rgba(255,85,0,.28); }
+.btn-pro { background: var(--p900); color: var(--white); box-shadow: 0 4px 16px rgba(7,7,26,.3); }
+.btn-white-ghost { background: rgba(255,255,255,.12); color: var(--white); border: 1.5px solid rgba(255,255,255,.25); backdrop-filter: blur(8px); box-shadow: none; }
+.btn-white-ghost:hover::after { background: rgba(255,255,255,.08); }
+.btn-outline { background: var(--white); color: var(--ink); border: 1.5px solid var(--border); box-shadow: 0 1px 4px rgba(0,0,0,.06); }
+.btn-outline:hover { border-color: #CCC; }
+.btn-text { background: none; color: var(--ink-muted); font-size: 14px; font-weight: 500; height: 40px; }
+.btn-text:hover::after { background: none; }
+
+/* Social auth buttons */
+.social-btn {
+  width: 100%; height: 52px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--r-md);
+  background: var(--white);
+  font-family: var(--fh); font-weight: 600; font-size: 14px; color: var(--ink);
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  cursor: pointer; transition: all var(--dur-fast) ease;
+}
+.social-btn:hover { background: var(--surface); border-color: #CCC; }
+.social-btn:active { transform: scale(.98); }
+
+/* Divider */
+.divider {
+  display: flex; align-items: center; gap: 12px;
+  color: var(--ink-muted); font-size: 13px; font-family: var(--fb);
+  margin: var(--s2) 0;
+}
+.divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+/* Input */
+.field-group { display: flex; flex-direction: column; gap: 5px; }
+.field-label { font-size: 12px; font-weight: 600; color: var(--ink-muted); letter-spacing: .04em; text-transform: uppercase; }
+.field {
+  height: 52px; padding: 0 16px;
+  border: 1.5px solid var(--border); border-radius: var(--r-md);
+  font-size: 15px; font-family: var(--fb); color: var(--ink);
+  background: var(--white); outline: none;
+  transition: border-color var(--dur-fast) ease, box-shadow var(--dur-fast) ease;
+  appearance: none;
+}
+.field:focus { border-color: var(--o500); box-shadow: 0 0 0 4px var(--o-glow); }
+.field::placeholder { color: #C0C0C0; }
+.field-pro:focus { border-color: var(--p-accent); box-shadow: 0 0 0 4px rgba(124,58,237,.12); }
+
+/* Auth tabs */
+.auth-seg {
+  display: flex; background: var(--surface); border-radius: 14px; padding: 4px;
+  margin-bottom: var(--s3);
+}
+.auth-seg-btn {
+  flex: 1; height: 40px; border-radius: 11px; border: none;
+  font-family: var(--fh); font-weight: 600; font-size: 14px; color: var(--ink-muted);
+  background: transparent; cursor: pointer; transition: all var(--dur-fast) ease;
+}
+.auth-seg-btn.active {
+  background: var(--white); color: var(--ink);
+  box-shadow: 0 2px 8px rgba(0,0,0,.08);
+}
+
+/* Cards */
+.card {
+  background: var(--white); border: 1.5px solid var(--border);
+  border-radius: var(--r-lg); padding: var(--s3);
+  box-shadow: 0 2px 12px rgba(0,0,0,.04);
+}
+.card-warm { background: var(--o050); border-color: rgba(255,85,0,.12); }
+.card-surface { background: var(--surface); border-color: var(--border); box-shadow: none; }
+
+/* Badges */
+.badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 6px 12px; border-radius: 20px;
+  font-family: var(--fh); font-weight: 700; font-size: 12px;
+  letter-spacing: .04em;
+}
+.badge-free { background: var(--success-bg); color: #065F35; border: 1.5px solid var(--success-border); }
+.badge-coin { background: var(--coin-bg); color: #92400E; border: 1.5px solid var(--coin-border); }
+.badge-pro { background: var(--p-pale); color: #4C1D95; border: 1.5px solid rgba(124,58,237,.2); }
+
+/* Section header */
+.sh { font-family: var(--fh); font-weight: 900; font-size: 30px; color: var(--ink); letter-spacing: -.03em; line-height: 1.1; }
+.sh-xl { font-size: 36px; }
+.sh span.hl { color: var(--o500); }
+.sh-white { color: var(--white); }
+.sub { font-size: 15px; color: var(--ink-muted); line-height: 1.6; margin-top: var(--s1); }
+.sub-white { color: rgba(255,255,255,.72); }
+
+/* Step items */
+.step-row { display: flex; gap: 14px; align-items: flex-start; }
+.step-dot {
+  width: 36px; height: 36px; border-radius: 11px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--fh); font-weight: 800; font-size: 15px; color: var(--white);
+}
+.step-title { font-family: var(--fh); font-weight: 700; font-size: 15px; color: var(--ink); margin-bottom: 2px; }
+.step-desc  { font-size: 13px; color: var(--ink-muted); line-height: 1.5; }
+.step-line  { width: 2px; height: 20px; background: var(--border); margin: 4px 17px; }
+
+/* Profile step */
+.profile-row {
+  display: flex; gap: 14px; align-items: center;
+  padding: 14px; border-radius: var(--r-md);
+  border: 1.5px solid var(--border); background: var(--white);
+  cursor: pointer; transition: all var(--dur-fast) ease;
+}
+.profile-row:hover { border-color: var(--p-accent); }
+.profile-row:active { transform: scale(.98); }
+.pr-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.pr-text { flex: 1; }
+.pr-title { font-family: var(--fh); font-weight: 700; font-size: 14px; color: var(--ink); }
+.pr-sub { font-size: 12px; color: var(--ink-muted); margin-top: 1px; line-height: 1.4; }
+.pr-check { width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--border); flex-shrink: 0; }
+
+/* Trust / testimonial */
+.testimonial {
+  background: var(--surface); border-radius: var(--r-lg);
+  padding: var(--s2) var(--s2); position: relative; overflow: hidden;
+}
+.testi-quote { font-size: 14px; color: var(--ink-mid); line-height: 1.6; font-style: italic; margin-bottom: 12px; }
+.testi-author { display: flex; align-items: center; gap: 10px; }
+.testi-avatar {
+  width: 32px; height: 32px; border-radius: 50%; overflow: hidden;
+  background: var(--o300); display: flex; align-items: center; justify-content: center;
+  font-family: var(--fh); font-weight: 800; font-size: 13px; color: var(--white);
+  flex-shrink: 0;
+}
+.testi-name { font-family: var(--fh); font-weight: 700; font-size: 13px; color: var(--ink); }
+.testi-role { font-size: 11px; color: var(--ink-muted); }
+.stars { display: flex; gap: 2px; }
+.star path { fill: #F59E0B; }
+
+/* Stat block */
+.stat-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: var(--s1); }
+.stat-item { text-align: center; padding: 14px 8px; background: var(--surface); border-radius: var(--r-md); border: 1.5px solid var(--border); }
+.stat-num { font-family: var(--fh); font-weight: 900; font-size: 20px; color: var(--ink); letter-spacing: -.03em; }
+.stat-lbl { font-size: 11px; color: var(--ink-muted); margin-top: 2px; line-height: 1.3; }
+
+/* Category cards */
+.cat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s1); }
+.cat-card {
+  padding: 14px; border-radius: var(--r-md);
+  border: 1.5px solid var(--border); background: var(--white);
+  cursor: pointer; transition: all var(--dur-fast) ease;
+  display: flex; flex-direction: column; gap: 8px;
+}
+.cat-card:hover { border-color: var(--o500); background: var(--o050); transform: translateY(-1px); }
+.cat-card:active { transform: scale(.97); }
+.cat-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; background: var(--surface); border: 1.5px solid var(--border); }
+.cat-name { font-family: var(--fh); font-weight: 600; font-size: 13px; color: var(--ink); }
+
+/* Search input composite */
+.search-wrap {
+  display: flex; align-items: center; gap: 10px;
+  background: var(--surface); border: 1.5px solid var(--border);
+  border-radius: var(--r-md); padding: 0 14px; height: 52px;
+  transition: border-color var(--dur-fast) ease, box-shadow var(--dur-fast) ease;
+}
+.search-wrap:focus-within { border-color: var(--o500); box-shadow: 0 0 0 4px var(--o-glow); background: var(--white); }
+.search-input { flex: 1; border: none; background: transparent; font-size: 15px; font-family: var(--fb); color: var(--ink); outline: none; }
+.search-input::placeholder { color: #BDBDBD; }
+
+/* ═══════════════════════════════════════
+   SPLASH SCREENS
+═══════════════════════════════════════ */
+.splash-bg-c {
+  background: linear-gradient(155deg, #FF5500 0%, #FF7033 55%, #FF9155 100%);
+  flex: 1; display: flex; flex-direction: column;
+}
+.splash-bg-p {
+  background: linear-gradient(155deg, #07071A 0%, #0F0F30 55%, #1A1040 100%);
+  flex: 1; display: flex; flex-direction: column;
+}
+
+.splash-icon-wrap {
+  animation: scaleIn var(--dur-slow) var(--spring) .1s both;
+}
+.splash-logo-bg {
+  width: 100px; height: 100px; border-radius: 28px;
+  background: var(--white); display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 16px 48px rgba(0,0,0,.2);
+  animation: float 3.6s ease-in-out 1s infinite;
+}
+.splash-name {
+  font-family: var(--fh); font-weight: 900; font-size: 50px;
+  letter-spacing: -.04em; color: var(--white); line-height: 1;
+  animation: fadeUp var(--dur-mid) var(--ease-out) .35s both;
+}
+.splash-tagline {
+  font-size: 16px; color: rgba(255,255,255,.8); line-height: 1.55;
+  text-align: center; max-width: 260px;
+  animation: fadeUp var(--dur-mid) var(--ease-out) .5s both;
+}
+.splash-body { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px; padding: 0 var(--s4); text-align: center; }
+.splash-foot { padding: 0 var(--s3) 48px; display: flex; flex-direction: column; gap: 10px; animation: fadeUp var(--dur-mid) var(--ease-out) .7s both; }
+
+.splash-pro-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(124,58,237,.25); border: 1.5px solid rgba(124,58,237,.4);
+  color: rgba(255,255,255,.9); padding: 6px 14px; border-radius: 20px;
+  font-family: var(--fh); font-weight: 700; font-size: 12px; letter-spacing: .1em;
+  backdrop-filter: blur(8px);
+  animation: fadeUp var(--dur-mid) var(--ease-out) .22s both;
+}
+
+/* ═══════════════════════════════════════
+   CELEBRATION / FINAL SCREEN
+═══════════════════════════════════════ */
+.celebrate-wrap {
+  display: flex; flex-direction: column; align-items: center;
+  text-align: center; padding: var(--s3);
+  gap: var(--s2); flex: 1; justify-content: center;
+}
+.celebrate-icon {
+  width: 100px; height: 100px; border-radius: var(--r-xl);
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
+}
+.celebrate-icon-c { background: var(--o500); box-shadow: 0 16px 48px rgba(255,85,0,.35); animation: pulse-ring 2.4s ease-out infinite; }
+.celebrate-icon-p { background: var(--p900); box-shadow: 0 16px 48px rgba(7,7,26,.4); }
+
+.check-svg { animation: scaleIn .5s var(--spring) .3s both; }
+.check-svg path { stroke-dasharray: 40; animation: checkDraw .5s ease .6s both; }
+
+.confetti-dot {
+  position: absolute; width: 8px; height: 8px; border-radius: 2px;
+  animation: confettiFall 1.2s ease-in-out forwards;
+}
+
+/* Dots progress */
+.dots-row { display: flex; gap: 6px; justify-content: center; margin-top: var(--s3); }
+.dot-item {
+  height: 6px; border-radius: 3px; cursor: pointer;
+  transition: all .25s var(--spring);
+  background: #CCCCCC;
+  width: 6px;
+}
+.dot-item.dot-c { background: var(--o500); }
+.dot-item.dot-p { background: var(--p900); }
+.dot-item.dot-active { width: 24px; }
+
+.screen-lbl {
+  font-family: var(--fh); font-size: 12px; font-weight: 600;
+  color: #999; letter-spacing: .06em; text-transform: uppercase;
+  text-align: center; margin-top: 10px;
+}
+
+/* Trust line (above CTA) */
+.trust-line {
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  font-size: 12px; color: var(--ink-muted); font-family: var(--fb);
+  margin-bottom: 8px;
+}
+.trust-line-dark { color: rgba(255,255,255,.45); }
+
+/* Value check list */
+.value-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 13px 14px; background: var(--white);
+  border: 1.5px solid var(--border); border-radius: var(--r-md);
+  font-size: 14px; color: var(--ink); font-family: var(--fb); line-height: 1.4;
+}
+.vi-icon { width: 32px; height: 32px; border-radius: 9px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+
+/* Coin explanation card */
+.coin-card {
+  background: var(--coin-bg); border: 1.5px solid var(--coin-border);
+  border-radius: var(--r-md); padding: 14px 16px;
+  display: flex; gap: 12px; align-items: flex-start;
+}
+.coin-icon { width: 36px; height: 36px; border-radius: 10px; background: var(--coin); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.coin-text-t { font-family: var(--fh); font-weight: 700; font-size: 13px; color: #92400E; margin-bottom: 2px; }
+.coin-text-b { font-size: 12px; color: #B45309; line-height: 1.4; }
+
+/* SVG icons inline helper */
+.icon { display: block; flex-shrink: 0; }
+</style>
+</head>
+<body>
+
+<!-- App Switcher -->
+<div class="switcher">
+  <button class="sw-btn on-c" id="sw-c" onclick="switchApp('c')">PROFIK</button>
+  <button class="sw-btn" id="sw-p" onclick="switchApp('p')">PROFIK PRO</button>
+</div>
+
+<!-- Stage -->
+<div class="stage">
+  <button class="nav-arrow" onclick="nav(-1)">
+    <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M11 4L6 9l5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </button>
+
+  <div class="phone" id="phone">
+
+  <!-- ══════════════════════════════
+       PROFIK  (Client App)  ——  6 screens
+       Research: Value BEFORE account
+  ══════════════════════════════ -->
+
+  <!-- C1 · SPLASH ─ Emotional hook, brand moment -->
+  <div class="screen s-active" id="c1">
+    <div class="sb sb-dark" style="position:absolute;width:100%;z-index:5;">
+      <span class="sb-time" style="color:rgba(255,255,255,.85);">9:41</span>
+      <div class="sb-icons">
+        <svg width="16" height="12" viewBox="0 0 16 12"><rect x="0" y="4" width="2.5" height="8" rx="1" fill="white"/><rect x="4" y="2" width="2.5" height="10" rx="1" fill="white"/><rect x="8" y="0" width="2.5" height="12" rx="1" fill="white"/><rect x="12" y="0" width="2.5" height="12" rx="1" fill="rgba(255,255,255,.3)"/></svg>
+        <svg width="26" height="12" viewBox="0 0 26 12"><rect x="0" y="1" width="22" height="10" rx="3" stroke="white" stroke-width="1.5" fill="none" opacity=".9"/><rect x="23" y="4" width="2.5" height="4" rx="1" fill="white" opacity=".6"/><rect x="1.5" y="2.5" width="16" height="7" rx="2" fill="white"/></svg>
+      </div>
+    </div>
+    <div class="splash-bg-c">
+      <div class="splash-body" style="padding-top:56px;">
+        <div class="splash-icon-wrap">
+          <div class="splash-logo-bg">
+            <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
+              <rect x="8" y="20" width="44" height="30" rx="9" fill="#FF5500"/>
+              <path d="M8 20 Q8 32 8 36 Q22 44 30 44 Q38 44 52 36 Q52 32 52 20 Z" fill="#FF7033"/>
+              <rect x="18" y="36" width="24" height="5" rx="2.5" fill="white" opacity=".9"/>
+              <path d="M21 20 V16 C21 13.2 23.2 11 26 11 H34 C36.8 11 39 13.2 39 16 V20" stroke="white" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+            </svg>
+          </div>
+        </div>
+        <div class="splash-name">Profik</div>
+        <div class="splash-tagline">Any task. Any help.<br/>In your city. Today.</div>
+      </div>
+      <div class="splash-foot">
+        <button class="btn btn-white-ghost" style="background:rgba(255,255,255,1);color:var(--o500);font-weight:800;" onclick="goTo('c2')">Get Started — it's free</button>
+        <button class="btn btn-text" style="color:rgba(255,255,255,.7);font-size:14px;" onclick="goTo('c5')">I already have an account</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- C2 · VALUE HOOK ─ Peak-End rule: deliver the "aha" BEFORE asking for account -->
+  <div class="screen" id="c2">
+    <div class="sb"><span class="sb-time" style="color:var(--ink);">9:41</span><div class="sb-icons"><svg width="26" height="12" viewBox="0 0 26 12"><rect x="0" y="1" width="22" height="10" rx="3" stroke="#111" stroke-width="1.5" fill="none"/><rect x="23" y="4" width="2.5" height="4" rx="1" fill="#111" opacity=".5"/><rect x="1.5" y="2.5" width="17" height="7" rx="2" fill="#111"/></svg></div></div>
+    <div class="topnav">
+      <button class="back-btn" onclick="nav(-1)"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8l5 5" stroke="#444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <span class="screen-progress">1 / 4</span>
+    </div>
+    <div class="scr-body" style="padding-bottom:80px;">
+      <!-- Hero visual -->
+      <div class="a1" style="background:var(--o100);border-radius:var(--r-xl);padding:32px 24px;text-align:center;margin-bottom:var(--s3);position:relative;overflow:hidden;">
+        <div style="position:absolute;top:-20px;right:-20px;width:120px;height:120px;background:rgba(255,85,0,.06);border-radius:50%;"></div>
+        <div style="width:80px;height:80px;background:var(--o500);border-radius:22px;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;box-shadow:0 8px 24px var(--o-glow);">
+          <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+            <path d="M6 30V14C6 11.8 7.8 10 10 10H30C32.2 10 34 11.8 34 14V30" stroke="white" stroke-width="2.8" stroke-linecap="round"/>
+            <path d="M2 30H38" stroke="white" stroke-width="2.8" stroke-linecap="round"/>
+            <rect x="15" y="22" width="10" height="8" rx="2" fill="white" opacity=".9"/>
+            <path d="M12 10V8C12 6.3 13.3 5 15 5H25C26.7 5 28 6.3 28 8V10" stroke="white" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+          </svg>
+        </div>
+        <div class="sh a2" style="font-size:28px;">Need something done?<br/><span class="hl">Post it in 30 seconds.</span></div>
+        <div class="sub a3" style="margin-top:8px;">From cleaning and repairs to tutoring and pet care — local professionals are nearby, ready to help.</div>
+      </div>
+
+      <div class="a3" style="margin-bottom:var(--s2);">
+        <div class="badge badge-free" style="margin-bottom:12px;">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1L7.5 4.5H11L8.25 6.75L9.5 11L6 8.75L2.5 11L3.75 6.75L1 4.5H4.5L6 1Z" fill="#065F35"/></svg>
+          Forever free for you
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div class="value-item"><div class="vi-icon" style="background:var(--o100);"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 1L10.5 6H15.5L11.5 9L13 14.5L9 11.5L5 14.5L6.5 9L2.5 6H7.5L9 1Z" fill="var(--o500)"/></svg></div>Post your need — get multiple offers</div>
+          <div class="value-item"><div class="vi-icon" style="background:#EDFFF5;"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 9l4 4 8-8" stroke="#00BF6F" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Compare ratings, pick the best pro</div>
+          <div class="value-item"><div class="vi-icon" style="background:var(--o100);"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="var(--o500)" stroke-width="2"/><path d="M6 9l2 2 4-4" stroke="var(--o500)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Pay only the professional — never Profik</div>
+        </div>
+      </div>
+
+      <!-- Social proof (Peak-End: impress before asking for commitment) -->
+      <div class="a4 stat-grid" style="margin-bottom:var(--s2);">
+        <div class="stat-item"><div class="stat-num" data-target="2M+">2M+</div><div class="stat-lbl">tasks completed</div></div>
+        <div class="stat-item"><div class="stat-num">4.9★</div><div class="stat-lbl">avg rating</div></div>
+        <div class="stat-item"><div class="stat-num" data-target="86k">86k</div><div class="stat-lbl">active pros</div></div>
+      </div>
+    </div>
+    <div class="cta-footer a5">
+      <div class="trust-line"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1L8.5 5H13L9.5 7.5L11 12L7 9.5L3 12L4.5 7.5L1 5H5.5L7 1Z" fill="#F59E0B"/></svg> Trusted by 2M+ people across Europe</div>
+      <button class="btn btn-primary" onclick="goTo('c3')">See how it works →</button>
+    </div>
+  </div>
+
+  <!-- C3 · HOW IT WORKS ─ Hick's Law: 4 steps max, one message per step -->
+  <div class="screen" id="c3">
+    <div class="sb"><span class="sb-time" style="color:var(--ink);">9:41</span><div class="sb-icons"><svg width="26" height="12" viewBox="0 0 26 12"><rect x="0" y="1" width="22" height="10" rx="3" stroke="#111" stroke-width="1.5" fill="none"/><rect x="23" y="4" width="2.5" height="4" rx="1" fill="#111" opacity=".5"/><rect x="1.5" y="2.5" width="17" height="7" rx="2" fill="#111"/></svg></div></div>
+    <div class="topnav">
+      <button class="back-btn" onclick="nav(-1)"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8l5 5" stroke="#444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <span class="screen-progress">2 / 4</span>
+    </div>
+    <div class="scr-body" style="padding-bottom:80px;">
+      <div class="a1" style="margin-bottom:var(--s3);">
+        <div class="sh">How Profik<br/><span class="hl">works for you</span></div>
+        <div class="sub">Four steps. Zero effort. Completely free.</div>
+      </div>
+
+      <div class="a2" style="display:flex;flex-direction:column;">
+        <div class="step-row">
+          <div>
+            <div class="step-dot" style="background:var(--o500);">1</div>
+          </div>
+          <div style="flex:1;padding-top:4px;">
+            <div class="step-title">Describe your task</div>
+            <div class="step-desc">Type what you need in plain language. "Need a plumber today" is enough.</div>
+          </div>
+        </div>
+        <div class="step-line" style="margin-left:17px;"></div>
+
+        <div class="step-row">
+          <div><div class="step-dot" style="background:var(--o400);">2</div></div>
+          <div style="flex:1;padding-top:4px;">
+            <div class="step-title">Receive offers fast</div>
+            <div class="step-desc">Verified local professionals see your post and send their best offer — usually within minutes.</div>
+          </div>
+        </div>
+        <div class="step-line" style="margin-left:17px;"></div>
+
+        <div class="step-row">
+          <div><div class="step-dot" style="background:var(--o300);">3</div></div>
+          <div style="flex:1;padding-top:4px;">
+            <div class="step-title">Pick who suits you best</div>
+            <div class="step-desc">Read reviews, compare prices, choose freely. No pressure, no algorithm deciding for you.</div>
+          </div>
+        </div>
+        <div class="step-line" style="margin-left:17px;"></div>
+
+        <div class="step-row">
+          <div><div class="step-dot" style="background:var(--success);">4</div></div>
+          <div style="flex:1;padding-top:4px;">
+            <div class="step-title">Done. ✓</div>
+            <div class="step-desc">Agree on details directly. Pay the pro after the job. Profik takes nothing from you — ever.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Von Restorff: free card breaks from everything, signals the most important info -->
+      <div class="a3 card card-warm" style="margin-top:var(--s3);display:flex;gap:12px;align-items:center;">
+        <div style="width:40px;height:40px;border-radius:12px;background:var(--o500);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2L11.8 7H17L12.9 9.7L14.5 15L10 12.2L5.5 15L7.1 9.7L3 7H8.2L10 2Z" fill="white"/></svg>
+        </div>
+        <div>
+          <div style="font-family:var(--fh);font-weight:700;font-size:14px;color:var(--o500);margin-bottom:2px;">Always free for you</div>
+          <div style="font-size:12px;color:var(--ink-mid);line-height:1.5;">Posting a task costs nothing. Professionals pay a small fee to respond. That's how we work.</div>
+        </div>
+      </div>
+    </div>
+    <div class="cta-footer a4">
+      <button class="btn btn-primary" onclick="goTo('c4')">Got it — show me proof →</button>
+    </div>
+  </div>
+
+  <!-- C4 · SOCIAL PROOF ─ Peak-End rule: make this screen emotionally memorable -->
+  <div class="screen" id="c4">
+    <div class="sb"><span class="sb-time" style="color:var(--ink);">9:41</span><div class="sb-icons"><svg width="26" height="12" viewBox="0 0 26 12"><rect x="0" y="1" width="22" height="10" rx="3" stroke="#111" stroke-width="1.5" fill="none"/><rect x="23" y="4" width="2.5" height="4" rx="1" fill="#111" opacity=".5"/><rect x="1.5" y="2.5" width="17" height="7" rx="2" fill="#111"/></svg></div></div>
+    <div class="topnav">
+      <button class="back-btn" onclick="nav(-1)"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8l5 5" stroke="#444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <span class="screen-progress">3 / 4</span>
+    </div>
+    <div class="scr-body" style="padding-bottom:80px;">
+      <div class="a1" style="margin-bottom:var(--s3);">
+        <div class="sh">People<br/><span class="hl">love Profik</span></div>
+        <div class="sub">Real people. Real results. Every day.</div>
+      </div>
+
+      <!-- Testimonials — social proof proximity to CTA (research requirement) -->
+      <div class="a2" style="display:flex;flex-direction:column;gap:12px;margin-bottom:var(--s3);">
+        <div class="testimonial">
+          <div class="stars" style="margin-bottom:8px;">
+            <svg class="star" width="14" height="14" viewBox="0 0 14 14"><path d="M7 1L8.5 5H13L9.5 7.5L11 12L7 9.5L3 12L4.5 7.5L1 5H5.5L7 1Z"/></svg>
+            <svg class="star" width="14" height="14" viewBox="0 0 14 14"><path d="M7 1L8.5 5H13L9.5 7.5L11 12L7 9.5L3 12L4.5 7.5L1 5H5.5L7 1Z"/></svg>
+            <svg class="star" width="14" height="14" viewBox="0 0 14 14"><path d="M7 1L8.5 5H13L9.5 7.5L11 12L7 9.5L3 12L4.5 7.5L1 5H5.5L7 1Z"/></svg>
+            <svg class="star" width="14" height="14" viewBox="0 0 14 14"><path d="M7 1L8.5 5H13L9.5 7.5L11 12L7 9.5L3 12L4.5 7.5L1 5H5.5L7 1Z"/></svg>
+            <svg class="star" width="14" height="14" viewBox="0 0 14 14"><path d="M7 1L8.5 5H13L9.5 7.5L11 12L7 9.5L3 12L4.5 7.5L1 5H5.5L7 1Z"/></svg>
+          </div>
+          <div class="testi-quote">"Posted at 9am, had three offers by 9:40. The cleaner arrived at noon. I literally did nothing except type."</div>
+          <div class="testi-author">
+            <div class="testi-avatar">M</div>
+            <div><div class="testi-name">Monika K.</div><div class="testi-role">Prague, CZ · Cleaning</div></div>
+          </div>
+        </div>
+
+        <div class="testimonial">
+          <div class="stars" style="margin-bottom:8px;">
+            <svg class="star" width="14" height="14" viewBox="0 0 14 14"><path d="M7 1L8.5 5H13L9.5 7.5L11 12L7 9.5L3 12L4.5 7.5L1 5H5.5L7 1Z"/></svg>
+            <svg class="star" width="14" height="14" viewBox="0 0 14 14"><path d="M7 1L8.5 5H13L9.5 7.5L11 12L7 9.5L3 12L4.5 7.5L1 5H5.5L7 1Z"/></svg>
+            <svg class="star" width="14" height="14" viewBox="0 0 14 14"><path d="M7 1L8.5 5H13L9.5 7.5L11 12L7 9.5L3 12L4.5 7.5L1 5H5.5L7 1Z"/></svg>
+            <svg class="star" width="14" height="14" viewBox="0 0 14 14"><path d="M7 1L8.5 5H13L9.5 7.5L11 12L7 9.5L3 12L4.5 7.5L1 5H5.5L7 1Z"/></svg>
+            <svg class="star" width="14" height="14" viewBox="0 0 14 14"><path d="M7 1L8.5 5H13L9.5 7.5L11 12L7 9.5L3 12L4.5 7.5L1 5H5.5L7 1Z"/></svg>
+          </div>
+          <div class="testi-quote">"Used to spend hours searching for a tutor for my son. Profik found one in 20 minutes. Absolutely no effort from me."</div>
+          <div class="testi-author">
+            <div class="testi-avatar" style="background:var(--p-accent);">J</div>
+            <div><div class="testi-name">Jana P.</div><div class="testi-role">Brno, CZ · Tutoring</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="a3 stat-grid">
+        <div class="stat-item"><div class="stat-num">30s</div><div class="stat-lbl">to post a task</div></div>
+        <div class="stat-item"><div class="stat-num">14min</div><div class="stat-lbl">first offer avg</div></div>
+        <div class="stat-item"><div class="stat-num">98%</div><div class="stat-lbl">satisfaction</div></div>
+      </div>
+    </div>
+    <div class="cta-footer a4">
+      <!-- Social proof proximity: right above the CTA (research requirement) -->
+      <div class="trust-line">
+        <svg class="star" width="13" height="13" viewBox="0 0 14 14"><path d="M7 1L8.5 5H13L9.5 7.5L11 12L7 9.5L3 12L4.5 7.5L1 5H5.5L7 1Z" fill="#F59E0B"/></svg>
+        Join 2,000,000+ who solved their task with Profik
+      </div>
+      <button class="btn btn-primary" onclick="goTo('c5')" style="font-size:17px;">Create free account →</button>
+    </div>
+  </div>
+
+  <!-- C5 · AUTH ─ NOW after value delivery. Micro-commitment: social auth first -->
+  <div class="screen" id="c5">
+    <div class="sb"><span class="sb-time" style="color:var(--ink);">9:41</span><div class="sb-icons"><svg width="26" height="12" viewBox="0 0 26 12"><rect x="0" y="1" width="22" height="10" rx="3" stroke="#111" stroke-width="1.5" fill="none"/><rect x="23" y="4" width="2.5" height="4" rx="1" fill="#111" opacity=".5"/><rect x="1.5" y="2.5" width="17" height="7" rx="2" fill="#111"/></svg></div></div>
+    <div class="topnav">
+      <button class="back-btn" onclick="nav(-1)"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8l5 5" stroke="#444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <span class="screen-progress">4 / 4</span>
+    </div>
+    <div class="scr-body" style="padding-bottom:80px;">
+      <div class="a1" style="margin-bottom:var(--s3);">
+        <div class="sh" style="font-size:26px;">Welcome to<br/>Profik</div>
+        <div class="sub">One tap to join 2 million people.</div>
+      </div>
+
+      <!-- Social auth FIRST — lowest friction (research: reduce steps before first value) -->
+      <div class="a2" style="display:flex;flex-direction:column;gap:10px;margin-bottom:var(--s2);">
+        <button class="social-btn" onclick="goTo('c6')">
+          <svg width="20" height="20" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9 3.1L39.5 6C35.4 2.4 30 0 24 0 14.6 0 6.7 5.6 3 13.7l7.8 6.1C12.6 13 17.8 9.5 24 9.5z"/><path fill="#34A853" d="M46.1 24.5c0-1.6-.1-3.1-.4-4.5H24v8.5h12.5c-.5 2.9-2.2 5.4-4.7 7.1l7.3 5.7c4.3-4 6.8-9.9 7-16.8z"/><path fill="#4A90D9" d="M10.8 28.7A14.5 14.5 0 0 1 9.5 24c0-1.6.3-3.2.8-4.7L2.5 13.2A23.9 23.9 0 0 0 0 24c0 3.8.9 7.4 2.5 10.7l8.3-6z"/><path fill="#FBBC05" d="M24 48c6 0 11-2 14.7-5.2l-7.3-5.7c-2 1.4-4.6 2.2-7.4 2.2-6.2 0-11.5-4.2-13.4-10l-7.8 6C6.6 42.3 14.7 48 24 48z"/></svg>
+          Continue with Google
+        </button>
+        <button class="social-btn" onclick="goTo('c6')">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="#000"><path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.7 9.05 7.42c1.39.07 2.34.74 3.15.8 1.2-.24 2.35-.93 3.62-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.39-1.32 2.76-2.65 3.97zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/></svg>
+          Continue with Apple
+        </button>
+      </div>
+
+      <div class="divider a3">or use email</div>
+
+      <div class="auth-seg a3" id="auth-c-tabs">
+        <button class="auth-seg-btn active" onclick="cAuthTab('login')">Log In</button>
+        <button class="auth-seg-btn" onclick="cAuthTab('register')">Register</button>
+      </div>
+
+      <div id="c-login" class="a3" style="display:flex;flex-direction:column;gap:12px;">
+        <div class="field-group"><label class="field-label">Email</label><input type="email" class="field" placeholder="your@email.com"/></div>
+        <div class="field-group"><label class="field-label">Password</label><input type="password" class="field" placeholder="••••••••"/></div>
+        <button style="background:none;border:none;color:var(--o500);font-size:13px;font-weight:600;cursor:pointer;text-align:right;padding:0;">Forgot password?</button>
+        <button class="btn btn-primary" onclick="goTo('c6')">Log In</button>
+      </div>
+
+      <div id="c-register" style="display:none;flex-direction:column;gap:12px;" class="a3">
+        <div class="field-group"><label class="field-label">Email</label><input type="email" class="field" placeholder="your@email.com"/></div>
+        <div class="field-group"><label class="field-label">Password</label><input type="password" class="field" placeholder="Min. 8 characters"/></div>
+        <div class="field-group"><label class="field-label">Phone</label><input type="tel" class="field" placeholder="+420 000 000 000"/></div>
+        <div class="field-group"><label class="field-label">City / Address</label><input type="text" class="field" placeholder="Prague, Czech Republic"/></div>
+        <button class="btn btn-primary" onclick="goTo('c6')">Create Account</button>
+      </div>
+
+      <div class="a4" style="text-align:center;margin-top:var(--s2);font-size:12px;color:var(--ink-muted);line-height:1.5;">By continuing you agree to our <u style="cursor:pointer;">Terms</u> & <u style="cursor:pointer;">Privacy Policy</u></div>
+    </div>
+  </div>
+
+  <!-- C6 · FIRST TASK ─ Fitts' Law: giant CTA at bottom; Hick's Law: 4 categories max -->
+  <div class="screen" id="c6">
+    <div class="sb"><span class="sb-time" style="color:var(--ink);">9:41</span><div class="sb-icons"><svg width="26" height="12" viewBox="0 0 26 12"><rect x="0" y="1" width="22" height="10" rx="3" stroke="#111" stroke-width="1.5" fill="none"/><rect x="23" y="4" width="2.5" height="4" rx="1" fill="#111" opacity=".5"/><rect x="1.5" y="2.5" width="17" height="7" rx="2" fill="#111"/></svg></div></div>
+    <div class="topnav">
+      <div class="logo-pill"><div class="mark"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="2" y="5" width="12" height="9" rx="2.5" fill="white"/><path d="M5 5 V4 C5 2.9 5.9 2 7 2 H9 C10.1 2 11 2.9 11 4 V5" stroke="white" stroke-width="1.8" stroke-linecap="round" fill="none"/><rect x="5" y="8.5" width="6" height="1.5" rx=".75" fill="var(--o500)"/></svg></div>Profik</div>
+      <span style="font-size:12px;color:var(--o500);font-family:var(--fh);font-weight:700;background:var(--o100);padding:4px 10px;border-radius:20px;">Free</span>
+    </div>
+    <div class="scr-body" style="padding-bottom:96px;">
+      <div class="a1" style="margin-bottom:var(--s3);">
+        <div class="sh">What do you<br/><span class="hl">need today?</span></div>
+        <div class="sub">Thousands of pros are already nearby.</div>
+      </div>
+
+      <div class="a2" style="margin-bottom:var(--s2);">
+        <div class="search-wrap">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" style="flex-shrink:0;opacity:.4;"><circle cx="8" cy="8" r="5.5" stroke="#555" stroke-width="1.8"/><path d="M12.5 12.5L16 16" stroke="#555" stroke-width="1.8" stroke-linecap="round"/></svg>
+          <input class="search-input" type="text" placeholder="Describe your task, e.g. clean apartment…"/>
+        </div>
+      </div>
+
+      <div class="a3" style="font-family:var(--fh);font-weight:700;font-size:12px;color:var(--ink-muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px;">Popular right now</div>
+
+      <div class="a3 cat-grid" style="margin-bottom:var(--s2);">
+        <div class="cat-card">
+          <div class="cat-icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M3 17L7 13M7 13C7 13 8 9 11.5 6.5C15 4 17 5 17 5C17 5 18 8 15.5 11.5C13 15 9 14 9 14M7 13H9" stroke="var(--o500)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="cat-name">Cleaning</div>
+        </div>
+        <div class="cat-card">
+          <div class="cat-icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M12 4l4 4-9 9-5 1 1-5 9-9z" stroke="var(--o500)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="cat-name">Repairs</div>
+        </div>
+        <div class="cat-card">
+          <div class="cat-icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 4h12M4 8h8M4 12h6" stroke="var(--o500)" stroke-width="1.8" stroke-linecap="round"/><circle cx="15" cy="14" r="3.5" stroke="var(--o500)" stroke-width="1.8"/></svg></div>
+          <div class="cat-name">Tutoring</div>
+        </div>
+        <div class="cat-card">
+          <div class="cat-icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2C6.7 2 4 4.7 4 8c0 4 6 10 6 10s6-6 6-10c0-3.3-2.7-6-6-6z" stroke="var(--o500)" stroke-width="1.8"/><circle cx="10" cy="8" r="2" stroke="var(--o500)" stroke-width="1.8"/></svg></div>
+          <div class="cat-name">Moving</div>
+        </div>
+      </div>
+
+      <!-- Nielsen Heuristic #7: show advanced option for power users -->
+      <div class="a4" style="text-align:center;">
+        <button class="btn-text" style="font-size:13px;color:var(--ink-muted);">Browse all 47 categories →</button>
+      </div>
+    </div>
+    <!-- Thumb zone: CTA anchored at bottom — Fitts' Law compliance -->
+    <div class="cta-footer a5">
+      <button class="btn btn-primary" style="font-size:17px;height:60px;animation:pulse-ring 2.8s ease-out 1s infinite;">Post my task — it's free</button>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════
+       PROFIK PRO  ——  7 screens
+       Research: Value → Trust → Account → Setup → Go
+  ══════════════════════════════ -->
+
+  <!-- P1 · SPLASH ─ Dark premium feel, distinct from client app -->
+  <div class="screen" id="p1">
+    <div class="sb sb-dark" style="position:absolute;width:100%;z-index:5;">
+      <span class="sb-time" style="color:rgba(255,255,255,.8);">9:41</span>
+      <div class="sb-icons"><svg width="26" height="12" viewBox="0 0 26 12"><rect x="0" y="1" width="22" height="10" rx="3" stroke="white" stroke-width="1.5" fill="none" opacity=".8"/><rect x="23" y="4" width="2.5" height="4" rx="1" fill="white" opacity=".5"/><rect x="1.5" y="2.5" width="16" height="7" rx="2" fill="white"/></svg></div>
+    </div>
+    <div class="splash-bg-p">
+      <div class="splash-body" style="padding-top:56px;">
+        <div class="splash-icon-wrap">
+          <div class="splash-logo-bg">
+            <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
+              <rect x="8" y="20" width="44" height="30" rx="9" fill="var(--p900)"/>
+              <path d="M8 20 Q8 32 8 36 Q22 44 30 44 Q38 44 52 36 Q52 32 52 20 Z" fill="var(--p700)"/>
+              <rect x="18" y="36" width="24" height="5" rx="2.5" fill="var(--p-accent)" opacity=".9"/>
+              <path d="M21 20 V16 C21 13.2 23.2 11 26 11 H34 C36.8 11 39 13.2 39 16 V20" stroke="var(--p-accent)" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+              <circle cx="45" cy="18" r="9" fill="var(--o500)"/>
+              <path d="M41 18l3.5 3.5 5.5-5.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+        </div>
+        <div class="splash-pro-badge">
+          <svg width="10" height="10" viewBox="0 0 10 10"><circle cx="5" cy="5" r="4" fill="var(--p-accent)"/><path d="M3 5l1.5 1.5 3-3" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          PROFIK PRO
+        </div>
+        <div class="splash-name">Profik Pro</div>
+        <div class="splash-tagline">Your professional business.<br/>Clients on demand.</div>
+      </div>
+      <div class="splash-foot">
+        <button class="btn" style="background:var(--o500);color:white;font-weight:800;box-shadow:0 4px 20px rgba(255,85,0,.4);" onclick="goTo('p2')">Start Getting Clients</button>
+        <button class="btn btn-text" style="color:rgba(255,255,255,.6);" onclick="goTo('p5')">I already have an account</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- P2 · VALUE HOOK ─ Money & growth focused, distinct tone from client app -->
+  <div class="screen" id="p2">
+    <div class="sb"><span class="sb-time" style="color:var(--ink);">9:41</span><div class="sb-icons"><svg width="26" height="12" viewBox="0 0 26 12"><rect x="0" y="1" width="22" height="10" rx="3" stroke="#111" stroke-width="1.5" fill="none"/><rect x="23" y="4" width="2.5" height="4" rx="1" fill="#111" opacity=".5"/><rect x="1.5" y="2.5" width="17" height="7" rx="2" fill="#111"/></svg></div></div>
+    <div class="topnav">
+      <button class="back-btn" onclick="nav(-1)"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8l5 5" stroke="#444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <span class="screen-progress">1 / 5</span>
+    </div>
+    <div class="scr-body" style="padding-bottom:80px;">
+      <div class="a1" style="background:var(--p-pale);border-radius:var(--r-xl);padding:28px 20px;text-align:center;margin-bottom:var(--s3);">
+        <div style="width:72px;height:72px;background:var(--p-accent);border-radius:20px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;box-shadow:0 8px 24px rgba(124,58,237,.3);">
+          <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+            <path d="M5 25C5 25 8 18 18 18C28 18 31 25 31 25" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M18 18V10" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M14 14L18 10L22 14" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="25" cy="28" r="6" fill="white" opacity=".2"/>
+            <path d="M23 28l1.5 1.5 3-3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="sh a2" style="font-size:26px;">Get thousands of clients.<br/><span style="color:var(--p-accent);">We do the marketing.</span></div>
+        <div class="sub a3" style="margin-top:8px;">You focus on your craft. Profik Pro brings the clients directly to your feed — no cold calls, no ads, no hustle.</div>
+      </div>
+
+      <div class="a3 stat-grid" style="margin-bottom:var(--s2);">
+        <div class="stat-item"><div class="stat-num" style="color:var(--p-accent);">12k+</div><div class="stat-lbl">active clients daily</div></div>
+        <div class="stat-item"><div class="stat-num" style="color:var(--o500);">2 min</div><div class="stat-lbl">to first match</div></div>
+        <div class="stat-item"><div class="stat-num" style="color:var(--success);">94%</div><div class="stat-lbl">hired within 24h</div></div>
+      </div>
+
+      <div class="a4" style="display:flex;flex-direction:column;gap:8px;">
+        <div class="value-item"><div class="vi-icon" style="background:var(--success-bg);"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 9l4 4 8-8" stroke="var(--success)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>No subscription — only pay when you respond</div>
+        <div class="value-item"><div class="vi-icon" style="background:var(--success-bg);"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 9l4 4 8-8" stroke="var(--success)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Verified profile builds trust & repeat business</div>
+        <div class="value-item"><div class="vi-icon" style="background:var(--success-bg);"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 9l4 4 8-8" stroke="var(--success)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Keep 100% of what you earn — we take nothing</div>
+      </div>
+    </div>
+    <div class="cta-footer a5">
+      <div class="trust-line">Join 8,000+ professionals already earning on Profik Pro</div>
+      <button class="btn btn-pro" onclick="goTo('p3')">See how the money works →</button>
+    </div>
+  </div>
+
+  <!-- P3 · HOW IT WORKS ─ Coins explained clearly, no jargon -->
+  <div class="screen" id="p3">
+    <div class="sb"><span class="sb-time" style="color:var(--ink);">9:41</span><div class="sb-icons"><svg width="26" height="12" viewBox="0 0 26 12"><rect x="0" y="1" width="22" height="10" rx="3" stroke="#111" stroke-width="1.5" fill="none"/><rect x="23" y="4" width="2.5" height="4" rx="1" fill="#111" opacity=".5"/><rect x="1.5" y="2.5" width="17" height="7" rx="2" fill="#111"/></svg></div></div>
+    <div class="topnav">
+      <button class="back-btn" onclick="nav(-1)"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8l5 5" stroke="#444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <span class="screen-progress">2 / 5</span>
+    </div>
+    <div class="scr-body" style="padding-bottom:80px;">
+      <div class="a1" style="margin-bottom:var(--s3);">
+        <div class="sh">Simple model.<br/><span style="color:var(--p-accent);">You only spend<br/>when you win work.</span></div>
+      </div>
+
+      <div class="a2" style="display:flex;flex-direction:column;">
+        <div class="step-row">
+          <div><div class="step-dot" style="background:var(--p900);">1</div></div>
+          <div style="flex:1;padding-top:4px;">
+            <div class="step-title">Browse real job offers</div>
+            <div class="step-desc">See exactly what clients need, their location and budget — in real time.</div>
+          </div>
+        </div>
+        <div class="step-line"></div>
+
+        <div class="step-row">
+          <div><div class="step-dot" style="background:var(--coin);">2</div></div>
+          <div style="flex:1;padding-top:4px;">
+            <div class="step-title">Spend a few coins to respond</div>
+            <div class="step-desc">A small coin fee filters spam and puts serious pros in front of real clients.</div>
+          </div>
+        </div>
+
+        <div class="coin-card a3" style="margin:8px 0 8px 50px;">
+          <div class="coin-icon">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="8" fill="#FBBF24"/><circle cx="10" cy="10" r="6" stroke="white" stroke-width="1.5" fill="none"/><path d="M10 6v8M7 7.5C7 6.7 8.3 6 10 6s3 .7 3 1.5S11.7 9 10 9 7 9.7 7 10.5 8.3 12 10 12s3-.7 3-1.5" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </div>
+          <div>
+            <div class="coin-text-t">What are coins?</div>
+            <div class="coin-text-b">Coins are Profik's in-app currency. Buy a pack once, spend per response. Far cheaper than any ad campaign.</div>
+          </div>
+        </div>
+
+        <div class="step-line"></div>
+
+        <div class="step-row">
+          <div><div class="step-dot" style="background:var(--p-accent);">3</div></div>
+          <div style="flex:1;padding-top:4px;">
+            <div class="step-title">Client chooses you</div>
+            <div class="step-desc">Your profile, ratings and message do the selling. The better your profile, the higher the win rate.</div>
+          </div>
+        </div>
+        <div class="step-line"></div>
+
+        <div class="step-row">
+          <div><div class="step-dot" style="background:var(--success);">4</div></div>
+          <div style="flex:1;padding-top:4px;">
+            <div class="step-title">Do the job. Get paid. 💰</div>
+            <div class="step-desc">Agree directly with the client. 100% of the money goes to you — no commission.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="cta-footer a3">
+      <button class="btn btn-pro" onclick="goTo('p4')">I'm in — show me results →</button>
+    </div>
+  </div>
+
+  <!-- P4 · PRO SOCIAL PROOF ─ Earnings focus, trust before account -->
+  <div class="screen" id="p4">
+    <div class="sb"><span class="sb-time" style="color:var(--ink);">9:41</span><div class="sb-icons"><svg width="26" height="12" viewBox="0 0 26 12"><rect x="0" y="1" width="22" height="10" rx="3" stroke="#111" stroke-width="1.5" fill="none"/><rect x="23" y="4" width="2.5" height="4" rx="1" fill="#111" opacity=".5"/><rect x="1.5" y="2.5" width="17" height="7" rx="2" fill="#111"/></svg></div></div>
+    <div class="topnav">
+      <button class="back-btn" onclick="nav(-1)"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8l5 5" stroke="#444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <span class="screen-progress">3 / 5</span>
+    </div>
+    <div class="scr-body" style="padding-bottom:80px;">
+      <div class="a1" style="margin-bottom:var(--s3);">
+        <div class="sh">Pros are<br/><span style="color:var(--p-accent);">earning every day</span></div>
+        <div class="sub">Real professionals. Real results.</div>
+      </div>
+
+      <div class="a2" style="display:flex;flex-direction:column;gap:12px;margin-bottom:var(--s3);">
+        <div class="testimonial" style="border-left:3px solid var(--p-accent);">
+          <div class="stars" style="margin-bottom:8px;">
+            <svg class="star" width="14" height="14" viewBox="0 0 14 14"><path d="M7 1L8.5 5H13L9.5 7.5L11 12L7 9.5L3 12L4.5 7.5L1 5H5.5L7 1Z"/></svg>
+            <svg class="star" width="14" height="14" viewBox="0 0 14 14"><path d="M7 1L8.5 5H13L9.5 7.5L11 12L7 9.5L3 12L4.5 7.5L1 5H5.5L7 1Z"/></svg>
+            <svg class="star" width="14" height="14" viewBox="0 0 14 14"><path d="M7 1L8.5 5H13L9.5 7.5L11 12L7 9.5L3 12L4.5 7.5L1 5H5.5L7 1Z"/></svg>
+            <svg class="star" width="14" height="14" viewBox="0 0 14 14"><path d="M7 1L8.5 5H13L9.5 7.5L11 12L7 9.5L3 12L4.5 7.5L1 5H5.5L7 1Z"/></svg>
+            <svg class="star" width="14" height="14" viewBox="0 0 14 14"><path d="M7 1L8.5 5H13L9.5 7.5L11 12L7 9.5L3 12L4.5 7.5L1 5H5.5L7 1Z"/></svg>
+          </div>
+          <div class="testi-quote">"I was skeptical about the coins model. But I got my first client on day one and she booked me weekly. The ROI is insane."</div>
+          <div class="testi-author">
+            <div class="testi-avatar" style="background:var(--p-accent);">T</div>
+            <div><div class="testi-name">Tomáš B.</div><div class="testi-role">Cleaner · Prague · 340 jobs done</div></div>
+          </div>
+        </div>
+
+        <div class="testimonial" style="border-left:3px solid var(--o500);">
+          <div class="stars" style="margin-bottom:8px;">
+            <svg class="star" width="14" height="14" viewBox="0 0 14 14"><path d="M7 1L8.5 5H13L9.5 7.5L11 12L7 9.5L3 12L4.5 7.5L1 5H5.5L7 1Z"/></svg>
+            <svg class="star" width="14" height="14" viewBox="0 0 14 14"><path d="M7 1L8.5 5H13L9.5 7.5L11 12L7 9.5L3 12L4.5 7.5L1 5H5.5L7 1Z"/></svg>
+            <svg class="star" width="14" height="14" viewBox="0 0 14 14"><path d="M7 1L8.5 5H13L9.5 7.5L11 12L7 9.5L3 12L4.5 7.5L1 5H5.5L7 1Z"/></svg>
+            <svg class="star" width="14" height="14" viewBox="0 0 14 14"><path d="M7 1L8.5 5H13L9.5 7.5L11 12L7 9.5L3 12L4.5 7.5L1 5H5.5L7 1Z"/></svg>
+            <svg class="star" width="14" height="14" viewBox="0 0 14 14"><path d="M7 1L8.5 5H13L9.5 7.5L11 12L7 9.5L3 12L4.5 7.5L1 5H5.5L7 1Z"/></svg>
+          </div>
+          <div class="testi-quote">"I'm a math tutor. Before Profik I had 2 students. Now I'm full — 11 regulars — and I turned down 3 more this month."</div>
+          <div class="testi-author">
+            <div class="testi-avatar" style="background:var(--success);">L</div>
+            <div><div class="testi-name">Lucie M.</div><div class="testi-role">Tutor · Brno · 187 sessions</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="a3 stat-grid">
+        <div class="stat-item"><div class="stat-num" style="color:var(--p-accent);">8k+</div><div class="stat-lbl">active pros</div></div>
+        <div class="stat-item"><div class="stat-num" style="color:var(--o500);">€2,400</div><div class="stat-lbl">avg monthly earn</div></div>
+        <div class="stat-item"><div class="stat-num" style="color:var(--success);">4.8★</div><div class="stat-lbl">avg pro rating</div></div>
+      </div>
+    </div>
+    <div class="cta-footer a4">
+      <div class="trust-line">8,000+ professionals are earning on Profik right now</div>
+      <button class="btn btn-pro" onclick="goTo('p5')" style="font-size:17px;">Join them — create account →</button>
+    </div>
+  </div>
+
+  <!-- P5 · PRO AUTH ─ After full value demonstration -->
+  <div class="screen" id="p5">
+    <div class="sb"><span class="sb-time" style="color:var(--ink);">9:41</span><div class="sb-icons"><svg width="26" height="12" viewBox="0 0 26 12"><rect x="0" y="1" width="22" height="10" rx="3" stroke="#111" stroke-width="1.5" fill="none"/><rect x="23" y="4" width="2.5" height="4" rx="1" fill="#111" opacity=".5"/><rect x="1.5" y="2.5" width="17" height="7" rx="2" fill="#111"/></svg></div></div>
+    <div class="topnav">
+      <button class="back-btn" onclick="nav(-1)"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8l5 5" stroke="#444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <span class="screen-progress">4 / 5</span>
+    </div>
+    <div class="scr-body" style="padding-bottom:80px;">
+      <div class="a1" style="margin-bottom:var(--s3);">
+        <div class="sh" style="font-size:26px;">Create your<br/><span style="color:var(--p-accent);">Pro account</span></div>
+        <div class="sub">One tap — start finding clients in minutes.</div>
+      </div>
+
+      <div class="a2" style="display:flex;flex-direction:column;gap:10px;margin-bottom:var(--s2);">
+        <button class="social-btn" onclick="goTo('p6')">
+          <svg width="20" height="20" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9 3.1L39.5 6C35.4 2.4 30 0 24 0 14.6 0 6.7 5.6 3 13.7l7.8 6.1C12.6 13 17.8 9.5 24 9.5z"/><path fill="#34A853" d="M46.1 24.5c0-1.6-.1-3.1-.4-4.5H24v8.5h12.5c-.5 2.9-2.2 5.4-4.7 7.1l7.3 5.7c4.3-4 6.8-9.9 7-16.8z"/><path fill="#4A90D9" d="M10.8 28.7A14.5 14.5 0 0 1 9.5 24c0-1.6.3-3.2.8-4.7L2.5 13.2A23.9 23.9 0 0 0 0 24c0 3.8.9 7.4 2.5 10.7l8.3-6z"/><path fill="#FBBC05" d="M24 48c6 0 11-2 14.7-5.2l-7.3-5.7c-2 1.4-4.6 2.2-7.4 2.2-6.2 0-11.5-4.2-13.4-10l-7.8 6C6.6 42.3 14.7 48 24 48z"/></svg>
+          Continue with Google
+        </button>
+        <button class="social-btn" onclick="goTo('p6')">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="#000"><path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.7 9.05 7.42c1.39.07 2.34.74 3.15.8 1.2-.24 2.35-.93 3.62-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.39-1.32 2.76-2.65 3.97zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/></svg>
+          Continue with Apple
+        </button>
+      </div>
+
+      <div class="divider a3">or use email</div>
+
+      <div class="auth-seg a3" id="auth-p-tabs">
+        <button class="auth-seg-btn active" onclick="pAuthTab('login')">Log In</button>
+        <button class="auth-seg-btn" onclick="pAuthTab('register')">Register</button>
+      </div>
+
+      <div id="p-login" class="a3" style="display:flex;flex-direction:column;gap:12px;">
+        <div class="field-group"><label class="field-label">Email</label><input type="email" class="field field-pro" placeholder="your@email.com"/></div>
+        <div class="field-group"><label class="field-label">Password</label><input type="password" class="field field-pro" placeholder="••••••••"/></div>
+        <button style="background:none;border:none;color:var(--p-accent);font-size:13px;font-weight:600;cursor:pointer;text-align:right;padding:0;">Forgot password?</button>
+        <button class="btn btn-pro" onclick="goTo('p6')">Log In</button>
+      </div>
+
+      <div id="p-register" style="display:none;flex-direction:column;gap:12px;" class="a3">
+        <div class="field-group"><label class="field-label">Email</label><input type="email" class="field field-pro" placeholder="your@email.com"/></div>
+        <div class="field-group"><label class="field-label">Password</label><input type="password" class="field field-pro" placeholder="Min. 8 characters"/></div>
+        <div class="field-group"><label class="field-label">Phone</label><input type="tel" class="field field-pro" placeholder="+420 000 000 000"/></div>
+        <div class="field-group"><label class="field-label">City / Address</label><input type="text" class="field field-pro" placeholder="Prague, Czech Republic"/></div>
+        <button class="btn btn-pro" onclick="goTo('p6')">Create Pro Account</button>
+      </div>
+
+      <div class="a4" style="text-align:center;margin-top:var(--s2);font-size:12px;color:var(--ink-muted);line-height:1.5;">By continuing you agree to our <u style="cursor:pointer;">Terms</u> & <u style="cursor:pointer;">Privacy Policy</u></div>
+    </div>
+  </div>
+
+  <!-- P6 · PROFILE SETUP ─ Hook Model: Investment mechanic, progressive disclosure -->
+  <div class="screen" id="p6">
+    <div class="sb"><span class="sb-time" style="color:var(--ink);">9:41</span><div class="sb-icons"><svg width="26" height="12" viewBox="0 0 26 12"><rect x="0" y="1" width="22" height="10" rx="3" stroke="#111" stroke-width="1.5" fill="none"/><rect x="23" y="4" width="2.5" height="4" rx="1" fill="#111" opacity=".5"/><rect x="1.5" y="2.5" width="17" height="7" rx="2" fill="#111"/></svg></div></div>
+    <div class="topnav">
+      <button class="back-btn" onclick="nav(-1)"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8l5 5" stroke="#444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <span class="screen-progress">5 / 5</span>
+    </div>
+    <div class="scr-body" style="padding-bottom:96px;">
+      <div class="a1" style="margin-bottom:var(--s2);">
+        <div class="sh" style="font-size:24px;">Set up your<br/><span style="color:var(--p-accent);">profile</span></div>
+        <div class="sub">Clients trust verified pros 5× more. Takes 3 minutes.</div>
+      </div>
+
+      <!-- Progress bar — Nielsen Heuristic #1: always show system status -->
+      <div class="a2" style="margin-bottom:var(--s3);">
+        <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+          <span style="font-size:12px;font-weight:600;color:var(--ink-muted);">Profile strength</span>
+          <span style="font-size:12px;font-weight:700;color:var(--p-accent);" id="profile-pct">0%</span>
+        </div>
+        <div style="height:8px;background:var(--surface);border-radius:4px;overflow:hidden;">
+          <div id="profile-bar" style="height:100%;width:0%;background:linear-gradient(to right,var(--p-accent),var(--o500));border-radius:4px;transition:width .4s var(--spring);"></div>
+        </div>
+      </div>
+
+      <div class="a3" style="display:flex;flex-direction:column;gap:10px;margin-bottom:var(--s2);">
+        <div class="profile-row" onclick="profileTap(this,33)">
+          <div class="pr-icon" style="background:#FFF4EC;">
+            <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><circle cx="11" cy="8" r="4" stroke="var(--o500)" stroke-width="2"/><path d="M3 20c0-4 3.6-7 8-7s8 3 8 7" stroke="var(--o500)" stroke-width="2" stroke-linecap="round"/></svg>
+          </div>
+          <div class="pr-text">
+            <div class="pr-title">Profile photo</div>
+            <div class="pr-sub">Clear face photo — increases trust by 3×</div>
+          </div>
+          <div class="pr-check" id="pcheck-0"></div>
+        </div>
+
+        <div class="profile-row" onclick="profileTap(this,33)">
+          <div class="pr-icon" style="background:var(--p-pale);">
+            <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect x="3" y="3" width="16" height="16" rx="3" stroke="var(--p-accent)" stroke-width="2"/><path d="M7 8h8M7 11h6M7 14h4" stroke="var(--p-accent)" stroke-width="2" stroke-linecap="round"/></svg>
+          </div>
+          <div class="pr-text">
+            <div class="pr-title">About me & services</div>
+            <div class="pr-sub">Tell clients what you do and your experience</div>
+          </div>
+          <div class="pr-check" id="pcheck-1"></div>
+        </div>
+
+        <div class="profile-row" onclick="profileTap(this,34)">
+          <div class="pr-icon" style="background:var(--success-bg);">
+            <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect x="4" y="2" width="14" height="18" rx="2" stroke="var(--success)" stroke-width="2"/><path d="M8 7h6M8 11h6M8 15h4" stroke="var(--success)" stroke-width="2" stroke-linecap="round"/><circle cx="16" cy="17" r="5" fill="white" stroke="var(--success)" stroke-width="1.5"/><path d="M14 17l1.5 1.5 2.5-2.5" stroke="var(--success)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="pr-text">
+            <div class="pr-title">ID verification</div>
+            <div class="pr-sub">Upload ID or passport — get the verified badge</div>
+          </div>
+          <div class="pr-check" id="pcheck-2"></div>
+        </div>
+      </div>
+
+      <!-- Nielsen Heuristic #3: control + freedom — skip is always available -->
+      <div class="a4" style="background:var(--coin-bg);border:1.5px solid var(--coin-border);border-radius:var(--r-md);padding:14px 16px;display:flex;gap:10px;align-items:flex-start;">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" style="flex-shrink:0;margin-top:1px;"><circle cx="9" cy="9" r="7" stroke="#F59E0B" stroke-width="1.8"/><path d="M9 8v5M9 6v.5" stroke="#F59E0B" stroke-width="2" stroke-linecap="round"/></svg>
+        <div style="font-size:13px;color:#92400E;line-height:1.5;"><strong style="font-family:var(--fh);font-size:13px;">You can skip and finish later.</strong> But verified profiles get 5× more responses from clients.</div>
+      </div>
+    </div>
+    <div class="cta-footer a5">
+      <button class="btn btn-pro" onclick="goTo('p7')" style="margin-bottom:8px;">Continue</button>
+      <button class="btn btn-text" onclick="goTo('p7')">Skip for now</button>
+    </div>
+  </div>
+
+  <!-- P7 · CELEBRATION ─ Peak-End: unforgettable final moment -->
+  <div class="screen" id="p7">
+    <div class="sb"><span class="sb-time" style="color:var(--ink);">9:41</span><div class="sb-icons"><svg width="26" height="12" viewBox="0 0 26 12"><rect x="0" y="1" width="22" height="10" rx="3" stroke="#111" stroke-width="1.5" fill="none"/><rect x="23" y="4" width="2.5" height="4" rx="1" fill="#111" opacity=".5"/><rect x="1.5" y="2.5" width="17" height="7" rx="2" fill="#111"/></svg></div></div>
+    <div class="celebrate-wrap a1">
+      <div class="celebrate-icon celebrate-icon-p" style="position:relative;">
+        <!-- Confetti -->
+        <div class="confetti-dot" style="background:var(--o500);top:-8px;left:10px;animation-delay:.1s;"></div>
+        <div class="confetti-dot" style="background:var(--p-accent);top:-12px;right:8px;width:6px;animation-delay:.2s;border-radius:50%;"></div>
+        <div class="confetti-dot" style="background:var(--coin);top:-6px;left:50%;animation-delay:.3s;border-radius:50%;"></div>
+        <div class="confetti-dot" style="background:var(--success);top:-10px;right:20px;animation-delay:.15s;width:5px;height:10px;"></div>
+        <svg class="check-svg" width="52" height="52" viewBox="0 0 52 52" fill="none">
+          <circle cx="26" cy="26" r="16" fill="rgba(124,58,237,.25)"/>
+          <path d="M18 26l6 6 10-10" stroke="white" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="40"/>
+        </svg>
+      </div>
+      <div>
+        <div class="a2" style="font-family:var(--fh);font-weight:900;font-size:32px;color:var(--ink);letter-spacing:-.03em;line-height:1.1;text-align:center;">You're a<br/><span style="color:var(--p-accent);">Profik Pro</span> now.</div>
+        <div class="a3 sub" style="text-align:center;margin-top:10px;">Your profile is live. The first client offer could arrive in minutes.</div>
+      </div>
+      <div class="a4 stat-grid" style="width:100%;">
+        <div class="stat-item"><div class="stat-num" style="color:var(--p900);">12k+</div><div class="stat-lbl">jobs posted today</div></div>
+        <div class="stat-item"><div class="stat-num" style="color:var(--o500);">2 min</div><div class="stat-lbl">avg first match</div></div>
+        <div class="stat-item"><div class="stat-num" style="color:var(--success);">Free</div><div class="stat-lbl">to start</div></div>
+      </div>
+    </div>
+    <div class="cta-footer a5">
+      <div class="trust-line">8,000+ professionals trust Profik Pro to grow their business</div>
+      <button class="btn btn-pro" style="font-size:17px;height:60px;">Browse jobs right now →</button>
+    </div>
+  </div>
+
+  </div><!-- /phone -->
+
+  <button class="nav-arrow" onclick="nav(1)">
+    <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M7 4l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </button>
+</div>
+
+<!-- Progress dots + label -->
+<div class="dots-row" id="dots"></div>
+<div class="screen-lbl" id="slbl"></div>
+
+<script>
+/* ═══════════════════════════
+   App state
+═══════════════════════════ */
+const apps = {
+  c: {
+    screens: ['c1','c2','c3','c4','c5','c6'],
+    labels: ['Splash','Value Proposition','How It Works','Social Proof','Login / Register','Post First Task'],
+    dot: 'dot-c'
+  },
+  p: {
+    screens: ['p1','p2','p3','p4','p5','p6','p7'],
+    labels: ['Splash','Value Proposition','How It Works','Social Proof','Login / Register','Complete Profile','You\'re a Pro!'],
+    dot: 'dot-p'
+  }
+};
+
+let curApp = 'c', curIdx = 0, isAnimating = false;
+
+function switchApp(a) {
+  if (a === curApp) return;
+  // dismiss current
+  const prev = document.getElementById(apps[curApp].screens[curIdx]);
+  prev.classList.remove('s-active');
+  prev.classList.add('s-exit-left');
+  setTimeout(() => prev.classList.remove('s-exit-left'), 300);
+
+  curApp = a; curIdx = 0;
+  document.getElementById('sw-c').className = 'sw-btn' + (a==='c'?' on-c':'');
+  document.getElementById('sw-p').className = 'sw-btn' + (a==='p'?' on-p':'');
+  activate(0);
+  renderDots();
+}
+
+function activate(idx, direction) {
+  const app = apps[curApp];
+  const el = document.getElementById(app.screens[idx]);
+  el.classList.remove('s-active','s-exit-left','s-exit-right');
+  // slight delay lets exit animation start
+  requestAnimationFrame(() => {
+    el.classList.add('s-active');
+    el.scrollTop = 0;
+  });
+  curIdx = idx;
+  renderDots();
+  document.getElementById('slbl').textContent =
+    (app.labels[idx] || '') + '  ·  ' + (idx+1) + ' / ' + app.screens.length;
+}
+
+function nav(dir) {
+  if (isAnimating) return;
+  const app = apps[curApp];
+  const next = curIdx + dir;
+  if (next < 0 || next >= app.screens.length) return;
+
+  isAnimating = true;
+  const cur = document.getElementById(app.screens[curIdx]);
+  cur.classList.remove('s-active');
+  cur.classList.add(dir > 0 ? 's-exit-left' : 's-exit-right');
+  setTimeout(() => { cur.classList.remove('s-exit-left','s-exit-right'); }, 300);
+
+  activate(next, dir);
+  setTimeout(() => isAnimating = false, 350);
+}
+
+function goTo(id) {
+  const app = apps[curApp];
+  const idx = app.screens.indexOf(id);
+  if (idx < 0) return;
+  const dir = idx > curIdx ? 1 : -1;
+  nav(dir * (Math.abs(idx - curIdx)));
+  // For multi-step jumps use direct activate
+  const cur = document.getElementById(app.screens[curIdx]);
+  cur.classList.remove('s-active');
+  cur.classList.add('s-exit-left');
+  setTimeout(() => cur.classList.remove('s-exit-left'), 300);
+  activate(idx);
+}
+
+function renderDots() {
+  const app = apps[curApp];
+  const c = document.getElementById('dots');
+  c.innerHTML = '';
+  app.screens.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'dot-item' + (i===curIdx?' dot-active '+app.dot:'');
+    d.onclick = () => goTo(app.screens[i]);
+    c.appendChild(d);
+  });
+}
+
+/* Auth tab switchers */
+function cAuthTab(tab) {
+  const tabs = document.getElementById('auth-c-tabs');
+  tabs.querySelectorAll('.auth-seg-btn').forEach((b,i) => b.classList.toggle('active', (tab==='login'?i===0:i===1)));
+  document.getElementById('c-login').style.display = tab==='login'?'flex':'none';
+  document.getElementById('c-register').style.display = tab==='register'?'flex':'none';
+}
+function pAuthTab(tab) {
+  const tabs = document.getElementById('auth-p-tabs');
+  tabs.querySelectorAll('.auth-seg-btn').forEach((b,i) => b.classList.toggle('active', (tab==='login'?i===0:i===1)));
+  document.getElementById('p-login').style.display = tab==='login'?'flex':'none';
+  document.getElementById('p-register').style.display = tab==='register'?'flex':'none';
+}
+
+/* Profile tap interaction */
+let profileTotal = 0;
+function profileTap(row, pct) {
+  const check = row.querySelector('.pr-check');
+  if (check.style.background === 'var(--p-accent)') return;
+  check.style.background = 'var(--p-accent)';
+  check.style.border = 'none';
+  check.innerHTML = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7l3.5 3.5 5.5-5.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  check.style.display = 'flex'; check.style.alignItems = 'center'; check.style.justifyContent = 'center';
+  profileTotal = Math.min(profileTotal + pct, 100);
+  document.getElementById('profile-pct').textContent = profileTotal + '%';
+  document.getElementById('profile-bar').style.width = profileTotal + '%';
+}
+
+/* Keyboard nav */
+document.addEventListener('keydown', e => {
+  if (e.key==='ArrowRight') nav(1);
+  if (e.key==='ArrowLeft') nav(-1);
+});
+
+/* Touch/swipe support */
+let touchStartX = 0;
+const phone = document.getElementById('phone');
+phone.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, {passive:true});
+phone.addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].clientX - touchStartX;
+  if (Math.abs(dx) > 50) nav(dx < 0 ? 1 : -1);
+}, {passive:true});
+
+/* Init */
+renderDots();
+document.getElementById('slbl').textContent =
+  apps.c.labels[0] + '  ·  1 / ' + apps.c.screens.length;
+</script>
+</body>
+</html>
