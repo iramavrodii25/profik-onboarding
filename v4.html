@@ -1,0 +1,1342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Profik — Easy. Trusted. Local. (V4)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+/* ═══════════════════════════════════════════════════════════
+   V4 — TOKENS  (V2 full system, WCAG-corrected orange text)
+   FIX #3: Complete 8pt grid  FIX #4: text orange = #C8621A
+═══════════════════════════════════════════════════════════ */
+:root {
+  /* Brand — official #ED7D31 (WCAG text = --o-text at 3.1:1 on white) */
+  --o500: #ED7D31;
+  --o-text: #C8621A;   /* FIX #4: darker for text contrast ≥3:1 */
+  --o400: #F2984F;
+  --o300: #F7B980;
+  --o100: #FEF4EC;
+  --o050: #FFF9F5;
+  --o-glow: rgba(237,125,49,.18);
+
+  /* Pro */
+  --p900: #07071A;
+  --p800: #0F0F2E;
+  --p700: #1A1A42;
+  --p-accent: #7C3AED;
+  --p-pale: #F3F0FF;
+  --coin: #F59E0B;
+  --coin-bg: #FFFBEB;
+  --coin-border: #FDE68A;
+
+  /* Neutral */
+  --ink: #0A0A0A;
+  --ink-mid: #3D3D3D;
+  --ink-muted: #6B6B6B;  /* FIX #4: darkened from #8A8A8A → 4.6:1 on white */
+  --border: #E8E8E8;
+  --surface: #F6F6F6;
+  --white: #FFFFFF;
+  --success: #00A85E;  /* FIX #4: darkened for contrast */
+  --success-bg: #EDFFF5;
+  --success-border: #A8F0CD;
+
+  /* FIX #3: 8pt spacing grid — complete token set */
+  --s1: 8px;  --s2: 16px;  --s3: 24px;
+  --s4: 32px; --s5: 40px;  --s6: 48px;
+
+  /* Typography */
+  --fh: 'Outfit', sans-serif;
+  --fb: 'Inter', sans-serif;
+
+  /* Motion */
+  --spring: cubic-bezier(.34,1.35,.64,1);
+  --ease-out: cubic-bezier(.22,1,.36,1);
+  --dur-fast: 200ms;
+  --dur-mid: 320ms;
+  --dur-slow: 480ms;
+
+  /* Radius */
+  --r-sm: 12px; --r-md: 18px; --r-lg: 24px; --r-xl: 32px;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   FIX #2: prefers-reduced-motion — respect user preference
+═══════════════════════════════════════════════════════════ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ── Reset ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html { -webkit-font-smoothing: antialiased; }
+body {
+  font-family: var(--fb);
+  background: #EDEDED;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--s4) var(--s2) var(--s6);
+  overflow-x: hidden;
+}
+
+/* ── Switcher ── */
+.switcher {
+  display: flex;
+  background: var(--white);
+  border-radius: 14px;
+  padding: 4px;
+  gap: var(--s1);
+  margin-bottom: var(--s4);
+  box-shadow: 0 1px 4px rgba(0,0,0,.08);
+}
+.sw-btn {
+  padding: 10px 28px;
+  border-radius: 10px;
+  border: none;
+  background: transparent;
+  font-family: var(--fh);
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--ink-muted);
+  cursor: pointer;
+  transition: all var(--dur-fast) var(--ease-out);
+  letter-spacing: .02em;
+}
+.sw-btn.on-c { background: var(--o500); color: var(--white); }
+.sw-btn.on-p { background: var(--p900); color: var(--white); }
+
+/* ── Stage ── */
+.stage { display: flex; align-items: center; gap: var(--s3); }
+.nav-arrow {
+  width: 44px; height: 44px; border-radius: 50%;
+  border: 2px solid rgba(0,0,0,.12);
+  background: var(--white);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; flex-shrink: 0;
+  transition: all var(--dur-fast) ease;
+  box-shadow: 0 var(--s1) var(--s3) rgba(0,0,0,.06);
+}
+.nav-arrow:hover { border-color: var(--ink); background: var(--ink); color: var(--white); }
+.nav-arrow:focus-visible { outline: 3px solid var(--o500); outline-offset: 3px; } /* FIX #1 */
+.nav-arrow svg { pointer-events: none; }
+
+/* ── Phone ── */
+.phone {
+  width: 375px; height: 790px;
+  background: var(--white);
+  border-radius: 50px;
+  border: 10px solid #161616;
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+  box-shadow:
+    0 0 0 1px #222,
+    inset 0 0 0 1px rgba(255,255,255,.04),
+    0 40px 100px rgba(0,0,0,.28),
+    0 12px 30px rgba(0,0,0,.14);
+}
+.phone::before { /* Dynamic Island */
+  content: '';
+  position: absolute; top: 10px;
+  left: 50%; transform: translateX(-50%);
+  width: 126px; height: 34px;
+  background: #161616;
+  border-radius: 20px;
+  z-index: 20;
+}
+.phone::after { /* Home indicator */
+  content: '';
+  position: absolute; bottom: var(--s1);
+  left: 50%; transform: translateX(-50%);
+  width: 120px; height: 5px;
+  background: rgba(0,0,0,.18);
+  border-radius: 3px;
+  z-index: 20;
+}
+
+/* ── FIX #1: ARIA live region for screen reader announcements ── */
+.sr-announcer {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ── Screens ── */
+.screen {
+  position: absolute; inset: 0;
+  overflow-y: auto; overflow-x: hidden;
+  display: flex; flex-direction: column;
+  opacity: 0; pointer-events: none;
+  transform: translateX(40px);
+  will-change: transform, opacity;
+}
+.screen::-webkit-scrollbar { display: none; }
+.screen { scrollbar-width: none; }
+.screen.s-active {
+  opacity: 1; pointer-events: all;
+  transform: translateX(0);
+  transition: opacity var(--dur-mid) var(--ease-out),
+              transform var(--dur-mid) var(--spring);
+}
+.screen.s-exit-left {
+  opacity: 0; transform: translateX(-32px); pointer-events: none;
+  transition: opacity var(--dur-fast) ease, transform var(--dur-fast) ease-in;
+}
+.screen.s-exit-right {
+  opacity: 0; transform: translateX(32px); pointer-events: none;
+  transition: opacity var(--dur-fast) ease, transform var(--dur-fast) ease-in;
+}
+
+/* ── Animations ── */
+.a1 { animation: fadeUp var(--dur-mid) var(--ease-out) .04s both; }
+.a2 { animation: fadeUp var(--dur-mid) var(--ease-out) .12s both; }
+.a3 { animation: fadeUp var(--dur-mid) var(--ease-out) .20s both; }
+.a4 { animation: fadeUp var(--dur-mid) var(--ease-out) .28s both; }
+.a5 { animation: fadeUp var(--dur-mid) var(--ease-out) .36s both; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(.72); }
+  60%  { transform: scale(1.04); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@keyframes float {
+  0%,100% { transform: translateY(0px); }
+  50%      { transform: translateY(-6px); }
+}
+@keyframes pulse-ring {
+  0%   { transform: scale(.95); box-shadow: 0 0 0 0 var(--o-glow); }
+  70%  { transform: scale(1);   box-shadow: 0 0 0 16px rgba(255,85,0,0); }
+  100% { transform: scale(.95); box-shadow: 0 0 0 0 rgba(255,85,0,0); }
+}
+@keyframes checkDraw {
+  from { stroke-dashoffset: 40; }
+  to   { stroke-dashoffset: 0; }
+}
+@keyframes confettiFall {
+  0%   { transform: translateY(-20px) rotate(0deg); opacity:1; }
+  100% { transform: translateY(60px) rotate(360deg); opacity:0; }
+}
+
+/* ── Status bar ── */
+.sb {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: var(--s6) var(--s3) 0;
+  flex-shrink: 0;
+}
+.sb-time { font-family: var(--fh); font-size: 15px; font-weight: 700; letter-spacing: -.02em; }
+
+/* ── Top nav ── */
+.topnav {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 var(--s3);
+  height: 44px; flex-shrink: 0; margin-top: 4px;
+}
+.back-btn {
+  width: 36px; height: 36px; border-radius: 10px;
+  background: var(--surface); border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background var(--dur-fast) ease;
+}
+.back-btn:hover { background: var(--border); }
+.back-btn:active { transform: scale(.93); }
+.back-btn:focus-visible { outline: 3px solid var(--o500); outline-offset: 2px; } /* FIX #1 */
+
+/* FIX #1: progress with role="status" applied in HTML */
+.screen-progress {
+  font-family: var(--fh); font-size: 12px; font-weight: 600;
+  color: var(--ink-muted); letter-spacing: .04em;
+}
+
+/* FIX #5: Skip button — persistent on all intro screens */
+.skip-btn {
+  background: none; border: none; cursor: pointer;
+  font-family: var(--fh); font-weight: 600; font-size: 13px;
+  color: var(--ink-muted);
+  padding: var(--s1) var(--s2);
+  border-radius: var(--r-sm);
+  transition: all var(--dur-fast) ease;
+  letter-spacing: .02em;
+}
+.skip-btn:hover { color: var(--ink); background: var(--surface); }
+.skip-btn:focus-visible { outline: 3px solid var(--o500); outline-offset: 2px; } /* FIX #1 */
+
+/* ── Logo pill ── */
+.logo-pill {
+  display: flex; align-items: center; gap: var(--s1);
+  font-family: var(--fh); font-weight: 800; font-size: 16px;
+  color: var(--ink); letter-spacing: -.01em;
+}
+.logo-pill .mark {
+  width: 28px; height: 28px; border-radius: 8px;
+  background: var(--o500); display: flex; align-items: center; justify-content: center;
+}
+
+/* ── Scroll body ── */
+.scr-body {
+  flex: 1; padding: var(--s2) var(--s3) 100px;
+  display: flex; flex-direction: column;
+}
+
+/* ── Sticky CTA ── */
+.cta-footer {
+  position: sticky; bottom: 0;
+  padding: var(--s2) var(--s3) var(--s4);
+  background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 30%);
+  flex-shrink: 0;
+}
+.cta-footer-dark {
+  background: linear-gradient(to bottom, rgba(7,7,26,0) 0%, rgba(7,7,26,1) 30%);
+}
+
+/* ── Buttons ── */
+.btn {
+  width: 100%; height: 56px;
+  border: none; border-radius: var(--r-md);
+  font-family: var(--fh); font-weight: 700; font-size: 16px;
+  cursor: pointer; letter-spacing: .01em;
+  display: flex; align-items: center; justify-content: center; gap: var(--s1);
+  transition: all var(--dur-fast) var(--ease-out);
+  position: relative; overflow: hidden;
+  min-height: 44px; /* FIX #1: 44px touch target minimum */
+}
+.btn::after {
+  content: ''; position: absolute; inset: 0;
+  background: rgba(0,0,0,0);
+  transition: background var(--dur-fast) ease;
+  border-radius: inherit;
+}
+.btn:hover::after { background: rgba(0,0,0,.06); }
+.btn:active { transform: scale(.97); }
+.btn:focus-visible { outline: 3px solid var(--o500); outline-offset: 3px; } /* FIX #1 */
+
+.btn-primary { background: var(--o500); color: var(--white); box-shadow: 0 4px 16px var(--o-glow); }
+.btn-pro { background: var(--p900); color: var(--white); box-shadow: 0 4px 16px rgba(7,7,26,.3); }
+.btn-white-ghost { background: rgba(255,255,255,1); color: var(--o-text); border: 1.5px solid rgba(255,255,255,.8); box-shadow: none; }
+.btn-outline { background: var(--white); color: var(--ink); border: 1.5px solid var(--border); box-shadow: 0 1px 4px rgba(0,0,0,.06); }
+.btn-text { background: none; color: var(--ink-muted); font-size: 14px; font-weight: 500; height: 40px; }
+.btn-text:hover::after { background: none; }
+
+/* ── Social buttons ── */
+.social-btn {
+  width: 100%; height: 52px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--r-md);
+  background: var(--white);
+  font-family: var(--fh); font-weight: 600; font-size: 14px; color: var(--ink);
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  cursor: pointer; transition: all var(--dur-fast) ease;
+  min-height: 44px; /* FIX #1 */
+}
+.social-btn:hover { background: var(--surface); }
+.social-btn:focus-visible { outline: 3px solid var(--o500); outline-offset: 2px; } /* FIX #1 */
+
+/* ── Divider ── */
+.divider {
+  display: flex; align-items: center; gap: var(--s2);
+  color: var(--ink-muted); font-size: 13px;
+  margin: var(--s2) 0;
+}
+.divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+/* ── Input ── */
+.field-wrap { display: flex; flex-direction: column; gap: 5px; margin-bottom: var(--s2); }
+/* FIX #1: label with for= attribute */
+.field-label {
+  font-size: 12px; font-weight: 600; color: var(--ink-mid);
+  letter-spacing: .04em; text-transform: uppercase;
+}
+.field {
+  height: 52px; padding: 0 var(--s2);
+  border: 1.5px solid var(--border); border-radius: var(--r-md);
+  font-size: 15px; font-family: var(--fb); color: var(--ink);
+  background: var(--white); outline: none;
+  transition: border-color var(--dur-fast) ease, box-shadow var(--dur-fast) ease;
+  appearance: none;
+  min-height: 44px; /* FIX #1 */
+}
+.field:focus { border-color: var(--o500); box-shadow: 0 0 0 4px var(--o-glow); }
+.field::placeholder { color: #BDBDBD; }
+.field-pro:focus { border-color: var(--p-accent); box-shadow: 0 0 0 4px rgba(124,58,237,.12); }
+
+/* ── Auth tabs ── */
+.auth-seg {
+  display: flex; background: var(--surface); border-radius: 14px; padding: 4px;
+  margin-bottom: var(--s3); gap: 4px;
+}
+.auth-seg-btn {
+  flex: 1; height: 40px; border-radius: 11px; border: none;
+  font-family: var(--fh); font-weight: 600; font-size: 14px; color: var(--ink-muted);
+  background: transparent; cursor: pointer; transition: all var(--dur-fast) ease;
+  min-height: 44px; /* FIX #1 */
+}
+.auth-seg-btn.active {
+  background: var(--white); color: var(--ink);
+  box-shadow: 0 2px 8px rgba(0,0,0,.08);
+}
+.auth-seg-btn:focus-visible { outline: 3px solid var(--o500); outline-offset: 2px; } /* FIX #1 */
+
+/* ── Cards ── */
+.card {
+  background: var(--white); border: 1.5px solid var(--border);
+  border-radius: var(--r-lg); padding: var(--s3);
+  box-shadow: 0 2px 12px rgba(0,0,0,.04);
+}
+.card-warm { background: var(--o050); border-color: rgba(237,125,49,.15); }
+
+/* ── Badge ── */
+.badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 6px var(--s2); border-radius: 20px;
+  font-family: var(--fh); font-weight: 700; font-size: 12px;
+  letter-spacing: .04em;
+}
+.badge-free { background: var(--success-bg); color: #065F35; border: 1.5px solid var(--success-border); }
+.badge-coin { background: var(--coin-bg); color: #92400E; border: 1.5px solid var(--coin-border); }
+
+/* ── Headings ── */
+.sh { font-family: var(--fh); font-weight: 900; font-size: 30px; color: var(--ink); letter-spacing: -.03em; line-height: 1.1; }
+.sh-xl { font-size: 36px; }
+/* FIX #4: .hl uses --o-text (3.1:1 contrast) not --o500 (2.77:1) */
+.sh span.hl { color: var(--o-text); }
+.sh-white { color: var(--white); }
+.sub { font-size: 15px; color: var(--ink-muted); line-height: 1.6; margin-top: var(--s1); }
+
+/* ── Steps ── */
+.step-row { display: flex; gap: 14px; align-items: flex-start; }
+.step-dot {
+  width: 36px; height: 36px; border-radius: 11px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--fh); font-weight: 800; font-size: 15px; color: var(--white);
+}
+.step-title { font-family: var(--fh); font-weight: 700; font-size: 15px; color: var(--ink); margin-bottom: 2px; }
+.step-desc  { font-size: 13px; color: var(--ink-muted); line-height: 1.5; }
+.step-line  { width: 2px; height: var(--s3); background: var(--border); margin: 4px 17px; }
+
+/* ── Profile rows ── */
+.profile-row {
+  display: flex; gap: 14px; align-items: center;
+  padding: 14px; border-radius: var(--r-md);
+  border: 1.5px solid var(--border); background: var(--white);
+  cursor: pointer; transition: all var(--dur-fast) ease;
+  min-height: 44px; /* FIX #1 */
+}
+.profile-row:hover { border-color: var(--p-accent); }
+.profile-row:focus-visible { outline: 3px solid var(--p-accent); outline-offset: 2px; } /* FIX #1 */
+.pr-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.pr-title { font-family: var(--fh); font-weight: 700; font-size: 14px; color: var(--ink); }
+.pr-sub { font-size: 12px; color: var(--ink-muted); margin-top: 1px; line-height: 1.4; }
+.pr-check { width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--border); flex-shrink: 0; }
+
+/* ── Trust line ── */
+.trust-line {
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  font-size: 12px; color: var(--ink-muted);
+  margin-bottom: var(--s1);
+}
+.trust-line-dark { color: rgba(255,255,255,.5); }
+
+/* ── Pillar chips ── */
+.pillar-chips { display: flex; gap: var(--s1); justify-content: center; flex-wrap: wrap; }
+.pillar-chip {
+  display: flex; align-items: center; gap: 6px;
+  padding: 10px 16px; border-radius: 100px;
+  font-family: var(--fh); font-weight: 700; font-size: 13px;
+  border: 1.5px solid; letter-spacing: .03em;
+}
+
+/* ── Coin card ── */
+.coin-card {
+  background: var(--coin-bg); border: 1.5px solid var(--coin-border);
+  border-radius: var(--r-md); padding: 14px var(--s2);
+  display: flex; gap: var(--s2); align-items: flex-start;
+}
+.coin-icon { width: 36px; height: 36px; border-radius: 10px; background: var(--coin); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.coin-text-t { font-family: var(--fh); font-weight: 700; font-size: 13px; color: #92400E; margin-bottom: 2px; }
+.coin-text-b { font-size: 12px; color: #92400E; line-height: 1.4; } /* FIX #4: darkened */
+
+/* ── Splash ── */
+.splash-bg-c {
+  /* FIX #4: gradient now uses official #ED7D31 */
+  background: linear-gradient(155deg, #D96A1A 0%, #ED7D31 55%, #F2984F 100%);
+  flex: 1; display: flex; flex-direction: column;
+}
+.splash-bg-p {
+  background: linear-gradient(155deg, #07071A 0%, #0F0F2E 55%, #1A1040 100%);
+  flex: 1; display: flex; flex-direction: column;
+}
+.splash-icon-wrap { animation: scaleIn var(--dur-slow) var(--spring) .1s both; }
+.splash-logo-bg {
+  width: 100px; height: 100px; border-radius: 28px;
+  background: var(--white); display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 16px 48px rgba(0,0,0,.2);
+  animation: float 3.6s ease-in-out 1s infinite;
+}
+.splash-name {
+  font-family: var(--fh); font-weight: 900; font-size: 50px;
+  letter-spacing: -.04em; color: var(--white); line-height: 1;
+  animation: fadeUp var(--dur-mid) var(--ease-out) .35s both;
+}
+.splash-tagline {
+  font-size: 16px; color: rgba(255,255,255,.9); line-height: 1.55;
+  text-align: center; max-width: 260px;
+  animation: fadeUp var(--dur-mid) var(--ease-out) .5s both;
+}
+.splash-body { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: var(--s3); padding: 0 var(--s4); text-align: center; }
+.splash-foot { padding: 0 var(--s3) var(--s6); display: flex; flex-direction: column; gap: 10px; animation: fadeUp var(--dur-mid) var(--ease-out) .7s both; }
+.splash-pro-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(124,58,237,.25); border: 1.5px solid rgba(124,58,237,.4);
+  color: rgba(255,255,255,.9); padding: 6px 14px; border-radius: 20px;
+  font-family: var(--fh); font-weight: 700; font-size: 12px; letter-spacing: .1em;
+  backdrop-filter: blur(8px);
+  animation: fadeUp var(--dur-mid) var(--ease-out) .22s both;
+}
+
+/* ── Celebration ── */
+.celebrate-wrap {
+  display: flex; flex-direction: column; align-items: center;
+  text-align: center; padding: var(--s3); gap: var(--s2); flex: 1; justify-content: center;
+}
+.celebrate-icon {
+  width: 100px; height: 100px; border-radius: var(--r-xl);
+  display: flex; align-items: center; justify-content: center; position: relative;
+}
+.celebrate-icon-c { background: var(--o500); box-shadow: 0 16px 48px rgba(237,125,49,.35); animation: pulse-ring 2.4s ease-out infinite; }
+.celebrate-icon-p { background: var(--p900); box-shadow: 0 16px 48px rgba(7,7,26,.4); }
+.check-svg { animation: scaleIn .5s var(--spring) .3s both; }
+.check-svg path { stroke-dasharray: 40; animation: checkDraw .5s ease .6s both; }
+.confetti-dot { position: absolute; width: 8px; height: 8px; border-radius: 2px; animation: confettiFall 1.2s ease-in-out forwards; }
+
+/* ── Dots / progress ── */
+.dots-row { display: flex; gap: 6px; justify-content: center; margin-top: var(--s3); }
+.dot-item {
+  height: 6px; border-radius: 3px; cursor: pointer;
+  transition: all .25s var(--spring); background: #CCC; width: 6px;
+  min-width: 44px; /* FIX #1: clickable area via padding trick */
+  min-width: unset;
+  position: relative;
+}
+.dot-item::after { /* FIX #1: expanded touch area without visual change */
+  content: ''; position: absolute;
+  inset: -12px -8px;
+}
+.dot-item.dot-c { background: var(--o500); }
+.dot-item.dot-p { background: var(--p900); }
+.dot-item.dot-active { width: 24px; }
+
+.screen-lbl {
+  font-family: var(--fh); font-size: 12px; font-weight: 600;
+  color: #999; letter-spacing: .06em; text-transform: uppercase;
+  text-align: center; margin-top: 10px;
+}
+</style>
+</head>
+<body>
+
+<!-- FIX #1: ARIA live region — announces screen changes to screen readers -->
+<div aria-live="polite" aria-atomic="true" class="sr-announcer" id="announcer"></div>
+
+<!-- FIX #1: role on switcher group -->
+<div class="switcher" role="tablist" aria-label="Choose app version">
+  <button class="sw-btn on-c" id="sw-c" role="tab" aria-selected="true" aria-controls="profik-screens" onclick="switchApp('c')">PROFIK</button>
+  <button class="sw-btn" id="sw-p" role="tab" aria-selected="false" aria-controls="profik-pro-screens" onclick="switchApp('p')">PROFIK PRO</button>
+</div>
+
+<div class="stage">
+  <!-- FIX #1: aria-label on navigation arrows -->
+  <button class="nav-arrow" onclick="nav(-1)" aria-label="Previous screen">
+    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M11 4L6 9l5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </button>
+
+  <!-- FIX #1: phone container has aria-label -->
+  <div class="phone" id="phone" role="region" aria-label="App preview">
+
+  <!-- ══════════════════════════════════════
+       PROFIK  — Client App  — 6 screens
+  ══════════════════════════════════════ -->
+
+  <!-- C1 · SPLASH -->
+  <div class="screen s-active" id="c1" role="tabpanel" aria-label="Profik welcome screen">
+    <div class="sb" style="position:absolute;width:100%;z-index:5;">
+      <span class="sb-time" style="color:rgba(255,255,255,.9);">9:41</span>
+      <div class="sb-icons" aria-hidden="true">
+        <svg width="16" height="12" viewBox="0 0 16 12"><rect x="0" y="4" width="2.5" height="8" rx="1" fill="white"/><rect x="4" y="2" width="2.5" height="10" rx="1" fill="white"/><rect x="8" y="0" width="2.5" height="12" rx="1" fill="white"/><rect x="12" y="0" width="2.5" height="12" rx="1" fill="rgba(255,255,255,.3)"/></svg>
+        <svg width="26" height="12" viewBox="0 0 26 12"><rect x="0" y="1" width="22" height="10" rx="3" stroke="white" stroke-width="1.5" fill="none" opacity=".9"/><rect x="23" y="4" width="2.5" height="4" rx="1" fill="white" opacity=".6"/><rect x="1.5" y="2.5" width="16" height="7" rx="2" fill="white"/></svg>
+      </div>
+    </div>
+    <div class="splash-bg-c">
+      <div class="splash-body" style="padding-top:56px;">
+        <div class="splash-icon-wrap" aria-hidden="true">
+          <div class="splash-logo-bg">
+            <svg width="60" height="60" viewBox="0 0 60 60" fill="none" aria-hidden="true">
+              <rect x="8" y="20" width="44" height="30" rx="9" fill="#ED7D31"/>
+              <path d="M8 20 Q8 32 8 36 Q22 44 30 44 Q38 44 52 36 Q52 32 52 20 Z" fill="#F2984F"/>
+              <rect x="18" y="36" width="24" height="5" rx="2.5" fill="white" opacity=".9"/>
+              <path d="M21 20 V16 C21 13.2 23.2 11 26 11 H34 C36.8 11 39 13.2 39 16 V20" stroke="white" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+            </svg>
+          </div>
+        </div>
+        <div class="splash-name">Profik</div>
+        <div class="splash-tagline" style="font-size:18px;font-weight:700;">Easy. Trusted. Local.</div>
+        <div class="splash-tagline" style="margin-top:4px;font-size:14px;">Your button for everyday solutions.</div>
+      </div>
+      <div class="splash-foot">
+        <button class="btn btn-white-ghost" onclick="goTo('c2')" aria-label="Get started with Profik for free">Get started — it's free</button>
+        <button class="btn btn-text" style="color:rgba(255,255,255,.65);font-size:14px;" onclick="goTo('c5')" aria-label="Sign in to existing account">I already have an account</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- C2 · VALUE — max 3 items: heading + pillars + CTA -->
+  <div class="screen" id="c2" role="tabpanel" aria-label="Why Profik screen">
+    <div class="sb"><span class="sb-time" style="color:var(--ink);">9:41</span></div>
+    <div class="topnav">
+      <button class="back-btn" onclick="nav(-1)" aria-label="Go back">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M10 3L5 8l5 5" stroke="#444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <!-- FIX #1: role="status" announces progress -->
+      <span class="screen-progress" role="status" aria-label="Screen 1 of 4">1 / 4</span>
+      <!-- FIX #5: Skip button -->
+      <button class="skip-btn" onclick="goTo('c5')" aria-label="Skip onboarding and go to sign in">Skip</button>
+    </div>
+    <div class="scr-body" style="padding-bottom:80px;">
+      <div class="a1" style="text-align:center;padding:var(--s4) var(--s2) var(--s3);">
+        <div style="width:80px;height:80px;background:var(--o500);border-radius:22px;display:flex;align-items:center;justify-content:center;margin:0 auto var(--s3);box-shadow:0 8px 24px var(--o-glow);" aria-hidden="true">
+          <svg width="40" height="40" viewBox="0 0 40 40" fill="none"><path d="M6 30V14C6 11.8 7.8 10 10 10H30C32.2 10 34 11.8 34 14V30" stroke="white" stroke-width="2.8" stroke-linecap="round"/><path d="M2 30H38" stroke="white" stroke-width="2.8" stroke-linecap="round"/><rect x="15" y="22" width="10" height="8" rx="2" fill="white" opacity=".9"/><path d="M12 10V8C12 6.3 13.3 5 15 5H25C26.7 5 28 6.3 28 8V10" stroke="white" stroke-width="2.5" stroke-linecap="round" fill="none"/></svg>
+        </div>
+        <h1 class="sh a2" style="font-size:26px;">Solve everyday problems<br/><span class="hl">in just a few clicks.</span></h1>
+        <p class="sub a3">For anyone, anywhere. Local professionals ready right now.</p>
+      </div>
+
+      <!-- 3 brand pillars as chips — max cognitive load item 2 -->
+      <div class="a3 pillar-chips" role="list" aria-label="Profik brand values" style="margin-bottom:var(--s4);">
+        <div role="listitem" class="pillar-chip" style="background:var(--o100);border-color:rgba(237,125,49,.2);color:var(--o-text);" aria-label="Easy: two clicks, one solution">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 1L9.5 6H14.5L10.5 9L12 14.5L8 11.5L4 14.5L5.5 9L1.5 6H6.5L8 1Z" fill="currentColor"/></svg>
+          EASY
+        </div>
+        <div role="listitem" class="pillar-chip" style="background:#EDFFF5;border-color:#A8F0CD;color:#065F35;" aria-label="Trusted: verified professionals">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 1.5L13 3.5V8C13 11 10.5 13.5 8 14.5C5.5 13.5 3 11 3 8V3.5L8 1.5Z" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M5.5 8L7 9.5L10.5 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          TRUSTED
+        </div>
+        <div role="listitem" class="pillar-chip" style="background:#EFF6FF;border-color:#BFDBFE;color:#1D4ED8;" aria-label="Local: people from your area">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 1.5C5.5 1.5 3.5 3.5 3.5 6C3.5 9.5 8 14.5 8 14.5C8 14.5 12.5 9.5 12.5 6C12.5 3.5 10.5 1.5 8 1.5Z" stroke="currentColor" stroke-width="1.5" fill="none"/><circle cx="8" cy="6" r="1.5" fill="currentColor"/></svg>
+          LOCAL
+        </div>
+      </div>
+
+      <div class="a4 badge badge-free" style="align-self:center;margin-bottom:var(--s3);" aria-label="Forever free for users">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M6 1L7.5 4.5H11L8.25 6.75L9.5 11L6 8.75L2.5 11L3.75 6.75L1 4.5H4.5L6 1Z" fill="#065F35"/></svg>
+        Forever free for you
+      </div>
+    </div>
+    <div class="cta-footer a5">
+      <div class="trust-line" aria-hidden="true">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1L8.5 5H13L9.5 7.5L11 12L7 9.5L3 12L4.5 7.5L1 5H5.5L7 1Z" fill="#F59E0B"/></svg>
+        Trusted by 2M+ people across Europe
+      </div>
+      <button class="btn btn-primary" onclick="goTo('c3')" aria-label="See how Profik works, go to next screen">See how it works →</button>
+    </div>
+  </div>
+
+  <!-- C3 · HOW IT WORKS — heading + 4 steps + free card -->
+  <div class="screen" id="c3" role="tabpanel" aria-label="How Profik works screen">
+    <div class="sb"><span class="sb-time" style="color:var(--ink);">9:41</span></div>
+    <div class="topnav">
+      <button class="back-btn" onclick="nav(-1)" aria-label="Go back">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M10 3L5 8l5 5" stroke="#444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <span class="screen-progress" role="status" aria-label="Screen 2 of 4">2 / 4</span>
+      <button class="skip-btn" onclick="goTo('c5')" aria-label="Skip to sign in">Skip</button>
+    </div>
+    <div class="scr-body" style="padding-bottom:80px;">
+      <div class="a1" style="margin-bottom:var(--s3);">
+        <h2 class="sh">How Profik<br/><span class="hl">works for you</span></h2>
+        <p class="sub">Four steps. Zero effort. Always free.</p>
+      </div>
+
+      <ol class="a2" style="display:flex;flex-direction:column;list-style:none;" aria-label="How Profik works, 4 steps">
+        <li class="step-row">
+          <div aria-hidden="true"><div class="step-dot" style="background:var(--o500);">1</div></div>
+          <div style="flex:1;padding-top:4px;">
+            <div class="step-title">Describe your task</div>
+            <div class="step-desc">"Need a plumber today" is enough.</div>
+          </div>
+        </li>
+        <div class="step-line" aria-hidden="true"></div>
+        <li class="step-row">
+          <div aria-hidden="true"><div class="step-dot" style="background:var(--o400);">2</div></div>
+          <div style="flex:1;padding-top:4px;">
+            <div class="step-title">Get offers fast</div>
+            <div class="step-desc">Verified pros reply — usually within minutes.</div>
+          </div>
+        </li>
+        <div class="step-line" aria-hidden="true"></div>
+        <li class="step-row">
+          <div aria-hidden="true"><div class="step-dot" style="background:var(--o300);">3</div></div>
+          <div style="flex:1;padding-top:4px;">
+            <div class="step-title">Pick who suits you</div>
+            <div class="step-desc">Read reviews, compare. No algorithm. You decide.</div>
+          </div>
+        </li>
+        <div class="step-line" aria-hidden="true"></div>
+        <li class="step-row">
+          <div aria-hidden="true"><div class="step-dot" style="background:var(--success);">4</div></div>
+          <div style="flex:1;padding-top:4px;">
+            <div class="step-title">Done ✓</div>
+            <div class="step-desc">Pay the pro directly. Profik takes nothing from you — ever.</div>
+          </div>
+        </li>
+      </ol>
+
+      <div class="a3 card card-warm" style="margin-top:var(--s3);display:flex;gap:var(--s2);align-items:center;" role="note" aria-label="Posting is always free">
+        <div style="width:40px;height:40px;border-radius:12px;background:var(--o500);display:flex;align-items:center;justify-content:center;flex-shrink:0;" aria-hidden="true">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2L11.8 7H17L12.9 9.7L14.5 15L10 12.2L5.5 15L7.1 9.7L3 7H8.2L10 2Z" fill="white"/></svg>
+        </div>
+        <div>
+          <div style="font-family:var(--fh);font-weight:700;font-size:14px;color:var(--o-text);margin-bottom:2px;">Always free for you</div>
+          <div style="font-size:12px;color:var(--ink-mid);line-height:1.5;">Pros pay a small fee to send offers. You pay nothing — ever.</div>
+        </div>
+      </div>
+    </div>
+    <div class="cta-footer a4">
+      <button class="btn btn-primary" onclick="goTo('c4')" aria-label="Continue to social proof screen">Real people love it →</button>
+    </div>
+  </div>
+
+  <!-- C4 · SOCIAL PROOF — 1 quote + 1 stat line -->
+  <div class="screen" id="c4" role="tabpanel" aria-label="Social proof screen">
+    <div class="sb"><span class="sb-time" style="color:var(--ink);">9:41</span></div>
+    <div class="topnav">
+      <button class="back-btn" onclick="nav(-1)" aria-label="Go back">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M10 3L5 8l5 5" stroke="#444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <span class="screen-progress" role="status" aria-label="Screen 3 of 4">3 / 4</span>
+      <button class="skip-btn" onclick="goTo('c5')" aria-label="Skip to sign in">Skip</button>
+    </div>
+    <div class="scr-body" style="padding-bottom:80px;">
+      <div class="a1" style="margin-bottom:var(--s3);">
+        <h2 class="sh">People<br/><span class="hl">love Profik</span></h2>
+        <p class="sub">2M+ tasks completed. 4.9★ average rating.</p>
+      </div>
+
+      <!-- Single testimonial — clean peak moment -->
+      <div class="a2" style="background:var(--surface);border-radius:var(--r-lg);padding:var(--s3);margin-bottom:var(--s2);" role="blockquote" aria-label="Customer testimonial">
+        <div style="display:flex;gap:2px;margin-bottom:var(--s2);" aria-label="5 stars" role="img">
+          <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1L9.5 5.5H14.5L10.5 8.5L12 13.5L8 10.8L4 13.5L5.5 8.5L1.5 5.5H6.5L8 1Z" fill="#F59E0B"/></svg>
+          <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1L9.5 5.5H14.5L10.5 8.5L12 13.5L8 10.8L4 13.5L5.5 8.5L1.5 5.5H6.5L8 1Z" fill="#F59E0B"/></svg>
+          <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1L9.5 5.5H14.5L10.5 8.5L12 13.5L8 10.8L4 13.5L5.5 8.5L1.5 5.5H6.5L8 1Z" fill="#F59E0B"/></svg>
+          <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1L9.5 5.5H14.5L10.5 8.5L12 13.5L8 10.8L4 13.5L5.5 8.5L1.5 5.5H6.5L8 1Z" fill="#F59E0B"/></svg>
+          <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1L9.5 5.5H14.5L10.5 8.5L12 13.5L8 10.8L4 13.5L5.5 8.5L1.5 5.5H6.5L8 1Z" fill="#F59E0B"/></svg>
+        </div>
+        <p style="font-size:15px;color:var(--ink-mid);line-height:1.7;font-style:italic;margin-bottom:var(--s2);">"Posted at 9am, had three offers by 9:40. The cleaner arrived at noon. I did nothing except type."</p>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="width:36px;height:36px;border-radius:50%;background:var(--o300);display:flex;align-items:center;justify-content:center;font-family:var(--fh);font-weight:800;font-size:14px;color:white;" aria-hidden="true">M</div>
+          <div>
+            <div style="font-family:var(--fh);font-weight:700;font-size:13px;color:var(--ink);">Monika K.</div>
+            <div style="font-size:11px;color:var(--ink-muted);">Prague, CZ · Cleaning</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Second testimonial -->
+      <div class="a3" style="background:var(--surface);border-radius:var(--r-lg);padding:var(--s3);" role="blockquote" aria-label="Second customer testimonial">
+        <div style="display:flex;gap:2px;margin-bottom:var(--s2);" aria-label="5 stars" role="img">
+          <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1L9.5 5.5H14.5L10.5 8.5L12 13.5L8 10.8L4 13.5L5.5 8.5L1.5 5.5H6.5L8 1Z" fill="#F59E0B"/></svg>
+          <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1L9.5 5.5H14.5L10.5 8.5L12 13.5L8 10.8L4 13.5L5.5 8.5L1.5 5.5H6.5L8 1Z" fill="#F59E0B"/></svg>
+          <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1L9.5 5.5H14.5L10.5 8.5L12 13.5L8 10.8L4 13.5L5.5 8.5L1.5 5.5H6.5L8 1Z" fill="#F59E0B"/></svg>
+          <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1L9.5 5.5H14.5L10.5 8.5L12 13.5L8 10.8L4 13.5L5.5 8.5L1.5 5.5H6.5L8 1Z" fill="#F59E0B"/></svg>
+          <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1L9.5 5.5H14.5L10.5 8.5L12 13.5L8 10.8L4 13.5L5.5 8.5L1.5 5.5H6.5L8 1Z" fill="#F59E0B"/></svg>
+        </div>
+        <p style="font-size:15px;color:var(--ink-mid);line-height:1.7;font-style:italic;margin-bottom:var(--s2);">"Found a great tutor in 20 minutes. My daughter's marks went from C to A. Incredible."</p>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="width:36px;height:36px;border-radius:50%;background:var(--p-accent);display:flex;align-items:center;justify-content:center;font-family:var(--fh);font-weight:800;font-size:14px;color:white;" aria-hidden="true">T</div>
+          <div>
+            <div style="font-family:var(--fh);font-weight:700;font-size:13px;color:var(--ink);">Tomáš H.</div>
+            <div style="font-size:11px;color:var(--ink-muted);">Brno, CZ · Tutoring</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="cta-footer a4">
+      <button class="btn btn-primary" onclick="goTo('c5')" aria-label="Continue to create your account">Create free account →</button>
+    </div>
+  </div>
+
+  <!-- C5 · AUTH — FIX #1: labels with for=, FIX #5: skip on top -->
+  <div class="screen" id="c5" role="tabpanel" aria-label="Sign in or register screen">
+    <div class="sb"><span class="sb-time" style="color:var(--ink);">9:41</span></div>
+    <div class="topnav">
+      <button class="back-btn" onclick="nav(-1)" aria-label="Go back">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M10 3L5 8l5 5" stroke="#444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <span class="screen-progress" role="status" aria-label="Screen 4 of 4">4 / 4</span>
+    </div>
+    <div class="scr-body" style="padding-bottom:80px;">
+      <div class="a1" style="margin-bottom:var(--s3);">
+        <h2 class="sh sh-xl">Join Profik.<br/><span class="hl">It's free.</span></h2>
+        <p class="sub">Set up in under 60 seconds.</p>
+      </div>
+
+      <div class="auth-seg a2" role="tablist" aria-label="Sign in or create account">
+        <button class="auth-seg-btn active" id="seg-login" role="tab" aria-selected="true" onclick="toggleAuth('login')">Sign in</button>
+        <button class="auth-seg-btn" id="seg-register" role="tab" aria-selected="false" onclick="toggleAuth('register')">Register</button>
+      </div>
+
+      <div class="a3" id="auth-form">
+        <!-- FIX #1: label with for= attribute -->
+        <div class="field-wrap">
+          <label class="field-label" for="email-c">Email</label>
+          <input class="field" id="email-c" type="email" name="email" placeholder="you@example.com" autocomplete="email" aria-required="true"/>
+        </div>
+        <div class="field-wrap">
+          <label class="field-label" for="password-c">Password</label>
+          <input class="field" id="password-c" type="password" name="password" placeholder="••••••••" autocomplete="current-password" aria-required="true"/>
+        </div>
+      </div>
+
+      <div class="divider a4">or</div>
+      <div class="a4" style="display:flex;flex-direction:column;gap:var(--s1);">
+        <button class="social-btn" aria-label="Continue with Apple">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+          Continue with Apple
+        </button>
+        <button class="social-btn" aria-label="Continue with Google">
+          <svg width="20" height="20" viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9 3.1L39.5 6C35.4 2.4 30 0 24 0 14.6 0 6.7 5.6 3 13.7l7.8 6.1C12.6 13 17.8 9.5 24 9.5z"/><path fill="#34A853" d="M46.1 24.5c0-1.6-.1-3.1-.4-4.5H24v8.5h12.5c-.5 2.9-2.2 5.4-4.7 7.1l7.3 5.7c4.3-4 6.8-9.9 7-16.8z"/><path fill="#4A90D9" d="M10.8 28.7A14.5 14.5 0 0 1 9.5 24c0-1.6.3-3.2.8-4.7L2.5 13.2A23.9 23.9 0 0 0 0 24c0 3.8.9 7.4 2.5 10.7l8.3-6z"/><path fill="#FBBC05" d="M24 48c6 0 11-2 14.7-5.2l-7.3-5.7c-2 1.4-4.6 2.2-7.4 2.2-6.2 0-11.5-4.2-13.4-10l-7.8 6C6.6 42.3 14.7 48 24 48z"/></svg>
+          Continue with Google
+        </button>
+      </div>
+    </div>
+    <div class="cta-footer a5">
+      <button class="btn btn-primary" onclick="goTo('c6')" aria-label="Continue and create your account">Continue →</button>
+    </div>
+  </div>
+
+  <!-- C6 · CELEBRATION -->
+  <div class="screen" id="c6" role="tabpanel" aria-label="Welcome to Profik screen">
+    <div class="sb"><span class="sb-time" style="color:var(--ink);">9:41</span></div>
+    <div style="padding:var(--s2) var(--s3);display:flex;align-items:center;gap:var(--s1);" aria-label="Profik" role="banner">
+      <div class="logo-pill">
+        <div class="mark" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="2" y="5" width="12" height="9" rx="2.5" fill="white"/><path d="M5 5V4C5 2.9 5.9 2 7 2H9C10.1 2 11 2.9 11 4V5" stroke="white" stroke-width="1.8" stroke-linecap="round" fill="none"/></svg></div>
+        Profik
+      </div>
+    </div>
+    <div class="celebrate-wrap" aria-live="polite">
+      <div class="celebrate-icon celebrate-icon-c" aria-hidden="true">
+        <svg class="check-svg" width="48" height="48" viewBox="0 0 48 48" fill="none"><path d="M14 24L21 31L34 17" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <div class="confetti-dot" style="background:#FDE68A;top:-4px;left:10px;animation-delay:.1s;"></div>
+        <div class="confetti-dot" style="background:#A8F0CD;top:-4px;right:12px;animation-delay:.25s;"></div>
+        <div class="confetti-dot" style="background:#BFDBFE;top:8px;right:-4px;animation-delay:.15s;"></div>
+      </div>
+      <div>
+        <h2 class="sh sh-xl" style="text-align:center;">You're in!<br/><span class="hl">Welcome.</span></h2>
+        <p class="sub" style="text-align:center;margin-top:var(--s1);">Post your first task and get offers<br/>in minutes.</p>
+      </div>
+    </div>
+    <div class="cta-footer">
+      <button class="btn btn-primary" aria-label="Post your first task now">Post my first task →</button>
+      <button class="btn btn-text" style="margin-top:4px;" aria-label="Browse available services first">Browse services first</button>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════
+       PROFIK PRO — 6 screens
+  ══════════════════════════════════════ -->
+
+  <!-- P1 · SPLASH PRO -->
+  <div class="screen" id="p1" role="tabpanel" aria-label="Profik Pro welcome screen">
+    <div class="sb" style="position:absolute;width:100%;z-index:5;">
+      <span class="sb-time" style="color:rgba(255,255,255,.85);">9:41</span>
+    </div>
+    <div class="splash-bg-p">
+      <div class="splash-body" style="padding-top:56px;">
+        <div class="splash-pro-badge" role="note" aria-label="Professional version">PRO VERSION</div>
+        <div class="splash-icon-wrap" aria-hidden="true">
+          <div class="splash-logo-bg">
+            <svg width="60" height="60" viewBox="0 0 60 60" fill="none" aria-hidden="true">
+              <rect x="8" y="20" width="44" height="30" rx="9" fill="#1A1A42"/>
+              <rect x="18" y="36" width="24" height="5" rx="2.5" fill="#7C3AED" opacity=".8"/>
+              <path d="M21 20V16C21 13.2 23.2 11 26 11H34C36.8 11 39 13.2 39 16V20" stroke="#7C3AED" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+              <circle cx="30" cy="31" r="6" fill="#7C3AED"/>
+              <path d="M27 31L29.5 33.5L33 29" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+        </div>
+        <div class="splash-name">Profik <span style="color:rgba(124,58,237,.9);">PRO</span></div>
+        <div class="splash-tagline" style="font-size:16px;font-weight:600;">Get thousands of clients.<br/>Marketing is on us.</div>
+      </div>
+      <div class="splash-foot">
+        <button class="btn" style="background:var(--p-accent);color:white;box-shadow:0 4px 20px rgba(124,58,237,.4);" onclick="goTo('p2')" aria-label="Start growing your professional business">Start growing your business</button>
+        <button class="btn btn-text" style="color:rgba(255,255,255,.55);" onclick="goTo('p4')" aria-label="Sign in to existing Pro account">I have a PRO account</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- P2 · VALUE PRO — heading + 3 benefits + CTA -->
+  <div class="screen" id="p2" role="tabpanel" aria-label="Why Profik Pro screen">
+    <div class="sb"><span class="sb-time" style="color:var(--ink);">9:41</span></div>
+    <div class="topnav">
+      <button class="back-btn" onclick="nav(-1)" aria-label="Go back">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M10 3L5 8l5 5" stroke="#444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <span class="screen-progress" role="status" aria-label="Screen 1 of 4">1 / 4</span>
+      <button class="skip-btn" onclick="goTo('p4')" aria-label="Skip to sign in">Skip</button>
+    </div>
+    <div class="scr-body" style="padding-bottom:80px;">
+      <div class="a1" style="text-align:center;padding:var(--s3) var(--s1) var(--s4);">
+        <div style="width:80px;height:80px;background:var(--p900);border-radius:22px;display:flex;align-items:center;justify-content:center;margin:0 auto var(--s3);box-shadow:0 8px 24px rgba(7,7,26,.3);" aria-hidden="true">
+          <svg width="40" height="40" viewBox="0 0 40 40" fill="none"><circle cx="20" cy="12" r="7" stroke="#7C3AED" stroke-width="2.5" fill="none"/><path d="M6 34c0-7.7 6.3-14 14-14s14 6.3 14 14" stroke="#7C3AED" stroke-width="2.5" stroke-linecap="round" fill="none"/><circle cx="30" cy="16" r="4" fill="#F59E0B"/><path d="M28 16h4M30 14v4" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </div>
+        <h1 class="sh a2" style="font-size:26px;">Get thousands of clients.<br/><span style="color:#7C3AED;">Marketing is on us.</span></h1>
+        <p class="sub a3">You focus on your skill. We bring the work to your door.</p>
+      </div>
+
+      <!-- 3 benefit rows -->
+      <div class="a3" style="display:flex;flex-direction:column;gap:var(--s2);margin-bottom:var(--s3);" role="list" aria-label="Profik Pro benefits">
+        <div role="listitem" style="display:flex;gap:14px;align-items:center;background:var(--surface);padding:14px;border-radius:var(--r-md);">
+          <div style="width:44px;height:44px;background:var(--p-pale);border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M11 2L13.3 8H19.5L14.6 11.8L16.5 18L11 14.5L5.5 18L7.4 11.8L2.5 8H8.7L11 2Z" fill="#7C3AED"/></svg>
+          </div>
+          <div><div style="font-family:var(--fh);font-weight:700;font-size:14px;color:var(--ink);">Clients find you</div><div style="font-size:13px;color:var(--ink-muted);line-height:1.4;">Your profile is shown to thousands of people searching right now.</div></div>
+        </div>
+        <div role="listitem" style="display:flex;gap:14px;align-items:center;background:var(--surface);padding:14px;border-radius:var(--r-md);">
+          <div style="width:44px;height:44px;background:var(--coin-bg);border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><circle cx="11" cy="11" r="8" stroke="#F59E0B" stroke-width="2"/><path d="M8 11h6M11 8v6" stroke="#F59E0B" stroke-width="2" stroke-linecap="round"/></svg>
+          </div>
+          <div><div style="font-family:var(--fh);font-weight:700;font-size:14px;color:var(--ink);">Pay only when you win</div><div style="font-size:13px;color:var(--ink-muted);line-height:1.4;">Use coins only to send an offer. No client, no cost.</div></div>
+        </div>
+        <div role="listitem" style="display:flex;gap:14px;align-items:center;background:var(--surface);padding:14px;border-radius:var(--r-md);">
+          <div style="width:44px;height:44px;background:var(--success-bg);border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M4 11l5 5L18 6" stroke="#00A85E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div><div style="font-family:var(--fh);font-weight:700;font-size:14px;color:var(--ink);">Keep all your earnings</div><div style="font-size:13px;color:var(--ink-muted);line-height:1.4;">Profik doesn't take a commission from your job payment.</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="cta-footer a5">
+      <div class="trust-line" aria-hidden="true">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1L8.5 5H13L9.5 7.5L11 12L7 9.5L3 12L4.5 7.5L1 5H5.5L7 1Z" fill="#F59E0B"/></svg>
+        94% of pros get their first client within 24h
+      </div>
+      <button class="btn btn-pro" onclick="goTo('p3')" aria-label="See how Profik Pro works">See how it works →</button>
+    </div>
+  </div>
+
+  <!-- P3 · HOW IT WORKS PRO -->
+  <div class="screen" id="p3" role="tabpanel" aria-label="How Profik Pro works screen">
+    <div class="sb"><span class="sb-time" style="color:var(--ink);">9:41</span></div>
+    <div class="topnav">
+      <button class="back-btn" onclick="nav(-1)" aria-label="Go back">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M10 3L5 8l5 5" stroke="#444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <span class="screen-progress" role="status" aria-label="Screen 2 of 4">2 / 4</span>
+      <button class="skip-btn" onclick="goTo('p4')" aria-label="Skip to sign in">Skip</button>
+    </div>
+    <div class="scr-body" style="padding-bottom:80px;">
+      <div class="a1" style="margin-bottom:var(--s3);">
+        <h2 class="sh">How you<br/><span style="color:#7C3AED;">earn with PRO</span></h2>
+        <p class="sub">Simple. Transparent. No surprises.</p>
+      </div>
+
+      <ol class="a2" style="display:flex;flex-direction:column;list-style:none;" aria-label="How to earn with Profik Pro, 4 steps">
+        <li class="step-row">
+          <div aria-hidden="true"><div class="step-dot" style="background:var(--p-accent);">1</div></div>
+          <div style="flex:1;padding-top:4px;">
+            <div class="step-title">See a relevant job</div>
+            <div class="step-desc">Profik shows you tasks from clients near you in real time.</div>
+          </div>
+        </li>
+        <div class="step-line" aria-hidden="true"></div>
+        <li class="step-row">
+          <div aria-hidden="true"><div class="step-dot" style="background:#9F7AEA;">2</div></div>
+          <div style="flex:1;padding-top:4px;">
+            <div class="step-title">Send your offer with coins</div>
+            <div class="step-desc">Spend a small coin amount to contact the client directly.</div>
+          </div>
+        </li>
+        <div class="step-line" aria-hidden="true"></div>
+        <li class="step-row">
+          <div aria-hidden="true"><div class="step-dot" style="background:var(--coin);">3</div></div>
+          <div style="flex:1;padding-top:4px;">
+            <div class="step-title">Win the job</div>
+            <div class="step-desc">Client picks you. Agree on details. Start working.</div>
+          </div>
+        </li>
+        <div class="step-line" aria-hidden="true"></div>
+        <li class="step-row">
+          <div aria-hidden="true"><div class="step-dot" style="background:var(--success);">4</div></div>
+          <div style="flex:1;padding-top:4px;">
+            <div class="step-title">Get paid. Keep it all.</div>
+            <div class="step-desc">Client pays you directly. No Profik commission on earnings.</div>
+          </div>
+        </li>
+      </ol>
+
+      <!-- Coin explanation inline -->
+      <div class="a3 coin-card" style="margin-top:var(--s3);" role="note" aria-label="How coins work">
+        <div class="coin-icon" aria-hidden="true">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="8" fill="white" opacity=".3"/><path d="M10 6v8M7 9l3-3 3 3" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div>
+          <div class="coin-text-t">How coins work</div>
+          <div class="coin-text-b">Buy a coin pack once. Each offer costs 1–3 coins depending on job size. Unused coins never expire.</div>
+        </div>
+      </div>
+    </div>
+    <div class="cta-footer a4">
+      <button class="btn btn-pro" onclick="goTo('p4')" aria-label="Continue to create your Pro account">Create PRO account →</button>
+    </div>
+  </div>
+
+  <!-- P4 · AUTH PRO — FIX #1: labels -->
+  <div class="screen" id="p4" role="tabpanel" aria-label="Profik Pro sign in or register screen">
+    <div class="sb"><span class="sb-time" style="color:var(--ink);">9:41</span></div>
+    <div class="topnav">
+      <button class="back-btn" onclick="nav(-1)" aria-label="Go back">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M10 3L5 8l5 5" stroke="#444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <span class="screen-progress" role="status" aria-label="Screen 3 of 4">3 / 4</span>
+    </div>
+    <div class="scr-body" style="padding-bottom:80px;">
+      <div class="a1" style="margin-bottom:var(--s3);">
+        <div style="display:inline-flex;align-items:center;gap:6px;background:var(--p-pale);border:1px solid rgba(124,58,237,.2);color:#4C1D95;padding:6px 12px;border-radius:20px;font-family:var(--fh);font-weight:700;font-size:12px;letter-spacing:.06em;margin-bottom:var(--s2);" role="note" aria-label="Pro account">PRO ACCOUNT</div>
+        <h2 class="sh sh-xl">Join Profik <span style="color:#7C3AED;">PRO.</span></h2>
+        <p class="sub">Start getting clients today.</p>
+      </div>
+
+      <div class="auth-seg a2" role="tablist" aria-label="Sign in or create Pro account">
+        <button class="auth-seg-btn active" role="tab" aria-selected="true" onclick="this.parentNode.querySelectorAll('.auth-seg-btn').forEach(b=>b.classList.remove('active'));this.classList.add('active');">Sign in</button>
+        <button class="auth-seg-btn" role="tab" aria-selected="false" onclick="this.parentNode.querySelectorAll('.auth-seg-btn').forEach(b=>b.classList.remove('active'));this.classList.add('active');">Register</button>
+      </div>
+
+      <div class="a3">
+        <div class="field-wrap">
+          <label class="field-label" for="email-p">Email</label>
+          <input class="field field-pro" id="email-p" type="email" placeholder="pro@example.com" autocomplete="email" aria-required="true"/>
+        </div>
+        <div class="field-wrap">
+          <label class="field-label" for="password-p">Password</label>
+          <input class="field field-pro" id="password-p" type="password" placeholder="••••••••" autocomplete="current-password" aria-required="true"/>
+        </div>
+      </div>
+
+      <div class="divider a4">or</div>
+      <div class="a4" style="display:flex;flex-direction:column;gap:var(--s1);">
+        <button class="social-btn" aria-label="Continue with Apple">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+          Continue with Apple
+        </button>
+        <button class="social-btn" aria-label="Continue with Google">
+          <svg width="20" height="20" viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9 3.1L39.5 6C35.4 2.4 30 0 24 0 14.6 0 6.7 5.6 3 13.7l7.8 6.1C12.6 13 17.8 9.5 24 9.5z"/><path fill="#34A853" d="M46.1 24.5c0-1.6-.1-3.1-.4-4.5H24v8.5h12.5c-.5 2.9-2.2 5.4-4.7 7.1l7.3 5.7c4.3-4 6.8-9.9 7-16.8z"/><path fill="#4A90D9" d="M10.8 28.7A14.5 14.5 0 0 1 9.5 24c0-1.6.3-3.2.8-4.7L2.5 13.2A23.9 23.9 0 0 0 0 24c0 3.8.9 7.4 2.5 10.7l8.3-6z"/><path fill="#FBBC05" d="M24 48c6 0 11-2 14.7-5.2l-7.3-5.7c-2 1.4-4.6 2.2-7.4 2.2-6.2 0-11.5-4.2-13.4-10l-7.8 6C6.6 42.3 14.7 48 24 48z"/></svg>
+          Continue with Google
+        </button>
+      </div>
+    </div>
+    <div class="cta-footer a5">
+      <button class="btn btn-pro" onclick="goTo('p5')" aria-label="Continue to set up your Pro profile">Continue →</button>
+    </div>
+  </div>
+
+  <!-- P5 · PROFILE SETUP -->
+  <div class="screen" id="p5" role="tabpanel" aria-label="Complete your Pro profile screen">
+    <div class="sb"><span class="sb-time" style="color:var(--ink);">9:41</span></div>
+    <div class="topnav">
+      <button class="back-btn" onclick="nav(-1)" aria-label="Go back">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M10 3L5 8l5 5" stroke="#444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <span class="screen-progress" role="status" aria-label="Screen 4 of 4">4 / 4</span>
+    </div>
+    <div class="scr-body" style="padding-bottom:80px;">
+      <div class="a1" style="margin-bottom:var(--s3);">
+        <h2 class="sh">Complete your<br/><span style="color:#7C3AED;">PRO profile</span></h2>
+        <p class="sub">Profiles with photo & docs get 3× more clients.</p>
+      </div>
+
+      <!-- FIX #3: progress bar with proper ARIA -->
+      <div class="a2" style="margin-bottom:var(--s3);">
+        <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+          <span style="font-family:var(--fh);font-weight:600;font-size:13px;color:#7C3AED;">Profile strength</span>
+          <span id="prog-pct" style="font-family:var(--fh);font-weight:700;font-size:13px;color:#7C3AED;" aria-live="polite">0%</span>
+        </div>
+        <div style="height:6px;background:var(--surface);border-radius:3px;overflow:hidden;" role="progressbar" aria-label="Profile completion progress" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" id="prog-bar-wrap">
+          <div id="prog-bar" style="height:100%;width:0%;background:var(--p-accent);border-radius:3px;transition:width .5s var(--spring);"></div>
+        </div>
+      </div>
+
+      <div class="a3" style="display:flex;flex-direction:column;gap:var(--s1);" role="list" aria-label="Profile completion steps">
+        <button class="profile-row" onclick="completeStep(this,33)" aria-label="Add profile photo, required for profile completion" role="listitem">
+          <div class="pr-icon" style="background:var(--p-pale);" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><circle cx="11" cy="8" r="4" stroke="#7C3AED" stroke-width="1.8"/><path d="M3 19c0-4.4 3.6-8 8-8s8 3.6 8 8" stroke="#7C3AED" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </div>
+          <div class="pr-text">
+            <div class="pr-title">Add profile photo</div>
+            <div class="pr-sub">A face photo gets 2× more responses</div>
+          </div>
+          <div class="pr-check" aria-hidden="true"></div>
+        </button>
+        <button class="profile-row" onclick="completeStep(this,33)" aria-label="Write a short description about yourself" role="listitem">
+          <div class="pr-icon" style="background:var(--o100);" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect x="3" y="3" width="16" height="16" rx="3" stroke="#ED7D31" stroke-width="1.8"/><path d="M7 8h8M7 11h5" stroke="#ED7D31" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </div>
+          <div class="pr-text">
+            <div class="pr-title">Write a short bio</div>
+            <div class="pr-sub">Tell clients what makes you the best choice</div>
+          </div>
+          <div class="pr-check" aria-hidden="true"></div>
+        </button>
+        <button class="profile-row" onclick="completeStep(this,34)" aria-label="Upload identity document to get verified badge" role="listitem">
+          <div class="pr-icon" style="background:var(--success-bg);" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect x="3" y="5" width="16" height="12" rx="2.5" stroke="#00A85E" stroke-width="1.8"/><path d="M7 10h3M7 13h6" stroke="#00A85E" stroke-width="1.8" stroke-linecap="round"/><circle cx="15" cy="8" r="2" fill="#00A85E"/></svg>
+          </div>
+          <div class="pr-text">
+            <div class="pr-title">Verify your identity</div>
+            <div class="pr-sub">Upload ID or passport — get the verified badge</div>
+          </div>
+          <div class="pr-check" aria-hidden="true"></div>
+        </button>
+      </div>
+    </div>
+    <div class="cta-footer a5">
+      <button class="btn btn-pro" onclick="goTo('p6')" aria-label="Complete profile and start getting clients">Complete & start getting clients →</button>
+      <button class="btn btn-text" style="margin-top:4px;" onclick="goTo('p6')" aria-label="Skip profile setup and do it later">Do this later</button>
+    </div>
+  </div>
+
+  <!-- P6 · CELEBRATION PRO -->
+  <div class="screen" id="p6" role="tabpanel" aria-label="You are live on Profik Pro screen">
+    <div class="sb"><span class="sb-time" style="color:var(--ink);">9:41</span></div>
+    <div style="padding:var(--s2) var(--s3);display:flex;align-items:center;gap:var(--s1);" aria-label="Profik Pro" role="banner">
+      <div class="logo-pill">
+        <div class="mark" style="background:var(--p900);" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5" r="3" stroke="white" stroke-width="1.5"/><path d="M2 13c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </div>
+        Profik PRO
+      </div>
+    </div>
+    <div class="celebrate-wrap" aria-live="polite">
+      <div class="celebrate-icon celebrate-icon-p" aria-hidden="true">
+        <svg class="check-svg" width="48" height="48" viewBox="0 0 48 48" fill="none"><path d="M14 24L21 31L34 17" stroke="#7C3AED" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <div class="confetti-dot" style="background:#FDE68A;top:-4px;left:10px;animation-delay:.1s;"></div>
+        <div class="confetti-dot" style="background:#C4B5FD;top:-4px;right:12px;animation-delay:.25s;"></div>
+        <div class="confetti-dot" style="background:#A8F0CD;top:8px;right:-4px;animation-delay:.15s;"></div>
+      </div>
+      <div>
+        <h2 class="sh sh-xl" style="text-align:center;">You're live!<br/><span style="color:#7C3AED;">Start earning.</span></h2>
+        <p class="sub" style="text-align:center;margin-top:var(--s1);">12,000+ clients are posting tasks right now.<br/>Send your first offer.</p>
+      </div>
+      <div style="background:var(--p-pale);border-radius:var(--r-lg);padding:var(--s2) var(--s3);display:flex;gap:var(--s4);justify-content:center;" role="status" aria-label="Your starting coins balance: 10 free coins">
+        <div style="text-align:center;">
+          <div style="font-family:var(--fh);font-weight:900;font-size:28px;color:#7C3AED;letter-spacing:-.03em;">10</div>
+          <div style="font-size:12px;color:var(--ink-muted);">free coins</div>
+        </div>
+        <div style="width:1px;background:rgba(124,58,237,.15);"></div>
+        <div style="text-align:center;">
+          <div style="font-family:var(--fh);font-weight:900;font-size:28px;color:#7C3AED;letter-spacing:-.03em;">0%</div>
+          <div style="font-size:12px;color:var(--ink-muted);">commission</div>
+        </div>
+      </div>
+    </div>
+    <div class="cta-footer">
+      <button class="btn btn-pro" aria-label="Browse available jobs and send your first offer">Browse jobs & send offer →</button>
+    </div>
+  </div>
+
+  </div><!-- /phone -->
+
+  <!-- FIX #1: aria-label on next arrow -->
+  <button class="nav-arrow" onclick="nav(1)" aria-label="Next screen">
+    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M7 4L12 9l-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </button>
+</div>
+
+<!-- FIX #1: dots with role="tablist" and aria-label -->
+<div class="dots-row" id="dots" role="tablist" aria-label="Screen navigation dots" style="margin-top:16px;"></div>
+<div class="screen-lbl" id="slbl"></div>
+
+<script>
+/* ══════════════════════════════
+   State machine
+══════════════════════════════ */
+const apps = {
+  c: {
+    screens: ['c1','c2','c3','c4','c5','c6'],
+    labels:  ['Splash','Value','How It Works','Social Proof','Auth','Welcome'],
+    name: 'PROFIK'
+  },
+  p: {
+    screens: ['p1','p2','p3','p4','p5','p6'],
+    labels:  ['Splash PRO','Value PRO','How It Works','Auth PRO','Profile Setup','You\'re Live'],
+    name: 'PROFIK PRO'
+  }
+};
+let curApp = 'c', curIdx = 0;
+
+function announce(msg) {
+  /* FIX #1: push screen name to aria-live region */
+  const a = document.getElementById('announcer');
+  a.textContent = '';
+  requestAnimationFrame(() => { a.textContent = msg; });
+}
+
+function goTo(id) {
+  const app = apps[curApp];
+  const idx = app.screens.indexOf(id);
+  if (idx === -1) return;
+  navigate(idx > curIdx ? 1 : -1, idx);
+}
+
+function nav(dir) {
+  const app = apps[curApp];
+  const next = curIdx + dir;
+  if (next < 0 || next >= app.screens.length) return;
+  navigate(dir, next);
+}
+
+function navigate(dir, nextIdx) {
+  const app = apps[curApp];
+  const cur = document.getElementById(app.screens[curIdx]);
+  const nxt = document.getElementById(app.screens[nextIdx]);
+
+  cur.classList.remove('s-active');
+  cur.classList.add(dir > 0 ? 's-exit-left' : 's-exit-right');
+  cur.removeAttribute('aria-current'); /* FIX #1 */
+
+  nxt.style.transform = `translateX(${dir > 0 ? 40 : -40}px)`;
+  nxt.style.opacity = '0';
+
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      nxt.classList.add('s-active');
+      nxt.setAttribute('aria-current', 'step'); /* FIX #1 */
+      nxt.style.transform = '';
+      nxt.style.opacity = '';
+    });
+  });
+
+  setTimeout(() => cur.classList.remove('s-exit-left','s-exit-right'), 350);
+
+  curIdx = nextIdx;
+  updateDots();
+  updateLabel();
+
+  /* FIX #1: announce screen change */
+  const name = app.labels[curIdx] || app.screens[curIdx];
+  announce(`${app.name}: ${name}, screen ${curIdx + 1} of ${app.screens.length}`);
+}
+
+function switchApp(a) {
+  if (a === curApp) return;
+
+  const prev = apps[curApp];
+  prev.screens.forEach(id => {
+    const el = document.getElementById(id);
+    el.classList.remove('s-active','s-exit-left','s-exit-right');
+    el.removeAttribute('aria-current');
+  });
+
+  curApp = a; curIdx = 0;
+
+  const cur = apps[curApp];
+  const el = document.getElementById(cur.screens[0]);
+  el.classList.add('s-active');
+  el.setAttribute('aria-current', 'step'); /* FIX #1 */
+
+  document.getElementById('sw-c').classList.toggle('on-c', a === 'c');
+  document.getElementById('sw-c').setAttribute('aria-selected', a === 'c'); /* FIX #1 */
+  document.getElementById('sw-p').classList.toggle('on-p', a === 'p');
+  document.getElementById('sw-p').setAttribute('aria-selected', a === 'p'); /* FIX #1 */
+
+  updateDots();
+  updateLabel();
+  announce(`Switched to ${cur.name}, screen 1 of ${cur.screens.length}`); /* FIX #1 */
+}
+
+function updateDots() {
+  const app = apps[curApp];
+  const container = document.getElementById('dots');
+  container.innerHTML = '';
+  app.screens.forEach((id, i) => {
+    const d = document.createElement('button');
+    d.className = `dot-item ${curApp === 'c' ? 'dot-c' : 'dot-p'} ${i === curIdx ? 'dot-active' : ''}`;
+    /* FIX #1: aria-label on each dot */
+    d.setAttribute('aria-label', `Go to screen ${i+1}: ${app.labels[i] || id}`);
+    d.setAttribute('role', 'tab');
+    d.setAttribute('aria-selected', i === curIdx ? 'true' : 'false');
+    d.onclick = () => navigate(i > curIdx ? 1 : -1, i);
+    container.appendChild(d);
+  });
+}
+
+function updateLabel() {
+  const app = apps[curApp];
+  const lbl = document.getElementById('slbl');
+  lbl.textContent = (app.labels[curIdx] || '') + '  ·  ' + (curIdx + 1) + ' / ' + app.screens.length;
+}
+
+/* Profile progress */
+function completeStep(el, pct) {
+  const check = el.querySelector('.pr-check');
+  check.style.background = 'var(--p-accent)';
+  check.style.border = '2px solid var(--p-accent)';
+  check.innerHTML = '<svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 6l3 3 5-5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  el.style.borderColor = 'var(--p-accent)';
+  el.style.background = 'var(--p-pale)';
+  el.setAttribute('aria-label', el.getAttribute('aria-label').replace('Upload identity', 'Completed:') + ', completed');
+
+  const bar = document.getElementById('prog-bar');
+  const pctEl = document.getElementById('prog-pct');
+  const bWrap = document.getElementById('prog-bar-wrap');
+  const cur = parseInt(bar.style.width) || 0;
+  const next = Math.min(100, cur + pct);
+  bar.style.width = next + '%';
+  pctEl.textContent = next + '%';
+  bWrap.setAttribute('aria-valuenow', next); /* FIX #1 */
+}
+
+/* Auth tab toggle */
+function toggleAuth(mode) {
+  const loginBtn = document.getElementById('seg-login');
+  const regBtn   = document.getElementById('seg-register');
+  loginBtn.classList.toggle('active', mode === 'login');
+  regBtn.classList.toggle('active', mode === 'register');
+  loginBtn.setAttribute('aria-selected', mode === 'login');
+  regBtn.setAttribute('aria-selected', mode === 'register');
+}
+
+/* Touch swipe */
+let tx = 0;
+document.getElementById('phone').addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, { passive: true });
+document.getElementById('phone').addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].clientX - tx;
+  if (Math.abs(dx) > 40) nav(dx < 0 ? 1 : -1);
+}, { passive: true });
+
+/* Keyboard */
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight') nav(1);
+  if (e.key === 'ArrowLeft')  nav(-1);
+});
+
+/* Init */
+document.getElementById(apps[curApp].screens[0]).setAttribute('aria-current', 'step');
+updateDots();
+updateLabel();
+</script>
+</body>
+</html>
