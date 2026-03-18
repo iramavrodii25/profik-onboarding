@@ -1,0 +1,1056 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Profik — Easy. Trusted. Local.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  --o:#ED7D31;--o-dark:#C8621A;--o-pale:#FEF4EC;--o-glow:rgba(237,125,49,.12);
+  --pro:#08081C;--pro-mid:#14143A;--pro-acc:#7C3AED;--pro-pale:#F3F0FF;
+  --ink:#0C0C0C;--mid:#4A4A4A;--muted:#8A8A8A;--border:#EBEBEB;--white:#FFFFFF;
+  --fh:'Outfit',sans-serif;--fb:'Inter',sans-serif;
+  --ease:cubic-bezier(.22,1,.36,1);--spring:cubic-bezier(.34,1.4,.64,1);
+  --r:24px;--rs:16px;
+}
+body{background:#F5F5F5;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;min-height:100vh;font-family:var(--fb);padding:24px 0 48px;gap:32px}
+
+/* ── Toggle ── */
+.toggle-wrap{display:flex;background:#E8E8E8;border-radius:100px;padding:4px;gap:2px;position:relative;z-index:10}
+.toggle-btn{font-family:var(--fh);font-size:13px;font-weight:700;padding:8px 20px;border-radius:100px;border:none;cursor:pointer;transition:all .3s var(--ease);color:var(--muted);background:transparent;letter-spacing:.3px}
+.toggle-btn.active{background:var(--white);color:var(--ink);box-shadow:0 2px 8px rgba(0,0,0,.12)}
+.toggle-btn.active.pro{background:var(--pro);color:var(--white)}
+
+/* ── Phone Shell ── */
+.phone{
+  width:375px;height:812px;background:var(--white);border-radius:50px;
+  box-shadow:0 40px 80px rgba(0,0,0,.18),0 0 0 1px rgba(0,0,0,.06);
+  overflow:hidden;position:relative;display:flex;flex-direction:column;
+}
+/* Dynamic Island */
+.phone::before{
+  content:'';position:absolute;top:14px;left:50%;transform:translateX(-50%);
+  width:120px;height:34px;background:#000;border-radius:20px;z-index:100;
+}
+/* Side buttons */
+.phone::after{
+  content:'';position:absolute;right:-2px;top:140px;
+  width:3px;height:80px;background:rgba(0,0,0,.15);border-radius:2px;
+}
+
+/* ── Screen Container ── */
+.screens{flex:1;display:flex;flex-direction:column;overflow:hidden;position:relative}
+.screen{
+  position:absolute;inset:0;display:flex;flex-direction:column;
+  transition:transform .5s var(--ease),opacity .4s var(--ease);
+  will-change:transform;
+}
+.screen.active{transform:translateX(0);opacity:1;pointer-events:auto;z-index:2}
+.screen.exit-left{transform:translateX(-100%);opacity:0;pointer-events:none;z-index:1}
+.screen.exit-right{transform:translateX(100%);opacity:0;pointer-events:none;z-index:1}
+
+/* ── Animations ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pop{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:scale(1)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes draw{from{stroke-dashoffset:100}to{stroke-dashoffset:0}}
+.a1{animation:fadeUp .5s var(--ease) .05s both}
+.a2{animation:fadeUp .5s var(--ease) .15s both}
+.a3{animation:fadeUp .5s var(--ease) .25s both}
+.a4{animation:fadeUp .5s var(--ease) .35s both}
+.a5{animation:fadeUp .5s var(--ease) .45s both}
+.pop{animation:pop .5s var(--spring) .1s both}
+.float{animation:float 3s ease-in-out infinite}
+
+/* ── Progress dots ── */
+.dots{display:flex;gap:6px;justify-content:center;padding:6px 0}
+.dot{width:6px;height:6px;border-radius:3px;background:var(--border);transition:all .4s var(--spring)}
+.dot.on{width:20px;background:var(--o)}
+.dot.on.pro-dot{background:var(--pro-acc)}
+
+/* ── Screen internals ── */
+.screen-inner{display:flex;flex-direction:column;flex:1;padding:0 28px;overflow:hidden}
+.head{padding:60px 28px 0;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.head-spacer{padding:60px 0 0;flex-shrink:0}
+.foot{padding:16px 28px 40px;flex-shrink:0}
+.mid-area{flex:1;display:flex;flex-direction:column;justify-content:center;padding:0 28px}
+
+/* ── Buttons ── */
+.btn{
+  width:100%;padding:17px;border-radius:100px;border:none;cursor:pointer;
+  font-family:var(--fh);font-size:16px;font-weight:700;letter-spacing:.2px;
+  transition:all .2s var(--ease);display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.btn-primary{background:var(--o);color:var(--white)}
+.btn-primary:active{background:var(--o-dark);transform:scale(.98)}
+.btn-ghost{background:transparent;color:var(--mid);font-size:14px;font-weight:500;padding:12px}
+.btn-dark{background:var(--pro);color:var(--white)}
+.btn-dark:active{background:#000;transform:scale(.98)}
+.btn-acc{background:var(--pro-acc);color:var(--white)}
+.btn-outline{background:transparent;border:1.5px solid var(--border);color:var(--ink)}
+.btn-outline:active{background:var(--border)}
+
+/* ── Typography ── */
+.super{font-family:var(--fh);font-size:42px;font-weight:900;line-height:1.05;color:var(--ink);letter-spacing:-1.5px}
+.h1{font-family:var(--fh);font-size:30px;font-weight:800;line-height:1.15;color:var(--ink);letter-spacing:-.8px}
+.h2{font-family:var(--fh);font-size:22px;font-weight:700;line-height:1.2;color:var(--ink)}
+.body{font-size:15px;line-height:1.6;color:var(--mid)}
+.caption{font-size:12px;color:var(--muted)}
+.accent{color:var(--o)}
+.accent-pro{color:var(--pro-acc)}
+
+/* ── Chips ── */
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{
+  padding:7px 14px;border-radius:100px;font-family:var(--fh);
+  font-size:12px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;
+}
+.chip-o{background:var(--o-pale);color:var(--o)}
+.chip-ink{background:#F0F0F0;color:var(--ink)}
+.chip-pro{background:rgba(124,58,237,.1);color:var(--pro-acc)}
+
+/* ── Cards ── */
+.card{background:var(--white);border-radius:var(--r);padding:20px;border:1px solid var(--border)}
+.card-soft{background:#FAFAFA;border-radius:var(--r);padding:20px}
+
+/* ── Step row ── */
+.step-row{display:flex;align-items:flex-start;gap:16px;padding:14px 0;border-bottom:1px solid var(--border)}
+.step-row:last-child{border-bottom:none}
+.step-num{
+  width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-family:var(--fh);font-size:15px;font-weight:800;flex-shrink:0;
+}
+.step-num-o{background:var(--o-pale);color:var(--o)}
+.step-num-pro{background:rgba(124,58,237,.1);color:var(--pro-acc)}
+.step-body{}
+.step-title{font-family:var(--fh);font-size:14px;font-weight:700;color:var(--ink);margin-bottom:2px}
+.step-desc{font-size:13px;color:var(--muted);line-height:1.4}
+
+/* ── Auth ── */
+.auth-divider{display:flex;align-items:center;gap:12px;margin:16px 0}
+.auth-divider span{font-size:12px;color:var(--muted)}
+.auth-divider::before,.auth-divider::after{content:'';flex:1;height:1px;background:var(--border)}
+.input-wrap{position:relative;margin-bottom:12px}
+.input-wrap input{
+  width:100%;padding:15px 16px;border-radius:14px;border:1.5px solid var(--border);
+  font-family:var(--fb);font-size:15px;color:var(--ink);outline:none;
+  transition:border-color .2s;background:var(--white);
+}
+.input-wrap input:focus{border-color:var(--o)}
+.input-wrap input.pro-input:focus{border-color:var(--pro-acc)}
+.input-wrap label{
+  position:absolute;top:-8px;left:12px;font-size:11px;font-weight:600;
+  color:var(--muted);background:var(--white);padding:0 4px;letter-spacing:.3px;
+}
+
+/* ── Social btn ── */
+.social-btn{
+  width:100%;padding:14px;border-radius:14px;border:1.5px solid var(--border);
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  font-family:var(--fb);font-size:14px;font-weight:500;color:var(--ink);
+  cursor:pointer;background:var(--white);transition:all .2s;margin-bottom:10px;
+}
+.social-btn:active{background:#F5F5F5}
+
+/* ── Profile ── */
+.progress-bar{height:4px;background:var(--border);border-radius:2px;margin-bottom:24px;overflow:hidden}
+.progress-fill{height:100%;border-radius:2px;background:var(--pro-acc);transition:width .6s var(--spring)}
+.avatar-upload{
+  width:88px;height:88px;border-radius:50%;background:var(--pro-pale);
+  display:flex;align-items:center;justify-content:center;cursor:pointer;
+  border:2px dashed var(--pro-acc);margin:0 auto 20px;font-size:28px;
+}
+.tag-row{display:flex;flex-wrap:wrap;gap:8px}
+.tag{
+  padding:8px 14px;border-radius:100px;font-size:13px;font-weight:500;
+  border:1.5px solid var(--border);color:var(--mid);cursor:pointer;transition:all .2s;
+}
+.tag.sel{background:var(--pro-pale);border-color:var(--pro-acc);color:var(--pro-acc)}
+
+/* ── Splash ── */
+.splash{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 28px 40px}
+.logo-wrap{margin-bottom:32px;position:relative}
+.logo-ring{
+  width:100px;height:100px;border-radius:26px;
+  display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;
+}
+.logo-ring-o{background:linear-gradient(135deg,#ED7D31,#F5A461)}
+.logo-ring-pro{background:linear-gradient(135deg,#08081C,#14143A)}
+.logo-icon{font-size:48px;line-height:1}
+.logo-glow{
+  position:absolute;width:140px;height:140px;border-radius:50%;
+  filter:blur(30px);opacity:.4;top:50%;left:50%;transform:translate(-50%,-50%);
+  pointer-events:none;
+}
+.logo-glow-o{background:var(--o)}
+.logo-glow-pro{background:var(--pro-acc)}
+
+/* ── Celebration ── */
+.confetti-wrap{font-size:32px;line-height:1;margin-bottom:16px;display:flex;gap:8px;justify-content:center}
+
+/* ── Coin badge ── */
+.coin-badge{
+  display:inline-flex;align-items:center;gap:6px;padding:6px 12px;
+  background:rgba(124,58,237,.08);border-radius:100px;
+  font-size:12px;font-weight:700;color:var(--pro-acc);font-family:var(--fh);
+}
+
+/* ── Switch bar ── */
+.switch-row{display:flex;gap:6px;padding:6px;background:#F0F0F0;border-radius:14px;margin-bottom:20px}
+.switch-opt{
+  flex:1;padding:10px;border-radius:10px;text-align:center;
+  font-family:var(--fh);font-size:13px;font-weight:700;cursor:pointer;
+  transition:all .2s;color:var(--muted);
+}
+.switch-opt.on{background:var(--white);color:var(--ink);box-shadow:0 1px 4px rgba(0,0,0,.1)}
+
+/* PRO dark backgrounds */
+.bg-pro{background:var(--pro)}
+.bg-pro-mid{background:var(--pro-mid)}
+.text-white{color:var(--white)!important}
+.text-pale{color:rgba(255,255,255,.6)!important}
+.border-pro{border-color:rgba(255,255,255,.1)!important}
+
+/* ── Scroll inside screen ── */
+.scrollable{overflow-y:auto;flex:1;-webkit-overflow-scrolling:touch}
+.scrollable::-webkit-scrollbar{display:none}
+
+/* Nav back */
+.nav-back{width:36px;height:36px;border-radius:50%;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;background:var(--white)}
+.nav-back-dark{border-color:rgba(255,255,255,.2);background:rgba(255,255,255,.08);color:var(--white)}
+
+/* ── Instruction ── */
+.instruction{text-align:center;font-size:11px;color:var(--muted);margin-top:12px;display:flex;align-items:center;justify-content:center;gap:6px}
+
+/* ── Comparison legend ── */
+.legend{width:375px;padding:0 16px;display:flex;gap:12px}
+.legend-item{flex:1;background:var(--white);border-radius:16px;padding:14px 16px;border:1px solid var(--border)}
+.legend-label{font-size:11px;font-weight:700;letter-spacing:.5px;color:var(--muted);text-transform:uppercase;margin-bottom:4px}
+.legend-title{font-family:var(--fh);font-size:13px;font-weight:700;color:var(--ink)}
+.legend-desc{font-size:11px;color:var(--muted);margin-top:2px;line-height:1.4}
+</style>
+</head>
+<body>
+
+<!-- App Toggle -->
+<div class="toggle-wrap">
+  <button class="toggle-btn active" id="btnClient" onclick="switchApp('client')">PROFIK</button>
+  <button class="toggle-btn" id="btnPro" onclick="switchApp('pro')">PROFIK PRO</button>
+</div>
+
+<!-- Phone -->
+<div class="phone">
+  <div class="screens" id="screens">
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!--  CLIENT SCREENS                             -->
+    <!-- ═══════════════════════════════════════════ -->
+
+    <!-- C1: Splash -->
+    <div class="screen active" id="c1" data-app="client">
+      <div class="splash">
+        <div class="logo-wrap pop">
+          <div style="position:relative">
+            <div style="position:absolute;inset:-20px;background:var(--o-glow);border-radius:50%;filter:blur(20px)"></div>
+            <div class="logo-ring logo-ring-o float">
+              <span class="logo-icon">💼</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="text-align:center;margin-bottom:32px">
+          <div class="super a1" style="font-size:38px;margin-bottom:8px">PROFIK</div>
+          <div class="a2" style="font-size:16px;color:var(--muted);font-family:var(--fh);font-weight:500;letter-spacing:.5px">Easy. Trusted. Local.</div>
+        </div>
+
+        <div class="chips a3" style="justify-content:center;margin-bottom:40px">
+          <span class="chip chip-o">⚡ Easy</span>
+          <span class="chip chip-o">🛡 Trusted</span>
+          <span class="chip chip-o">📍 Local</span>
+        </div>
+
+        <div class="a4" style="width:100%">
+          <button class="btn btn-primary" onclick="go('c2')">Get Started</button>
+          <button class="btn btn-ghost" onclick="go('c4')">I already have account</button>
+        </div>
+      </div>
+      <div class="dots" style="padding-bottom:20px">
+        <div class="dot on"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+    </div>
+
+    <!-- C2: Value Prop -->
+    <div class="screen exit-right" id="c2" data-app="client">
+      <div class="head">
+        <div class="nav-back" onclick="go('c1')">←</div>
+      </div>
+      <div class="mid-area">
+
+        <div class="a1" style="margin-bottom:8px">
+          <span class="chip chip-o">For Everyone</span>
+        </div>
+
+        <div class="h1 a2" style="margin-bottom:16px">
+          Solve everyday problems<br><span class="accent">in a few clicks</span>
+        </div>
+
+        <div class="body a3" style="margin-bottom:28px">
+          From cleaning to tutoring — post your need and get offers from trusted local professionals.
+        </div>
+
+        <div class="a4" style="background:var(--o-pale);border-radius:20px;padding:20px">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
+            <span style="font-size:24px">🧹</span>
+            <div>
+              <div style="font-family:var(--fh);font-size:13px;font-weight:700;color:var(--ink)">Home Cleaning</div>
+              <div style="font-size:12px;color:var(--muted)">3 offers in 20 min · from €25</div>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
+            <span style="font-size:24px">📚</span>
+            <div>
+              <div style="font-family:var(--fh);font-size:13px;font-weight:700;color:var(--ink)">Math Tutoring</div>
+              <div style="font-size:12px;color:var(--muted)">5 offers in 15 min · from €18</div>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px">
+            <span style="font-size:24px">🔧</span>
+            <div>
+              <div style="font-family:var(--fh);font-size:13px;font-weight:700;color:var(--ink)">Furniture Assembly</div>
+              <div style="font-size:12px;color:var(--muted)">2 offers in 30 min · from €40</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="a5" style="text-align:center;margin-top:16px;font-size:12px;color:var(--muted)">
+          ✓ It's completely free to post
+        </div>
+
+      </div>
+      <div class="foot">
+        <button class="btn btn-primary" onclick="go('c3')">See how it works</button>
+      </div>
+      <div class="dots" style="padding-bottom:4px">
+        <div class="dot"></div>
+        <div class="dot on"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+    </div>
+
+    <!-- C3: How It Works -->
+    <div class="screen exit-right" id="c3" data-app="client">
+      <div class="head">
+        <div class="nav-back" onclick="go('c2')">←</div>
+      </div>
+      <div class="mid-area">
+
+        <div class="a1" style="margin-bottom:20px">
+          <div class="h1" style="margin-bottom:4px">How it works</div>
+          <div class="body" style="font-size:14px">Four steps, zero complexity</div>
+        </div>
+
+        <div class="a2" style="background:#FAFAFA;border-radius:20px;padding:4px 16px">
+          <div class="step-row">
+            <div class="step-num step-num-o">1</div>
+            <div class="step-body">
+              <div class="step-title">Post your need</div>
+              <div class="step-desc">Describe what you need in 30 seconds</div>
+            </div>
+          </div>
+          <div class="step-row">
+            <div class="step-num step-num-o">2</div>
+            <div class="step-body">
+              <div class="step-title">Get offers</div>
+              <div class="step-desc">Professionals reply with price & time</div>
+            </div>
+          </div>
+          <div class="step-row">
+            <div class="step-num step-num-o">3</div>
+            <div class="step-body">
+              <div class="step-title">Choose the best</div>
+              <div class="step-desc">Compare profiles, reviews, prices</div>
+            </div>
+          </div>
+          <div class="step-row">
+            <div class="step-num step-num-o">4</div>
+            <div class="step-body">
+              <div class="step-title">Done ✓</div>
+              <div class="step-desc">Problem solved, stress gone</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="a3" style="margin-top:20px;display:flex;align-items:center;gap:12px;padding:14px 16px;background:var(--o-pale);border-radius:14px">
+          <span style="font-size:20px">🎁</span>
+          <div>
+            <div style="font-family:var(--fh);font-size:13px;font-weight:700;color:var(--ink)">Always free for you</div>
+            <div style="font-size:12px;color:var(--muted)">Professionals pay to contact you, not you</div>
+          </div>
+        </div>
+
+      </div>
+      <div class="foot">
+        <button class="btn btn-primary" onclick="go('c4')">Create my account</button>
+      </div>
+      <div class="dots" style="padding-bottom:4px">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot on"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+    </div>
+
+    <!-- C4: Auth -->
+    <div class="screen exit-right" id="c4" data-app="client">
+      <div class="head-spacer" style="padding-top:72px"></div>
+      <div class="scrollable" style="padding:0 28px">
+
+        <div class="a1" style="margin-bottom:24px">
+          <div class="h2" style="margin-bottom:4px">Welcome to Profik</div>
+          <div class="body" style="font-size:14px">Create account or sign in</div>
+        </div>
+
+        <div class="a2">
+          <button class="social-btn">
+            <svg width="18" height="18" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+            Continue with Google
+          </button>
+          <button class="social-btn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+            Continue with Apple
+          </button>
+        </div>
+
+        <div class="auth-divider a3"><span>or</span></div>
+
+        <div class="a3">
+          <div class="switch-row" id="authSwitch">
+            <div class="switch-opt on" onclick="setAuth('register')">Register</div>
+            <div class="switch-opt" onclick="setAuth('login')">Sign in</div>
+          </div>
+        </div>
+
+        <div class="a4" id="authFields">
+          <div class="input-wrap">
+            <label>Full name</label>
+            <input type="text" placeholder="Jana Novák"/>
+          </div>
+          <div class="input-wrap">
+            <label>Email</label>
+            <input type="email" placeholder="jana@email.cz"/>
+          </div>
+          <div class="input-wrap">
+            <label>Phone</label>
+            <input type="tel" placeholder="+420 ..."/>
+          </div>
+          <div class="input-wrap">
+            <label>Password</label>
+            <input type="password" placeholder="••••••••"/>
+          </div>
+        </div>
+
+      </div>
+      <div class="foot">
+        <button class="btn btn-primary" onclick="go('c5')">Create Account</button>
+        <div class="caption" style="text-align:center;margin-top:10px">By continuing you agree to our <span style="color:var(--o)">Terms</span> & <span style="color:var(--o)">Privacy</span></div>
+      </div>
+      <div class="dots" style="padding-bottom:4px">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot on"></div>
+        <div class="dot"></div>
+      </div>
+    </div>
+
+    <!-- C5: Post First Task -->
+    <div class="screen exit-right" id="c5" data-app="client">
+      <div class="head-spacer" style="padding-top:72px"></div>
+      <div class="mid-area">
+
+        <div style="text-align:center;margin-bottom:32px">
+          <div style="font-size:56px;margin-bottom:16px" class="pop">🎉</div>
+          <div class="h1 a1" style="margin-bottom:8px">You're in!</div>
+          <div class="body a2">Post your first need and get offers from local pros</div>
+        </div>
+
+        <div class="a3" style="background:#FAFAFA;border-radius:20px;padding:20px">
+          <div style="font-family:var(--fh);font-size:13px;font-weight:700;color:var(--ink);margin-bottom:12px">What do you need help with?</div>
+          <div class="tag-row" id="clientTags">
+            <div class="tag" onclick="toggleTag(this)">🧹 Cleaning</div>
+            <div class="tag" onclick="toggleTag(this)">🔧 Repairs</div>
+            <div class="tag" onclick="toggleTag(this)">📚 Tutoring</div>
+            <div class="tag" onclick="toggleTag(this)">🌿 Gardening</div>
+            <div class="tag" onclick="toggleTag(this)">🎨 Painting</div>
+            <div class="tag" onclick="toggleTag(this)">🚗 Transport</div>
+            <div class="tag" onclick="toggleTag(this)">💆 Wellness</div>
+            <div class="tag" onclick="toggleTag(this)">💻 IT Help</div>
+          </div>
+        </div>
+
+        <div class="a4" style="margin-top:16px;text-align:center">
+          <div class="caption" style="color:var(--o);font-weight:600">100% free · No card required</div>
+        </div>
+
+      </div>
+      <div class="foot">
+        <button class="btn btn-primary" onclick="alert('🚀 Task posted! Offers coming in...')">Post My First Need →</button>
+        <button class="btn btn-ghost" onclick="alert('Welcome to Profik!')">Explore first</button>
+      </div>
+      <div class="dots" style="padding-bottom:4px">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot on"></div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!--  PRO SCREENS                                -->
+    <!-- ═══════════════════════════════════════════ -->
+
+    <!-- P1: PRO Splash -->
+    <div class="screen exit-right" id="p1" data-app="pro" style="background:var(--pro)">
+      <div class="splash" style="background:var(--pro)">
+
+        <div class="logo-wrap pop">
+          <div style="position:relative">
+            <div style="position:absolute;inset:-20px;background:rgba(124,58,237,.3);border-radius:50%;filter:blur(25px)"></div>
+            <div class="logo-ring logo-ring-pro float">
+              <span class="logo-icon">⚡</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="text-align:center;margin-bottom:32px">
+          <div class="super a1 text-white" style="font-size:32px;margin-bottom:4px">PROFIK PRO</div>
+          <div class="a2" style="font-size:14px;color:rgba(255,255,255,.5);font-family:var(--fh);font-weight:500;letter-spacing:.5px">For Professionals</div>
+        </div>
+
+        <div class="chips a3" style="justify-content:center;margin-bottom:40px">
+          <span class="chip" style="background:rgba(124,58,237,.2);color:#A78BFA">🚀 Grow</span>
+          <span class="chip" style="background:rgba(124,58,237,.2);color:#A78BFA">💰 Earn</span>
+          <span class="chip" style="background:rgba(124,58,237,.2);color:#A78BFA">📈 Scale</span>
+        </div>
+
+        <div class="a4" style="width:100%">
+          <button class="btn btn-acc" onclick="go('p2')">Get Clients Now</button>
+          <button class="btn" style="background:transparent;color:rgba(255,255,255,.5);font-size:14px;font-weight:500;padding:12px" onclick="go('p4')">I have an account</button>
+        </div>
+      </div>
+      <div class="dots" style="padding-bottom:20px">
+        <div class="dot on pro-dot"></div>
+        <div class="dot" style="background:rgba(255,255,255,.2)"></div>
+        <div class="dot" style="background:rgba(255,255,255,.2)"></div>
+        <div class="dot" style="background:rgba(255,255,255,.2)"></div>
+        <div class="dot" style="background:rgba(255,255,255,.2)"></div>
+        <div class="dot" style="background:rgba(255,255,255,.2)"></div>
+      </div>
+    </div>
+
+    <!-- P2: PRO Value -->
+    <div class="screen exit-right" id="p2" data-app="pro" style="background:var(--pro)">
+      <div class="head">
+        <div class="nav-back nav-back-dark" onclick="go('p1')">←</div>
+      </div>
+      <div class="mid-area" style="background:var(--pro)">
+
+        <div class="a1" style="margin-bottom:8px">
+          <span class="chip" style="background:rgba(124,58,237,.2);color:#A78BFA">For Pros</span>
+        </div>
+
+        <div class="h1 a2 text-white" style="margin-bottom:16px;font-size:26px">
+          Get thousands of clients —<br><span style="color:#A78BFA">we handle the marketing</span>
+        </div>
+
+        <div class="body a3 text-pale" style="margin-bottom:24px;font-size:14px">
+          Stop chasing clients. Profik brings them to you — verified, local, ready to hire.
+        </div>
+
+        <div class="a4" style="background:rgba(255,255,255,.06);border-radius:20px;padding:20px;border:1px solid rgba(255,255,255,.08)">
+          <div style="display:flex;gap:16px;margin-bottom:16px">
+            <div style="flex:1;text-align:center;padding:16px;background:rgba(255,255,255,.05);border-radius:14px">
+              <div style="font-family:var(--fh);font-size:24px;font-weight:900;color:#A78BFA">12k+</div>
+              <div style="font-size:11px;color:rgba(255,255,255,.4);margin-top:2px">Tasks posted weekly</div>
+            </div>
+            <div style="flex:1;text-align:center;padding:16px;background:rgba(255,255,255,.05);border-radius:14px">
+              <div style="font-family:var(--fh);font-size:24px;font-weight:900;color:#A78BFA">€820</div>
+              <div style="font-size:11px;color:rgba(255,255,255,.4);margin-top:2px">Avg monthly extra</div>
+            </div>
+          </div>
+          <div style="text-align:center;font-size:12px;color:rgba(255,255,255,.3)">
+            ★★★★★ "Got my first client in 2 hours" — Marek, Plumber
+          </div>
+        </div>
+
+      </div>
+      <div class="foot" style="background:var(--pro)">
+        <button class="btn btn-acc" onclick="go('p3')">See how it works</button>
+      </div>
+      <div class="dots" style="padding-bottom:4px;background:var(--pro)">
+        <div class="dot" style="background:rgba(255,255,255,.2)"></div>
+        <div class="dot on pro-dot"></div>
+        <div class="dot" style="background:rgba(255,255,255,.2)"></div>
+        <div class="dot" style="background:rgba(255,255,255,.2)"></div>
+        <div class="dot" style="background:rgba(255,255,255,.2)"></div>
+        <div class="dot" style="background:rgba(255,255,255,.2)"></div>
+      </div>
+    </div>
+
+    <!-- P3: PRO How It Works -->
+    <div class="screen exit-right" id="p3" data-app="pro" style="background:var(--pro)">
+      <div class="head">
+        <div class="nav-back nav-back-dark" onclick="go('p2')">←</div>
+      </div>
+      <div class="mid-area" style="background:var(--pro)">
+
+        <div class="a1" style="margin-bottom:20px">
+          <div class="h1 text-white" style="margin-bottom:4px;font-size:24px">How to earn with Profik</div>
+          <div style="font-size:14px;color:rgba(255,255,255,.4)">Simple. Transparent. Fair.</div>
+        </div>
+
+        <div class="a2" style="background:rgba(255,255,255,.05);border-radius:20px;padding:4px 16px;border:1px solid rgba(255,255,255,.08)">
+          <div class="step-row border-pro">
+            <div class="step-num step-num-pro">1</div>
+            <div class="step-body">
+              <div class="step-title text-white">Find a matching task</div>
+              <div class="step-desc" style="color:rgba(255,255,255,.4)">Browse jobs near you in your category</div>
+            </div>
+          </div>
+          <div class="step-row border-pro">
+            <div class="step-num step-num-pro">2</div>
+            <div class="step-body">
+              <div class="step-title text-white">Unlock with coins <span class="coin-badge">🪙 Coins</span></div>
+              <div class="step-desc" style="color:rgba(255,255,255,.4)">Buy coins to send your offer — only pay when you want to bid</div>
+            </div>
+          </div>
+          <div class="step-row border-pro">
+            <div class="step-num step-num-pro">3</div>
+            <div class="step-body">
+              <div class="step-title text-white">Client picks you</div>
+              <div class="step-desc" style="color:rgba(255,255,255,.4)">Your profile, reviews & price win the job</div>
+            </div>
+          </div>
+          <div class="step-row" style="border-bottom:none">
+            <div class="step-num step-num-pro">4</div>
+            <div class="step-body">
+              <div class="step-title text-white">Get paid 💸</div>
+              <div class="step-desc" style="color:rgba(255,255,255,.4)">Agree terms, do the work, receive money</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="a3" style="margin-top:16px;padding:12px 16px;background:rgba(124,58,237,.15);border-radius:12px;border:1px solid rgba(124,58,237,.3)">
+          <div style="font-size:12px;color:#A78BFA;font-weight:600">💡 You only spend coins when you choose to bid. No hidden fees.</div>
+        </div>
+
+      </div>
+      <div class="foot" style="background:var(--pro)">
+        <button class="btn btn-acc" onclick="go('p4')">Join as Professional</button>
+      </div>
+      <div class="dots" style="padding-bottom:4px;background:var(--pro)">
+        <div class="dot" style="background:rgba(255,255,255,.2)"></div>
+        <div class="dot" style="background:rgba(255,255,255,.2)"></div>
+        <div class="dot on pro-dot"></div>
+        <div class="dot" style="background:rgba(255,255,255,.2)"></div>
+        <div class="dot" style="background:rgba(255,255,255,.2)"></div>
+        <div class="dot" style="background:rgba(255,255,255,.2)"></div>
+      </div>
+    </div>
+
+    <!-- P4: PRO Auth -->
+    <div class="screen exit-right" id="p4" data-app="pro" style="background:var(--white)">
+      <div class="head-spacer" style="padding-top:72px"></div>
+      <div class="scrollable" style="padding:0 28px">
+
+        <div class="a1" style="margin-bottom:24px">
+          <div class="h2" style="margin-bottom:4px">Join Profik Pro</div>
+          <div class="body" style="font-size:14px">Start getting clients today</div>
+        </div>
+
+        <div class="a2">
+          <button class="social-btn">
+            <svg width="18" height="18" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+            Continue with Google
+          </button>
+          <button class="social-btn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+            Continue with Apple
+          </button>
+        </div>
+
+        <div class="auth-divider a3"><span>or</span></div>
+
+        <div class="a3">
+          <div class="switch-row" id="proAuthSwitch">
+            <div class="switch-opt on" onclick="setProAuth('register')">Register</div>
+            <div class="switch-opt" onclick="setProAuth('login')">Sign in</div>
+          </div>
+        </div>
+
+        <div class="a4">
+          <div class="input-wrap">
+            <label>Full name</label>
+            <input class="pro-input" type="text" placeholder="Jan Novák"/>
+          </div>
+          <div class="input-wrap">
+            <label>Email</label>
+            <input class="pro-input" type="email" placeholder="jan@email.cz"/>
+          </div>
+          <div class="input-wrap">
+            <label>Phone</label>
+            <input class="pro-input" type="tel" placeholder="+420 ..."/>
+          </div>
+          <div class="input-wrap">
+            <label>Password</label>
+            <input class="pro-input" type="password" placeholder="••••••••"/>
+          </div>
+        </div>
+      </div>
+      <div class="foot">
+        <button class="btn btn-acc" onclick="go('p5')">Create Pro Account</button>
+        <div class="caption" style="text-align:center;margin-top:10px">By continuing you agree to our <span style="color:var(--pro-acc)">Terms</span> & <span style="color:var(--pro-acc)">Privacy</span></div>
+      </div>
+      <div class="dots" style="padding-bottom:4px">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot on pro-dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+    </div>
+
+    <!-- P5: PRO Profile Setup -->
+    <div class="screen exit-right" id="p5" data-app="pro" style="background:var(--white)">
+      <div class="head-spacer" style="padding-top:72px"></div>
+      <div class="scrollable" style="padding:0 28px">
+
+        <div class="a1" style="margin-bottom:20px">
+          <div class="h2" style="margin-bottom:4px">Set up your profile</div>
+          <div class="body" style="font-size:13px">A complete profile gets 3× more clients</div>
+        </div>
+
+        <div class="progress-bar a2"><div class="progress-fill" id="progressFill" style="width:33%"></div></div>
+
+        <!-- Step indicator -->
+        <div class="a2" style="display:flex;gap:8px;margin-bottom:24px">
+          <div id="pStep1" class="chip chip-pro" style="cursor:pointer" onclick="showProfileStep(1)">1 Photo</div>
+          <div id="pStep2" class="chip chip-ink" style="cursor:pointer" onclick="showProfileStep(2)">2 About</div>
+          <div id="pStep3" class="chip chip-ink" style="cursor:pointer" onclick="showProfileStep(3)">3 Verify</div>
+        </div>
+
+        <!-- Profile Step 1: Photo -->
+        <div id="profileStep1" class="a3">
+          <div class="avatar-upload" onclick="alert('Camera roll would open here')">
+            📷
+          </div>
+          <div style="text-align:center;margin-bottom:20px">
+            <div style="font-family:var(--fh);font-size:13px;font-weight:700;color:var(--ink);margin-bottom:4px">Add your photo</div>
+            <div style="font-size:12px;color:var(--muted)">Profiles with photos get 5× more replies</div>
+          </div>
+
+          <div style="font-family:var(--fh);font-size:13px;font-weight:700;color:var(--ink);margin-bottom:12px">Your specialty</div>
+          <div class="tag-row" id="proCategories">
+            <div class="tag" onclick="toggleTag(this)">🔧 Repairs</div>
+            <div class="tag" onclick="toggleTag(this)">🧹 Cleaning</div>
+            <div class="tag" onclick="toggleTag(this)">📚 Tutoring</div>
+            <div class="tag" onclick="toggleTag(this)">🌿 Gardening</div>
+            <div class="tag" onclick="toggleTag(this)">🎨 Painting</div>
+            <div class="tag" onclick="toggleTag(this)">💆 Wellness</div>
+            <div class="tag" onclick="toggleTag(this)">🚗 Transport</div>
+            <div class="tag" onclick="toggleTag(this)">💻 IT</div>
+          </div>
+        </div>
+
+        <!-- Profile Step 2: About (hidden) -->
+        <div id="profileStep2" style="display:none">
+          <div class="input-wrap" style="margin-bottom:16px">
+            <label>Professional headline</label>
+            <input class="pro-input" type="text" placeholder="e.g. Experienced electrician, 8 yrs"/>
+          </div>
+          <div style="margin-bottom:16px">
+            <label style="font-size:11px;font-weight:600;color:var(--muted);letter-spacing:.3px;display:block;margin-bottom:8px">ABOUT YOU</label>
+            <textarea style="width:100%;padding:14px;border-radius:14px;border:1.5px solid var(--border);font-family:var(--fb);font-size:14px;color:var(--ink);outline:none;resize:none;height:100px" placeholder="Tell clients about your experience, why they should choose you..."></textarea>
+          </div>
+          <div class="input-wrap">
+            <label>Years of experience</label>
+            <input class="pro-input" type="number" placeholder="e.g. 5"/>
+          </div>
+        </div>
+
+        <!-- Profile Step 3: Verify (hidden) -->
+        <div id="profileStep3" style="display:none">
+          <div style="font-size:13px;color:var(--mid);margin-bottom:16px;line-height:1.5">Verification builds trust. Verified pros earn 40% more.</div>
+
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <div style="padding:16px;background:#FAFAFA;border-radius:14px;border:1px solid var(--border);display:flex;align-items:center;gap:12px;cursor:pointer">
+              <span style="font-size:22px">🪪</span>
+              <div style="flex:1">
+                <div style="font-family:var(--fh);font-size:13px;font-weight:700">ID Document</div>
+                <div style="font-size:12px;color:var(--muted)">Passport or national ID</div>
+              </div>
+              <span style="color:var(--muted);font-size:18px">›</span>
+            </div>
+            <div style="padding:16px;background:#FAFAFA;border-radius:14px;border:1px solid var(--border);display:flex;align-items:center;gap:12px;cursor:pointer">
+              <span style="font-size:22px">📜</span>
+              <div style="flex:1">
+                <div style="font-family:var(--fh);font-size:13px;font-weight:700">Trade License</div>
+                <div style="font-size:12px;color:var(--muted)">If applicable to your work</div>
+              </div>
+              <span style="color:var(--muted);font-size:18px">›</span>
+            </div>
+            <div style="padding:16px;background:#FAFAFA;border-radius:14px;border:1px solid var(--border);display:flex;align-items:center;gap:12px;cursor:pointer">
+              <span style="font-size:22px">📸</span>
+              <div style="flex:1">
+                <div style="font-family:var(--fh);font-size:13px;font-weight:700">Selfie Check</div>
+                <div style="font-size:12px;color:var(--muted)">Quick face verification</div>
+              </div>
+              <span style="color:var(--muted);font-size:18px">›</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="foot">
+        <button class="btn btn-acc" id="profileNextBtn" onclick="nextProfileStep()">Continue</button>
+        <button class="btn btn-ghost" onclick="go('p6')" style="font-size:13px">Skip for now</button>
+      </div>
+      <div class="dots" style="padding-bottom:4px">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot on pro-dot"></div>
+        <div class="dot"></div>
+      </div>
+    </div>
+
+    <!-- P6: PRO Celebration -->
+    <div class="screen exit-right" id="p6" data-app="pro" style="background:var(--pro)">
+      <div class="splash" style="background:var(--pro)">
+
+        <div style="text-align:center;margin-bottom:8px">
+          <div class="confetti-wrap pop">🎊 🚀 💰</div>
+          <div class="h1 a1 text-white" style="margin-bottom:8px;font-size:28px">You're live!</div>
+          <div class="body a2" style="color:rgba(255,255,255,.5);font-size:14px">
+            Your profile is active. First clients may reach out within hours.
+          </div>
+        </div>
+
+        <div class="a3" style="width:100%;background:rgba(255,255,255,.06);border-radius:20px;padding:20px;border:1px solid rgba(255,255,255,.1);margin-bottom:24px">
+          <div style="font-family:var(--fh);font-size:13px;font-weight:700;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.5px;margin-bottom:16px">Your starter pack</div>
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+            <span style="font-size:20px">🪙</span>
+            <div>
+              <div style="font-family:var(--fh);font-size:14px;font-weight:700;color:var(--white)">10 Free Coins</div>
+              <div style="font-size:12px;color:rgba(255,255,255,.4)">Send your first 3–4 offers for free</div>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+            <span style="font-size:20px">⭐</span>
+            <div>
+              <div style="font-family:var(--fh);font-size:14px;font-weight:700;color:var(--white)">Featured for 7 days</div>
+              <div style="font-size:12px;color:rgba(255,255,255,.4)">Appear at the top of search results</div>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px">
+            <span style="font-size:20px">🛡</span>
+            <div>
+              <div style="font-family:var(--fh);font-size:14px;font-weight:700;color:var(--white)">Pro Badge</div>
+              <div style="font-size:12px;color:rgba(255,255,255,.4)">Verified professional status</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="a4" style="width:100%">
+          <button class="btn btn-acc" onclick="alert('🎯 Opening job feed...')">Find First Job →</button>
+          <button class="btn" style="background:transparent;color:rgba(255,255,255,.4);font-size:13px;padding:12px" onclick="alert('Welcome to Profik Pro!')">Explore dashboard</button>
+        </div>
+
+      </div>
+      <div class="dots" style="padding-bottom:20px;background:var(--pro)">
+        <div class="dot" style="background:rgba(255,255,255,.2)"></div>
+        <div class="dot" style="background:rgba(255,255,255,.2)"></div>
+        <div class="dot" style="background:rgba(255,255,255,.2)"></div>
+        <div class="dot" style="background:rgba(255,255,255,.2)"></div>
+        <div class="dot" style="background:rgba(255,255,255,.2)"></div>
+        <div class="dot on pro-dot"></div>
+      </div>
+    </div>
+
+  </div><!-- /screens -->
+</div><!-- /phone -->
+
+<!-- Legend -->
+<div class="legend">
+  <div class="legend-item">
+    <div class="legend-label">PROFIK</div>
+    <div class="legend-title">Client App</div>
+    <div class="legend-desc">Post needs, get offers, hire local pros</div>
+  </div>
+  <div class="legend-item">
+    <div class="legend-label">PROFIK PRO</div>
+    <div class="legend-title">Professional App</div>
+    <div class="legend-desc">Find clients, bid with coins, grow business</div>
+  </div>
+</div>
+
+<!-- Instruction -->
+<div class="instruction">
+  <span>←</span> Swipe or use arrow keys to navigate <span>→</span>
+</div>
+
+<script>
+// ── State ──
+let currentApp = 'client';
+let currentScreen = 'c1';
+let currentProfileStep = 1;
+
+const clientFlow = ['c1','c2','c3','c4','c5'];
+const proFlow = ['p1','p2','p3','p4','p5','p6'];
+
+// ── Navigation ──
+function go(id) {
+  const prev = document.getElementById(currentScreen);
+  const next = document.getElementById(id);
+  if (!next || id === currentScreen) return;
+
+  const flow = currentApp === 'client' ? clientFlow : proFlow;
+  const pi = flow.indexOf(currentScreen);
+  const ni = flow.indexOf(id);
+  const dir = ni >= pi ? 'left' : 'right';
+
+  prev.className = prev.className.replace('active','').replace('exit-left','').replace('exit-right','').trim();
+  next.className = next.className.replace('active','').replace('exit-left','').replace('exit-right','').trim();
+
+  prev.classList.add(dir === 'left' ? 'exit-left' : 'exit-right');
+  next.classList.add('active');
+
+  // Re-trigger animations
+  next.querySelectorAll('[class*="a1"],[class*="a2"],[class*="a3"],[class*="a4"],[class*="a5"],[class*="pop"]').forEach(el => {
+    const cls = el.className;
+    el.className = cls.replace(/a[1-5]|pop/g,'').trim();
+    void el.offsetWidth;
+    el.className = cls;
+  });
+
+  currentScreen = id;
+}
+
+// ── App Switch ──
+function switchApp(app) {
+  if (app === currentApp) return;
+  currentApp = app;
+
+  const isClient = app === 'client';
+  document.getElementById('btnClient').className = 'toggle-btn' + (isClient ? ' active' : '');
+  document.getElementById('btnPro').className = 'toggle-btn' + (!isClient ? ' active pro' : '');
+
+  // Hide all
+  document.querySelectorAll('.screen').forEach(s => {
+    s.classList.remove('active','exit-left','exit-right');
+    s.classList.add('exit-right');
+  });
+
+  const target = isClient ? 'c1' : 'p1';
+  const targetEl = document.getElementById(target);
+  targetEl.classList.remove('exit-right');
+  targetEl.classList.add('active');
+  currentScreen = target;
+  currentProfileStep = 1;
+}
+
+// ── Auth mode ──
+function setAuth(mode) {
+  const sw = document.getElementById('authSwitch');
+  sw.querySelectorAll('.switch-opt').forEach((o,i) => {
+    o.classList.toggle('on', (mode==='register'&&i===0)||(mode==='login'&&i===1));
+  });
+  const fields = document.getElementById('authFields');
+  if (mode === 'login') {
+    fields.innerHTML = `
+      <div class="input-wrap"><label>Email</label><input type="email" placeholder="jana@email.cz"/></div>
+      <div class="input-wrap"><label>Password</label><input type="password" placeholder="••••••••"/></div>
+      <div style="text-align:right;margin-bottom:8px"><span style="font-size:12px;color:var(--o);cursor:pointer">Forgot password?</span></div>`;
+  } else {
+    fields.innerHTML = `
+      <div class="input-wrap"><label>Full name</label><input type="text" placeholder="Jana Novák"/></div>
+      <div class="input-wrap"><label>Email</label><input type="email" placeholder="jana@email.cz"/></div>
+      <div class="input-wrap"><label>Phone</label><input type="tel" placeholder="+420 ..."/></div>
+      <div class="input-wrap"><label>Password</label><input type="password" placeholder="••••••••"/></div>`;
+  }
+}
+
+function setProAuth(mode) {
+  const sw = document.getElementById('proAuthSwitch');
+  sw.querySelectorAll('.switch-opt').forEach((o,i) => {
+    o.classList.toggle('on', (mode==='register'&&i===0)||(mode==='login'&&i===1));
+  });
+}
+
+// ── Tag toggle ──
+function toggleTag(el) {
+  el.classList.toggle('sel');
+}
+
+// ── Profile steps ──
+function showProfileStep(step) {
+  currentProfileStep = step;
+  [1,2,3].forEach(i => {
+    const el = document.getElementById('profileStep'+i);
+    const chip = document.getElementById('pStep'+i);
+    if (el) el.style.display = i===step ? 'block' : 'none';
+    if (chip) {
+      chip.className = 'chip ' + (i===step ? 'chip-pro' : 'chip-ink');
+    }
+  });
+  const progress = {1:'33%',2:'66%',3:'100%'};
+  document.getElementById('progressFill').style.width = progress[step];
+  const btn = document.getElementById('profileNextBtn');
+  btn.textContent = step < 3 ? 'Continue' : 'Finish Setup';
+}
+
+function nextProfileStep() {
+  if (currentProfileStep < 3) {
+    showProfileStep(currentProfileStep + 1);
+  } else {
+    go('p6');
+  }
+}
+
+// ── Keyboard nav ──
+document.addEventListener('keydown', e => {
+  const flow = currentApp === 'client' ? clientFlow : proFlow;
+  const ci = flow.indexOf(currentScreen);
+  if (e.key === 'ArrowRight' && ci < flow.length-1) go(flow[ci+1]);
+  if (e.key === 'ArrowLeft' && ci > 0) go(flow[ci-1]);
+});
+
+// ── Swipe ──
+let sx = 0;
+const phone = document.querySelector('.phone');
+phone.addEventListener('touchstart', e => { sx = e.touches[0].clientX; }, {passive:true});
+phone.addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].clientX - sx;
+  const flow = currentApp === 'client' ? clientFlow : proFlow;
+  const ci = flow.indexOf(currentScreen);
+  if (dx < -50 && ci < flow.length-1) go(flow[ci+1]);
+  if (dx > 50 && ci > 0) go(flow[ci-1]);
+}, {passive:true});
+</script>
+</body>
+</html>
