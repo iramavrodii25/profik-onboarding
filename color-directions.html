@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Profik — Color Direction Exploration · 5 Visual Identities</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:#EDEDEC;font-family:'Inter',sans-serif;color:#0C0C0C;min-height:100vh}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
+/* ─── NAV ─── */
+nav{
+  position:sticky;top:0;z-index:100;
+  background:rgba(237,237,236,.88);backdrop-filter:blur(20px);
+  border-bottom:1px solid rgba(0,0,0,.08);
+  padding:0 40px;height:58px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.nav-logo{font-family:'Outfit',sans-serif;font-weight:800;font-size:17px;letter-spacing:-.02em}
+.nav-logo em{color:#ED7D31;font-style:normal}
+.nav-links{display:flex;gap:2px}
+.nav-link{padding:6px 14px;border-radius:8px;font-size:13px;font-weight:500;color:#555;text-decoration:none;transition:all .15s}
+.nav-link:hover{background:rgba(0,0,0,.07);color:#0C0C0C}
+.nav-back{padding:6px 14px;border-radius:8px;font-size:13px;font-weight:600;color:#0C0C0C;text-decoration:none;border:1px solid rgba(0,0,0,.15);background:#fff;transition:all .15s}
+.nav-back:hover{background:#0C0C0C;color:#fff;border-color:#0C0C0C}
+
+/* ─── HERO ─── */
+.hero{
+  text-align:center;padding:88px 32px 72px;
+  background:linear-gradient(180deg,#fff 0%,#EDEDEC 100%);
+  border-bottom:1px solid rgba(0,0,0,.06);
+}
+.hero-eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  background:#0C0C0C;color:#F8F8F8;
+  border-radius:100px;padding:6px 18px;
+  font-size:11px;font-weight:700;letter-spacing:.1em;
+  margin-bottom:28px;
+}
+.hero-eyebrow span{display:inline-block;width:6px;height:6px;border-radius:50%;background:#ED7D31}
+.hero h1{
+  font-family:'Outfit',sans-serif;font-weight:900;
+  font-size:clamp(38px,5.5vw,68px);letter-spacing:-.04em;line-height:1.02;
+  color:#0C0C0C;margin-bottom:20px;
+}
+.hero h1 strong{color:#ED7D31;font-style:normal}
+.hero-sub{font-size:18px;color:#555;max-width:580px;margin:0 auto 16px;line-height:1.65}
+.hero-meta{font-size:13px;color:#999;margin-bottom:44px}
+.dir-jumps{display:flex;flex-wrap:wrap;justify-content:center;gap:8px}
+.dir-jump{
+  padding:10px 22px;border-radius:100px;
+  border:1.5px solid rgba(0,0,0,.12);
+  font-size:13px;font-weight:600;color:#333;
+  text-decoration:none;background:#fff;
+  transition:all .2s;white-space:nowrap;
+}
+.dir-jump:hover{border-color:#0C0C0C;background:#0C0C0C;color:#fff}
+
+/* ─── DIRECTION CARD ─── */
+.direction{
+  display:flex;min-height:560px;
+  border-radius:20px;overflow:hidden;
+  margin:0 40px 28px;
+  box-shadow:0 4px 40px rgba(0,0,0,.1);
+}
+.visual-panel{
+  width:360px;flex-shrink:0;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:44px 32px;position:relative;overflow:hidden;
+}
+.dir-num-bg{
+  position:absolute;top:-20px;left:-16px;
+  font-family:'Outfit',sans-serif;font-weight:900;
+  font-size:140px;line-height:1;letter-spacing:-.04em;
+  opacity:.06;color:#fff;user-select:none;pointer-events:none;
+}
+.detail-panel{flex:1;background:#fff;padding:52px 56px}
+
+/* ─── PHONE ─── */
+.phone{
+  width:188px;height:390px;border-radius:32px;
+  border:5px solid rgba(0,0,0,.25);
+  position:relative;overflow:hidden;
+  box-shadow:0 0 0 1px rgba(255,255,255,.08),0 28px 56px rgba(0,0,0,.45),0 8px 16px rgba(0,0,0,.3);
+  flex-shrink:0;z-index:1;
+}
+.di{
+  position:absolute;top:11px;left:50%;transform:translateX(-50%);
+  width:54px;height:17px;background:#000;border-radius:9px;z-index:20;
+}
+.sb{
+  position:absolute;top:0;left:0;right:0;height:36px;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 16px;padding-top:4px;font-size:8.5px;font-weight:700;
+  z-index:15;letter-spacing:.02em;
+}
+.sc{position:absolute;top:36px;left:0;right:0;bottom:0;overflow:hidden}
+
+/* ─── PALETTE ─── */
+.palette-row{display:flex;gap:10px;flex-wrap:wrap;margin:24px 0}
+.sw-item{display:flex;flex-direction:column;align-items:center;gap:5px}
+.sw{width:54px;height:54px;border-radius:14px;border:1px solid rgba(0,0,0,.07);flex-shrink:0}
+.sw-role{font-size:9px;font-weight:700;letter-spacing:.06em;color:#888;text-align:center;text-transform:uppercase}
+.sw-hex{font-size:9px;color:#555;font-family:monospace;text-align:center}
+
+/* ─── DETAIL CONTENT ─── */
+.dir-label{font-size:11px;font-weight:700;letter-spacing:.12em;color:#aaa;margin-bottom:8px}
+.dir-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  border-radius:100px;padding:5px 14px;
+  font-size:11px;font-weight:700;letter-spacing:.07em;
+  margin-bottom:16px;border-width:1.5px;border-style:solid;
+}
+.dir-name{font-family:'Outfit',sans-serif;font-weight:900;font-size:30px;letter-spacing:-.025em;margin-bottom:10px}
+.dir-sub{font-size:15px;color:#555;line-height:1.65;max-width:440px;margin-bottom:24px}
+.section-label{font-size:10px;font-weight:700;letter-spacing:.12em;color:#bbb;text-transform:uppercase;margin-bottom:10px}
+
+.positioning-box{background:#F8F8F7;border-radius:14px;padding:20px 22px;margin:20px 0}
+.pos-text{font-size:14px;line-height:1.68;color:#333}
+
+.emotions{display:flex;flex-wrap:wrap;gap:6px;margin:16px 0}
+.emo{padding:5px 12px;border-radius:7px;font-size:12px;font-weight:600}
+
+.competitors-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.comp-tag{
+  padding:6px 14px;border-radius:8px;
+  border:1px solid rgba(0,0,0,.1);background:#F8F8F7;
+  font-size:12px;font-weight:600;color:#333;
+}
+.suitable-for{font-size:13px;color:#666;line-height:1.7;margin-top:8px}
+
+/* ─── COMPARISON TABLE ─── */
+.comparison{
+  background:#fff;border-radius:20px;
+  padding:52px;margin:0 40px 60px;
+  box-shadow:0 4px 40px rgba(0,0,0,.07);
+}
+.comparison h2{font-family:'Outfit',sans-serif;font-weight:900;font-size:28px;letter-spacing:-.025em;margin-bottom:8px}
+.comparison p{font-size:15px;color:#666;margin-bottom:32px}
+.comp-table{width:100%;border-collapse:collapse;font-size:13.5px}
+.comp-table th{font-size:10px;font-weight:700;letter-spacing:.1em;color:#aaa;text-transform:uppercase;padding:10px 16px;text-align:left;border-bottom:2px solid #F0F0EF}
+.comp-table td{padding:14px 16px;border-bottom:1px solid #F5F5F4;vertical-align:middle;color:#333;line-height:1.5}
+.comp-table tr:last-child td{border-bottom:none}
+.comp-table tr:hover td{background:#FAFAF9}
+.dot{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:10px;vertical-align:middle;flex-shrink:0}
+.table-name{display:flex;align-items:center;font-weight:700;color:#0C0C0C}
+.tag-small{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700}
+
+/* ─── FOOTER ─── */
+footer{
+  text-align:center;padding:40px 24px;
+  font-size:13px;color:#999;
+  border-top:1px solid rgba(0,0,0,.06);
+}
+footer a{color:#ED7D31;text-decoration:none;font-weight:600}
+
+/* ─── ANIMATIONS ─── */
+@keyframes goldPulse{0%,100%{box-shadow:0 0 16px rgba(232,160,32,.4)}50%{box-shadow:0 0 28px rgba(232,160,32,.7)}}
+@keyframes blobFloat{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(4px,-6px) scale(1.02)}}
+@keyframes cyanPulse{0%,100%{opacity:.6}50%{opacity:1}}
+@keyframes gridMove{0%{background-position:0 0}100%{background-position:40px 40px}}
+</style>
+</head>
+<body>
+
+<!-- ─────────────── NAV ─────────────── -->
+<nav>
+  <div class="nav-logo"><em>PROFIK</em> · Color Exploration</div>
+  <div class="nav-links">
+    <a class="nav-link" href="#d1">01 Dark</a>
+    <a class="nav-link" href="#d2">02 Minimal</a>
+    <a class="nav-link" href="#d3">03 Organic</a>
+    <a class="nav-link" href="#d4">04 Electric</a>
+    <a class="nav-link" href="#d5">05 Playful</a>
+    <a class="nav-link" href="#comparison">Table</a>
+  </div>
+  <a class="nav-back" href="compare.html">← Back to Compare</a>
+</nav>
+
+<!-- ─────────────── HERO ─────────────── -->
+<div class="hero">
+  <div class="hero-eyebrow"><span></span> COLOR DIRECTION EXPLORATION</div>
+  <h1>5 Visual Identities<br>for <strong>Profik</strong></h1>
+  <p class="hero-sub">Based on competitive research of marketplace, gig economy, and professional platform apps in 2024–2025. Each direction is a strategic bet on a different emotional territory.</p>
+  <p class="hero-meta">Research sources: Stripe, Linear, Revolut, Notion, Deel, Headspace, Vercel, Duolingo · Q1 2026</p>
+  <div class="dir-jumps">
+    <a class="dir-jump" href="#d1">01 · Dark Premium</a>
+    <a class="dir-jump" href="#d2">02 · Minimal Trust</a>
+    <a class="dir-jump" href="#d3">03 · Organic Human</a>
+    <a class="dir-jump" href="#d4">04 · Tech Electric</a>
+    <a class="dir-jump" href="#d5">05 · Playful Bold</a>
+  </div>
+</div>
+
+<div style="height:40px"></div>
+
+<!-- ═══════════════════════════════════════
+     DIRECTION 01 · DARK PREMIUM
+═══════════════════════════════════════ -->
+<section class="direction" id="d1">
+
+  <!-- Visual panel -->
+  <div class="visual-panel" style="background:linear-gradient(160deg,#0A1628 0%,#060D1A 100%);">
+    <div class="dir-num-bg">01</div>
+    <div class="phone">
+      <div class="di"></div>
+      <div class="sb" style="color:rgba(248,250,252,.45)">
+        <span>9:41</span><span style="letter-spacing:.04em">●●● ■■■</span>
+      </div>
+      <!-- Screen content -->
+      <div class="sc" style="background:linear-gradient(160deg,#0F1E3A 0%,#060D1A 100%);display:flex;flex-direction:column;align-items:center;padding:10px 14px 16px;">
+        <!-- Logo zone -->
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;width:100%">
+          <!-- Gold mark -->
+          <div style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#E8A020,#F5CC5A);display:flex;align-items:center;justify-content:center;margin-bottom:2px;animation:goldPulse 3s ease-in-out infinite">
+            <div style="font-size:15px;color:#06090F;font-weight:900;font-family:'Outfit',sans-serif;line-height:1">✦</div>
+          </div>
+          <!-- Wordmark -->
+          <div style="font-family:'Outfit',sans-serif;font-weight:900;font-size:17px;letter-spacing:.18em;color:#F8FAFC;text-align:center">PROFIK</div>
+          <!-- Gold bar -->
+          <div style="width:32px;height:2px;background:linear-gradient(90deg,transparent,#E8A020,transparent);border-radius:1px;margin-top:1px"></div>
+          <!-- Tagline -->
+          <div style="font-size:9px;color:rgba(148,163,184,.75);text-align:center;line-height:1.5;margin-top:5px;max-width:110px;font-weight:400">Your Premium<br>Professional Platform</div>
+        </div>
+        <!-- Glass cards -->
+        <div style="display:flex;gap:5px;width:100%;margin-bottom:12px">
+          <div style="flex:1;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);border-radius:10px;padding:8px 6px;display:flex;flex-direction:column;align-items:center;gap:4px;backdrop-filter:blur(8px)">
+            <div style="width:18px;height:18px;border-radius:5px;background:rgba(232,160,32,.18);border:1px solid rgba(232,160,32,.32)"></div>
+            <div style="font-size:7.5px;color:rgba(248,250,252,.55);font-weight:600;letter-spacing:.03em">TRUST</div>
+          </div>
+          <div style="flex:1;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);border-radius:10px;padding:8px 6px;display:flex;flex-direction:column;align-items:center;gap:4px;backdrop-filter:blur(8px)">
+            <div style="width:18px;height:18px;border-radius:50%;background:rgba(232,160,32,.18);border:1px solid rgba(232,160,32,.32)"></div>
+            <div style="font-size:7.5px;color:rgba(248,250,252,.55);font-weight:600;letter-spacing:.03em">SPEED</div>
+          </div>
+          <div style="flex:1;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);border-radius:10px;padding:8px 6px;display:flex;flex-direction:column;align-items:center;gap:4px;backdrop-filter:blur(8px)">
+            <div style="width:18px;height:18px;border-radius:5px;background:rgba(232,160,32,.18);border:1px solid rgba(232,160,32,.32);transform:rotate(45deg)"></div>
+            <div style="font-size:7.5px;color:rgba(248,250,252,.55);font-weight:600;letter-spacing:.03em">VALUE</div>
+          </div>
+        </div>
+        <!-- CTA -->
+        <div style="width:100%;height:36px;border-radius:18px;background:linear-gradient(135deg,#D4900A,#E8A020 40%,#F5CC5A);display:flex;align-items:center;justify-content:center;font-size:10.5px;font-weight:800;font-family:'Outfit',sans-serif;color:#06090F;letter-spacing:.04em;margin-bottom:8px;box-shadow:0 6px 18px rgba(232,160,32,.38)">
+          Get Started →
+        </div>
+        <div style="font-size:8px;color:rgba(148,163,184,.5);font-weight:500">Already a member? <span style="color:rgba(232,160,32,.75);font-weight:700">Sign in</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Detail panel -->
+  <div class="detail-panel">
+    <div class="dir-label">DIRECTION 01</div>
+    <div class="dir-badge" style="background:rgba(232,160,32,.1);color:#8A6000;border-color:rgba(232,160,32,.25)">DARK PREMIUM</div>
+    <h2 class="dir-name">Midnight Vault</h2>
+    <p class="dir-sub">Deep navy backgrounds, liquid gold accents, and glassmorphism cards. Targets professionals who already associate dark interfaces with high-performing tools — Linear, Stripe, Revolut.</p>
+
+    <div class="section-label">PALETTE</div>
+    <div class="palette-row">
+      <div class="sw-item"><div class="sw" style="background:#060D1A"></div><div class="sw-role">BG</div><div class="sw-hex">#060D1A</div></div>
+      <div class="sw-item"><div class="sw" style="background:#0F1E3A"></div><div class="sw-role">Surface</div><div class="sw-hex">#0F1E3A</div></div>
+      <div class="sw-item"><div class="sw" style="background:#E8A020;box-shadow:0 4px 12px rgba(232,160,32,.4)"></div><div class="sw-role">Gold</div><div class="sw-hex">#E8A020</div></div>
+      <div class="sw-item"><div class="sw" style="background:#F5CC5A"></div><div class="sw-role">Light Gold</div><div class="sw-hex">#F5CC5A</div></div>
+      <div class="sw-item"><div class="sw" style="background:#F8FAFC"></div><div class="sw-role">Text</div><div class="sw-hex">#F8FAFC</div></div>
+      <div class="sw-item"><div class="sw" style="background:#475569"></div><div class="sw-role">Muted</div><div class="sw-hex">#475569</div></div>
+    </div>
+
+    <div class="positioning-box">
+      <div class="section-label" style="margin-bottom:8px">STRATEGIC POSITIONING</div>
+      <p class="pos-text">In 2024–2025, the most-used premium tool category (SaaS, fintech, dev tools) converged on dark-mode-first design. Gold accents bypass the "cheap yellow" association by staying warm and desaturated. Glassmorphism depth signals layered functionality — you're not just signing up, you're accessing something. Strongest positioning for <strong>PROFIK PRO</strong> and high-ticket service verticals (legal, finance, executive coaching).</p>
+    </div>
+
+    <div class="section-label">EMOTIONAL RESPONSE</div>
+    <div class="emotions">
+      <span class="emo" style="background:rgba(232,160,32,.12);color:#7A5400">Authority</span>
+      <span class="emo" style="background:rgba(232,160,32,.12);color:#7A5400">Exclusivity</span>
+      <span class="emo" style="background:rgba(15,30,58,.08);color:#1A2B4A">Sophistication</span>
+      <span class="emo" style="background:rgba(15,30,58,.08);color:#1A2B4A">Trust</span>
+      <span class="emo" style="background:rgba(15,30,58,.08);color:#1A2B4A">Premium Access</span>
+    </div>
+
+    <div class="section-label" style="margin-top:20px">INSPIRED BY</div>
+    <div class="competitors-row">
+      <span class="comp-tag">Revolut</span><span class="comp-tag">Linear</span><span class="comp-tag">Stripe</span><span class="comp-tag">Raycast</span>
+    </div>
+    <p class="suitable-for" style="margin-top:14px"><strong>Suitable for:</strong> PROFIK PRO tier · High-value B2B clients · Finance, Legal, Executive verticals · Markets where dark mode = premium signal</p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     DIRECTION 02 · MINIMAL TRUST
+═══════════════════════════════════════ -->
+<section class="direction" id="d2">
+
+  <!-- Visual panel -->
+  <div class="visual-panel" style="background:#F7F9FC;border-right:1px solid rgba(0,0,0,.07)">
+    <div class="dir-num-bg" style="color:#0F172A;opacity:.04">02</div>
+    <div class="phone" style="border-color:rgba(0,0,0,.18)">
+      <div class="di"></div>
+      <div class="sb" style="color:rgba(15,23,42,.4)">
+        <span>9:41</span><span>●●● ■■■</span>
+      </div>
+      <div class="sc" style="background:#FFFFFF;display:flex;flex-direction:column;align-items:flex-start;padding:10px 16px 16px">
+        <!-- Logo zone -->
+        <div style="flex:1;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;width:100%;gap:6px">
+          <!-- Navy mark -->
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:2px">
+            <div style="width:22px;height:22px;border-radius:6px;background:#1A2B4A;display:flex;align-items:center;justify-content:center">
+              <div style="width:8px;height:8px;border-radius:2px;background:#2563EB"></div>
+            </div>
+            <div style="font-family:'Outfit',sans-serif;font-weight:900;font-size:15px;letter-spacing:.06em;color:#0F172A">PROFIK</div>
+          </div>
+          <!-- Underline -->
+          <div style="width:32px;height:2.5px;background:#2563EB;border-radius:1.5px;margin-bottom:2px"></div>
+          <!-- Tagline -->
+          <div style="font-size:11px;color:#0F172A;font-weight:700;line-height:1.4;max-width:120px;font-family:'Outfit',sans-serif">The professional<br>platform that works.</div>
+          <div style="font-size:8.5px;color:#64748B;line-height:1.5;max-width:130px;margin-top:2px">Trusted by 14,000+ verified<br>professionals across Europe.</div>
+        </div>
+        <!-- Trust items -->
+        <div style="width:100%;display:flex;flex-direction:column;gap:6px;margin-bottom:12px">
+          <div style="display:flex;align-items:center;gap:7px;background:#F7F9FC;border-radius:8px;padding:7px 10px">
+            <div style="width:14px;height:14px;border-radius:50%;background:#2563EB;flex-shrink:0;display:flex;align-items:center;justify-content:center"><div style="width:6px;height:4px;border-left:1.5px solid #fff;border-bottom:1.5px solid #fff;transform:rotate(-45deg) translate(1px,-1px)"></div></div>
+            <div style="font-size:8.5px;color:#0F172A;font-weight:600">Verified professionals only</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:7px;background:#F7F9FC;border-radius:8px;padding:7px 10px">
+            <div style="width:14px;height:14px;border-radius:50%;background:#2563EB;flex-shrink:0;display:flex;align-items:center;justify-content:center"><div style="width:6px;height:4px;border-left:1.5px solid #fff;border-bottom:1.5px solid #fff;transform:rotate(-45deg) translate(1px,-1px)"></div></div>
+            <div style="font-size:8.5px;color:#0F172A;font-weight:600">Secure escrow payments</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:7px;background:#F7F9FC;border-radius:8px;padding:7px 10px">
+            <div style="width:14px;height:14px;border-radius:50%;background:#2563EB;flex-shrink:0;display:flex;align-items:center;justify-content:center"><div style="width:6px;height:4px;border-left:1.5px solid #fff;border-bottom:1.5px solid #fff;transform:rotate(-45deg) translate(1px,-1px)"></div></div>
+            <div style="font-size:8.5px;color:#0F172A;font-weight:600">24/7 dispute resolution</div>
+          </div>
+        </div>
+        <!-- CTA -->
+        <div style="width:100%;height:36px;border-radius:8px;background:#1A2B4A;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;font-family:'Outfit',sans-serif;color:#fff;letter-spacing:.02em;margin-bottom:8px">
+          Continue
+        </div>
+        <div style="font-size:8px;color:#94A3B8;font-weight:500;text-align:center;width:100%">Sign in to existing account</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Detail panel -->
+  <div class="detail-panel">
+    <div class="dir-label">DIRECTION 02</div>
+    <div class="dir-badge" style="background:rgba(37,99,235,.08);color:#1e40af;border-color:rgba(37,99,235,.2)">MINIMAL TRUST</div>
+    <h2 class="dir-name">Clean Slate</h2>
+    <p class="dir-sub">White-first, trust-first. Deep navy anchors the brand, cool blue communicates reliability and security — the #1 emotional need in marketplace and payment apps.</p>
+
+    <div class="section-label">PALETTE</div>
+    <div class="palette-row">
+      <div class="sw-item"><div class="sw" style="background:#FFFFFF;border:1.5px solid #E2E8F0"></div><div class="sw-role">BG</div><div class="sw-hex">#FFFFFF</div></div>
+      <div class="sw-item"><div class="sw" style="background:#F7F9FC"></div><div class="sw-role">Surface</div><div class="sw-hex">#F7F9FC</div></div>
+      <div class="sw-item"><div class="sw" style="background:#1A2B4A"></div><div class="sw-role">Primary</div><div class="sw-hex">#1A2B4A</div></div>
+      <div class="sw-item"><div class="sw" style="background:#2563EB"></div><div class="sw-role">Accent</div><div class="sw-hex">#2563EB</div></div>
+      <div class="sw-item"><div class="sw" style="background:#0F172A"></div><div class="sw-role">Text</div><div class="sw-hex">#0F172A</div></div>
+      <div class="sw-item"><div class="sw" style="background:#64748B"></div><div class="sw-role">Muted</div><div class="sw-hex">#64748B</div></div>
+    </div>
+
+    <div class="positioning-box">
+      <div class="section-label" style="margin-bottom:8px">STRATEGIC POSITIONING</div>
+      <p class="pos-text">Blue remains the dominant trust color in B2B SaaS globally (Fiverr 2023 rebrand, Deel, Upwork, Toptal). White-first design removes friction at the moment of doubt — a user hesitating to trust a new platform is reassured by the visual language of banks and established institutions. This direction scales cleanly from mobile to desktop web without redesign, and passes WCAG AA by default due to high-contrast foundations.</p>
+    </div>
+
+    <div class="section-label">EMOTIONAL RESPONSE</div>
+    <div class="emotions">
+      <span class="emo" style="background:rgba(37,99,235,.1);color:#1e40af">Reliability</span>
+      <span class="emo" style="background:rgba(37,99,235,.1);color:#1e40af">Clarity</span>
+      <span class="emo" style="background:rgba(15,23,42,.07);color:#334155">Professionalism</span>
+      <span class="emo" style="background:rgba(15,23,42,.07);color:#334155">Transparency</span>
+      <span class="emo" style="background:rgba(15,23,42,.07);color:#334155">Efficiency</span>
+    </div>
+
+    <div class="section-label" style="margin-top:20px">INSPIRED BY</div>
+    <div class="competitors-row">
+      <span class="comp-tag">Notion</span><span class="comp-tag">Deel</span><span class="comp-tag">Fiverr</span><span class="comp-tag">Upwork</span>
+    </div>
+    <p class="suitable-for" style="margin-top:14px"><strong>Suitable for:</strong> B2B & B2C combined · Enterprise procurement · Czech & EU markets · Legal/financial services · International expansion</p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     DIRECTION 03 · ORGANIC HUMAN
+═══════════════════════════════════════ -->
+<section class="direction" id="d3">
+
+  <!-- Visual panel -->
+  <div class="visual-panel" style="background:#F4EFE6">
+    <div class="dir-num-bg" style="color:#2D6A4F;opacity:.08">03</div>
+    <!-- Decorative blobs behind phone -->
+    <div style="position:absolute;top:-40px;right:-40px;width:180px;height:180px;border-radius:50%;background:rgba(45,106,79,.12);animation:blobFloat 6s ease-in-out infinite;z-index:0"></div>
+    <div style="position:absolute;bottom:-30px;left:-20px;width:120px;height:120px;border-radius:50%;background:rgba(212,120,75,.1);animation:blobFloat 8s ease-in-out infinite reverse;z-index:0"></div>
+    <div class="phone" style="border-color:rgba(45,106,79,.2);z-index:2">
+      <div class="di"></div>
+      <div class="sb" style="color:rgba(44,24,16,.35)">
+        <span>9:41</span><span>●●● ■■■</span>
+      </div>
+      <div class="sc" style="background:#FAF7F2;display:flex;flex-direction:column;align-items:center;padding:8px 14px 14px">
+        <!-- Decorative blobs inside screen -->
+        <div style="position:absolute;top:20px;right:-20px;width:80px;height:80px;border-radius:50%;background:rgba(45,106,79,.1)"></div>
+        <div style="position:absolute;bottom:40px;left:-24px;width:70px;height:70px;border-radius:50%;background:rgba(212,120,75,.09)"></div>
+        <!-- Logo zone -->
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;width:100%;position:relative;z-index:1">
+          <!-- Leaf mark -->
+          <div style="width:40px;height:40px;border-radius:50%;background:#2D6A4F;display:flex;align-items:center;justify-content:center;margin-bottom:2px">
+            <div style="width:18px;height:18px;border-radius:50% 0 50% 0;background:#F9C74F;transform:rotate(-45deg)"></div>
+          </div>
+          <div style="font-family:'Outfit',sans-serif;font-weight:800;font-size:16px;letter-spacing:.04em;color:#2D6A4F;text-align:center">profik</div>
+          <div style="font-size:9.5px;color:#7D6658;text-align:center;line-height:1.5;max-width:120px;font-weight:400;margin-top:3px">Where humans<br>help humans grow</div>
+        </div>
+        <!-- Organic pills -->
+        <div style="display:flex;gap:5px;width:100%;margin-bottom:12px;position:relative;z-index:1">
+          <div style="flex:1;background:rgba(45,106,79,.08);border:1px solid rgba(45,106,79,.15);border-radius:20px;padding:6px 4px;display:flex;flex-direction:column;align-items:center;gap:3px">
+            <div style="width:16px;height:16px;border-radius:50%;background:#2D6A4F"></div>
+            <div style="font-size:7.5px;color:#2D6A4F;font-weight:700">Real</div>
+          </div>
+          <div style="flex:1;background:rgba(212,120,75,.08);border:1px solid rgba(212,120,75,.2);border-radius:20px;padding:6px 4px;display:flex;flex-direction:column;align-items:center;gap:3px">
+            <div style="width:16px;height:16px;border-radius:4px;background:#D4784B"></div>
+            <div style="font-size:7.5px;color:#D4784B;font-weight:700">Fair</div>
+          </div>
+          <div style="flex:1;background:rgba(249,199,79,.15);border:1px solid rgba(249,199,79,.3);border-radius:20px;padding:6px 4px;display:flex;flex-direction:column;align-items:center;gap:3px">
+            <div style="width:16px;height:16px;border-radius:50%;background:#F9C74F;border:2px solid rgba(0,0,0,.08)"></div>
+            <div style="font-size:7.5px;color:#8A6300;font-weight:700">Grow</div>
+          </div>
+        </div>
+        <!-- CTA -->
+        <div style="width:100%;height:36px;border-radius:24px;background:#D4784B;display:flex;align-items:center;justify-content:center;font-size:10.5px;font-weight:800;font-family:'Outfit',sans-serif;color:#fff;letter-spacing:.03em;margin-bottom:8px;box-shadow:0 4px 14px rgba(212,120,75,.3);position:relative;z-index:1">
+          Start Growing →
+        </div>
+        <div style="font-size:8px;color:#A08070;font-weight:500;position:relative;z-index:1">Already growing? <span style="color:#2D6A4F;font-weight:700">Sign in</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Detail panel -->
+  <div class="detail-panel">
+    <div class="dir-label">DIRECTION 03</div>
+    <div class="dir-badge" style="background:rgba(45,106,79,.1);color:#1a4a34;border-color:rgba(45,106,79,.22)">ORGANIC HUMAN</div>
+    <h2 class="dir-name">Earth & Grow</h2>
+    <p class="dir-sub">Forest green, warm cream, and terracotta. Differentiates in a sea of tech-cold interfaces by signaling community, authenticity, and real human connection over algorithmic matching.</p>
+
+    <div class="section-label">PALETTE</div>
+    <div class="palette-row">
+      <div class="sw-item"><div class="sw" style="background:#FAF7F2"></div><div class="sw-role">BG</div><div class="sw-hex">#FAF7F2</div></div>
+      <div class="sw-item"><div class="sw" style="background:#FFFFFF;border:1px solid #EDE9E1"></div><div class="sw-role">Surface</div><div class="sw-hex">#FFFFFF</div></div>
+      <div class="sw-item"><div class="sw" style="background:#2D6A4F"></div><div class="sw-role">Forest</div><div class="sw-hex">#2D6A4F</div></div>
+      <div class="sw-item"><div class="sw" style="background:#D4784B"></div><div class="sw-role">Terra</div><div class="sw-hex">#D4784B</div></div>
+      <div class="sw-item"><div class="sw" style="background:#F9C74F"></div><div class="sw-role">Warm Gold</div><div class="sw-hex">#F9C74F</div></div>
+      <div class="sw-item"><div class="sw" style="background:#2C1810"></div><div class="sw-role">Text</div><div class="sw-hex">#2C1810</div></div>
+    </div>
+
+    <div class="positioning-box">
+      <div class="section-label" style="margin-bottom:8px">STRATEGIC POSITIONING</div>
+      <p class="pos-text">Post-2023 research shows users of gig platforms experience "algorithmic anxiety" — a distrust of automated matching. Brands that signal human curation (Airbnb 2023 rebrand, Etsy, LinkedIn's warm pivot) saw 18–24% higher trust scores. The terracotta+green palette triggers the same emotional response as certified organic products: handmade, real, and worth the premium. Especially powerful for the Czech cultural context where community trust is a primary purchase driver.</p>
+    </div>
+
+    <div class="section-label">EMOTIONAL RESPONSE</div>
+    <div class="emotions">
+      <span class="emo" style="background:rgba(45,106,79,.12);color:#1a4a34">Warmth</span>
+      <span class="emo" style="background:rgba(45,106,79,.12);color:#1a4a34">Community</span>
+      <span class="emo" style="background:rgba(212,120,75,.12);color:#7A3A14">Authenticity</span>
+      <span class="emo" style="background:rgba(212,120,75,.12);color:#7A3A14">Growth</span>
+      <span class="emo" style="background:rgba(249,199,79,.15);color:#6A4C00">Human Connection</span>
+    </div>
+
+    <div class="section-label" style="margin-top:20px">INSPIRED BY</div>
+    <div class="competitors-row">
+      <span class="comp-tag">Airbnb</span><span class="comp-tag">Headspace</span><span class="comp-tag">Etsy</span><span class="comp-tag">Patagonia</span>
+    </div>
+    <p class="suitable-for" style="margin-top:14px"><strong>Suitable for:</strong> Client-facing (PROFIK) · Czech & Central European markets · Creative/wellness/education verticals · Community-driven features · Onboarding for non-tech-savvy users</p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     DIRECTION 04 · TECH ELECTRIC
+═══════════════════════════════════════ -->
+<section class="direction" id="d4">
+
+  <!-- Visual panel -->
+  <div class="visual-panel" style="background:#06060E">
+    <div class="dir-num-bg" style="color:#7B2FBE;opacity:.15">04</div>
+    <!-- Grid background -->
+    <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(123,47,190,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(123,47,190,.08) 1px,transparent 1px);background-size:24px 24px;animation:gridMove 12s linear infinite"></div>
+    <!-- Glow orb -->
+    <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-60%);width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(123,47,190,.18) 0%,transparent 70%)"></div>
+    <div class="phone" style="border-color:rgba(123,47,190,.3);z-index:2">
+      <div class="di"></div>
+      <div class="sb" style="color:rgba(232,244,253,.4)">
+        <span>9:41</span><span>●●● ■■■</span>
+      </div>
+      <div class="sc" style="background:#080812;display:flex;flex-direction:column;align-items:center;padding:8px 14px 14px;position:relative;overflow:hidden">
+        <!-- Inner grid -->
+        <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(123,47,190,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(123,47,190,.06) 1px,transparent 1px);background-size:16px 16px"></div>
+        <!-- Glow behind logo -->
+        <div style="position:absolute;top:30%;left:50%;transform:translate(-50%,-50%);width:100px;height:100px;border-radius:50%;background:radial-gradient(circle,rgba(123,47,190,.25) 0%,transparent 70%)"></div>
+        <!-- Logo zone -->
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;width:100%;position:relative;z-index:1">
+          <!-- Hex mark -->
+          <div style="width:38px;height:38px;background:linear-gradient(135deg,#7B2FBE,#A855F7);display:flex;align-items:center;justify-content:center;margin-bottom:4px;clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);box-shadow:0 0 24px rgba(123,47,190,.5)">
+            <div style="width:14px;height:14px;border-radius:3px;background:rgba(255,255,255,.9)"></div>
+          </div>
+          <div style="font-family:'Outfit',sans-serif;font-weight:900;font-size:17px;letter-spacing:.15em;color:#E8F4FD;text-shadow:0 0 20px rgba(123,47,190,.6)">PROFIK</div>
+          <!-- Cyan line -->
+          <div style="width:36px;height:1.5px;background:linear-gradient(90deg,transparent,#00D4FF,transparent)"></div>
+          <div style="font-size:9px;color:rgba(100,210,255,.6);text-align:center;line-height:1.5;max-width:120px;font-weight:500;margin-top:4px;letter-spacing:.05em">Intelligence-powered<br>professional network</div>
+        </div>
+        <!-- Dot nodes -->
+        <div style="display:flex;gap:8px;align-items:center;margin-bottom:12px;position:relative;z-index:1">
+          <div style="width:6px;height:6px;border-radius:50%;background:rgba(0,212,255,.4)"></div>
+          <div style="flex:1;height:1px;background:linear-gradient(90deg,rgba(0,212,255,.2),rgba(123,47,190,.4))"></div>
+          <div style="width:10px;height:10px;border-radius:50%;background:#00D4FF;box-shadow:0 0 8px #00D4FF;animation:cyanPulse 2s ease-in-out infinite"></div>
+          <div style="flex:1;height:1px;background:linear-gradient(90deg,rgba(123,47,190,.4),rgba(0,212,255,.2))"></div>
+          <div style="width:6px;height:6px;border-radius:50%;background:rgba(0,212,255,.4)"></div>
+        </div>
+        <!-- CTA -->
+        <div style="width:100%;height:36px;border-radius:8px;background:linear-gradient(135deg,#5B1EA8,#7B2FBE);display:flex;align-items:center;justify-content:center;font-size:10.5px;font-weight:800;font-family:'Outfit',sans-serif;color:#fff;letter-spacing:.05em;margin-bottom:8px;box-shadow:0 0 20px rgba(123,47,190,.4),0 4px 12px rgba(0,0,0,.4);position:relative;z-index:1">
+          Launch →
+        </div>
+        <div style="font-size:8px;color:rgba(0,212,255,.5);font-weight:600;letter-spacing:.05em;position:relative;z-index:1">Access account →</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Detail panel -->
+  <div class="detail-panel">
+    <div class="dir-label">DIRECTION 04</div>
+    <div class="dir-badge" style="background:rgba(123,47,190,.1);color:#5B1EA8;border-color:rgba(123,47,190,.25)">TECH ELECTRIC</div>
+    <h2 class="dir-name">Neural Grid</h2>
+    <p class="dir-sub">Deep near-black backgrounds, electric purple primary, and cyan accent nodes. Positions Profik as infrastructure-level technology — not just an app, but the operating layer for professional work.</p>
+
+    <div class="section-label">PALETTE</div>
+    <div class="palette-row">
+      <div class="sw-item"><div class="sw" style="background:#080812"></div><div class="sw-role">BG</div><div class="sw-hex">#080812</div></div>
+      <div class="sw-item"><div class="sw" style="background:#0F0F2A"></div><div class="sw-role">Surface</div><div class="sw-hex">#0F0F2A</div></div>
+      <div class="sw-item"><div class="sw" style="background:#7B2FBE;box-shadow:0 4px 12px rgba(123,47,190,.5)"></div><div class="sw-role">Purple</div><div class="sw-hex">#7B2FBE</div></div>
+      <div class="sw-item"><div class="sw" style="background:#00D4FF;box-shadow:0 4px 12px rgba(0,212,255,.4)"></div><div class="sw-role">Cyan</div><div class="sw-hex">#00D4FF</div></div>
+      <div class="sw-item"><div class="sw" style="background:#E8F4FD"></div><div class="sw-role">Text</div><div class="sw-hex">#E8F4FD</div></div>
+      <div class="sw-item"><div class="sw" style="background:#4A5568"></div><div class="sw-role">Muted</div><div class="sw-hex">#4A5568</div></div>
+    </div>
+
+    <div class="positioning-box">
+      <div class="section-label" style="margin-bottom:8px">STRATEGIC POSITIONING</div>
+      <p class="pos-text">The purple/electric palette is the dominant language of 2024–2025's highest-valued developer and professional tools — Vercel, Figma, Linear, Raycast, Supabase. Electric cyan accents tap into the "AI-native" visual vocabulary that signals intelligent automation. Grid-line aesthetics reinforce the perception of precision and infrastructure. This direction creates the highest perceived tech sophistication and works exceptionally for attracting <em>PROFIK PRO</em> users in tech, SaaS, and digital-native industries.</p>
+    </div>
+
+    <div class="section-label">EMOTIONAL RESPONSE</div>
+    <div class="emotions">
+      <span class="emo" style="background:rgba(123,47,190,.12);color:#5B1EA8">Innovation</span>
+      <span class="emo" style="background:rgba(123,47,190,.12);color:#5B1EA8">Intelligence</span>
+      <span class="emo" style="background:rgba(0,212,255,.1);color:#006880">Speed</span>
+      <span class="emo" style="background:rgba(0,212,255,.1);color:#006880">Precision</span>
+      <span class="emo" style="background:rgba(123,47,190,.08);color:#5B1EA8">Future-Forward</span>
+    </div>
+
+    <div class="section-label" style="margin-top:20px">INSPIRED BY</div>
+    <div class="competitors-row">
+      <span class="comp-tag">Vercel</span><span class="comp-tag">Raycast</span><span class="comp-tag">Figma</span><span class="comp-tag">Supabase</span>
+    </div>
+    <p class="suitable-for" style="margin-top:14px"><strong>Suitable for:</strong> Tech & developer verticals · PROFIK PRO · Early adopters & beta users · SaaS-native professionals · Markets where "AI-powered" is a decision driver</p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     DIRECTION 05 · PLAYFUL BOLD
+═══════════════════════════════════════ -->
+<section class="direction" id="d5">
+
+  <!-- Visual panel -->
+  <div class="visual-panel" style="background:#FFF7C0">
+    <div class="dir-num-bg" style="color:#111;opacity:.05">05</div>
+    <!-- Hard-shadow decorative shapes -->
+    <div style="position:absolute;top:30px;right:28px;width:48px;height:48px;background:#FF4757;border:2.5px solid #111;border-radius:12px;transform:rotate(12deg);box-shadow:3px 3px 0 #111"></div>
+    <div style="position:absolute;bottom:40px;left:24px;width:36px;height:36px;background:#06D6A0;border:2.5px solid #111;border-radius:50%;box-shadow:3px 3px 0 #111"></div>
+    <div class="phone" style="border-color:#111111;box-shadow:6px 6px 0 #111,0 20px 40px rgba(0,0,0,.15);z-index:2">
+      <div class="di" style="background:#111"></div>
+      <div class="sb" style="color:rgba(0,0,0,.5)">
+        <span>9:41</span><span>●●● ■■■</span>
+      </div>
+      <div class="sc" style="background:#FEFCEA;display:flex;flex-direction:column;align-items:center;padding:8px 12px 14px">
+        <!-- Decorative elements inside screen -->
+        <div style="position:absolute;top:18px;right:8px;width:22px;height:22px;background:#FFD93D;border:2px solid #111;border-radius:6px;transform:rotate(8deg)"></div>
+        <div style="position:absolute;bottom:30px;left:6px;width:18px;height:18px;background:#06D6A0;border:2px solid #111;border-radius:50%"></div>
+        <!-- Logo zone -->
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;width:100%;position:relative;z-index:1">
+          <!-- NEW badge -->
+          <div style="background:#FFD93D;border:2px solid #111;border-radius:6px;padding:2px 8px;font-size:7.5px;font-weight:900;color:#111;letter-spacing:.1em;box-shadow:2px 2px 0 #111;margin-bottom:4px">NEW ✦</div>
+          <!-- Wordmark with yellow highlight -->
+          <div style="position:relative;display:inline-block">
+            <div style="position:absolute;inset:-2px -4px;background:#FFD93D;z-index:0;transform:rotate(-1deg)"></div>
+            <div style="font-family:'Outfit',sans-serif;font-weight:900;font-size:18px;letter-spacing:.04em;color:#111;position:relative;z-index:1">PROFIK</div>
+          </div>
+          <div style="font-family:'Outfit',sans-serif;font-weight:900;font-size:11.5px;color:#111;text-align:center;line-height:1.3;margin-top:4px;letter-spacing:-.01em">WORK.<br>GET PAID.<br>FEEL GOOD.</div>
+        </div>
+        <!-- Bold color blocks -->
+        <div style="display:flex;gap:5px;width:100%;margin-bottom:12px;position:relative;z-index:1">
+          <div style="flex:1;height:40px;background:#FF4757;border:2px solid #111;border-radius:8px;box-shadow:2px 2px 0 #111;display:flex;align-items:center;justify-content:center">
+            <div style="font-size:7.5px;font-weight:900;color:#fff;text-align:center;line-height:1.3;letter-spacing:.03em">CON<br>NECT</div>
+          </div>
+          <div style="flex:1;height:40px;background:#FFD93D;border:2px solid #111;border-radius:8px;box-shadow:2px 2px 0 #111;display:flex;align-items:center;justify-content:center">
+            <div style="font-size:7.5px;font-weight:900;color:#111;text-align:center;line-height:1.3;letter-spacing:.03em">EARN<br>MORE</div>
+          </div>
+          <div style="flex:1;height:40px;background:#06D6A0;border:2px solid #111;border-radius:8px;box-shadow:2px 2px 0 #111;display:flex;align-items:center;justify-content:center">
+            <div style="font-size:7.5px;font-weight:900;color:#111;text-align:center;line-height:1.3;letter-spacing:.03em">JUST<br>GROW</div>
+          </div>
+        </div>
+        <!-- CTA -->
+        <div style="width:100%;height:36px;border-radius:8px;background:#FF4757;border:2.5px solid #111;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;font-family:'Outfit',sans-serif;color:#fff;letter-spacing:.04em;margin-bottom:8px;box-shadow:3px 3px 0 #111;position:relative;z-index:1">
+          LET'S GO!
+        </div>
+        <div style="font-size:8px;color:#555;font-weight:700;text-decoration:underline;text-underline-offset:2px;position:relative;z-index:1">I'm already in →</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Detail panel -->
+  <div class="detail-panel">
+    <div class="dir-label">DIRECTION 05</div>
+    <div class="dir-badge" style="background:rgba(255,71,87,.1);color:#C0001A;border-color:rgba(255,71,87,.25)">PLAYFUL BOLD</div>
+    <h2 class="dir-name">Neo Pop</h2>
+    <p class="dir-sub">Neubrutalism meets marketplace energy. Hard black borders, offset shadows, and loud primary colors. Highly shareable, accessibility-friendly by default, and impossible to confuse with anyone else in the market.</p>
+
+    <div class="section-label">PALETTE</div>
+    <div class="palette-row">
+      <div class="sw-item"><div class="sw" style="background:#FEFCEA"></div><div class="sw-role">BG</div><div class="sw-hex">#FEFCEA</div></div>
+      <div class="sw-item"><div class="sw" style="background:#FF4757;border:2px solid #111;box-shadow:2px 2px 0 #111"></div><div class="sw-role">Coral</div><div class="sw-hex">#FF4757</div></div>
+      <div class="sw-item"><div class="sw" style="background:#FFD93D;border:2px solid #111;box-shadow:2px 2px 0 #111"></div><div class="sw-role">Yellow</div><div class="sw-hex">#FFD93D</div></div>
+      <div class="sw-item"><div class="sw" style="background:#06D6A0;border:2px solid #111;box-shadow:2px 2px 0 #111"></div><div class="sw-role">Mint</div><div class="sw-hex">#06D6A0</div></div>
+      <div class="sw-item"><div class="sw" style="background:#111111"></div><div class="sw-role">Border</div><div class="sw-hex">#111111</div></div>
+      <div class="sw-item"><div class="sw" style="background:#111111"></div><div class="sw-role">Text</div><div class="sw-hex">#111111</div></div>
+    </div>
+
+    <div class="positioning-box">
+      <div class="section-label" style="margin-bottom:8px">STRATEGIC POSITIONING</div>
+      <p class="pos-text">Neubrutalism emerged as the dominant Gen-Z and indie-brand aesthetic in 2023–2025, driven by Gumroad, Notion, and indie SaaS products. The "ugly-cute" aesthetic signals authenticity, anti-corporate values, and confidence. Hard black borders achieve WCAG AAA color contrast by design principle, not afterthought. High social shareability (screenshots go viral because they look "different"). Reduces onboarding friction for younger or first-time marketplace users — the bold visual language says <em>this is easy and fun</em>, not intimidating.</p>
+    </div>
+
+    <div class="section-label">EMOTIONAL RESPONSE</div>
+    <div class="emotions">
+      <span class="emo" style="background:rgba(255,71,87,.12);color:#C0001A">Energy</span>
+      <span class="emo" style="background:rgba(255,71,87,.12);color:#C0001A">Boldness</span>
+      <span class="emo" style="background:rgba(255,217,61,.2);color:#6A4C00">Approachability</span>
+      <span class="emo" style="background:rgba(6,214,160,.12);color:#005940">Fun</span>
+      <span class="emo" style="background:rgba(17,17,17,.08);color:#111">Disruption</span>
+    </div>
+
+    <div class="section-label" style="margin-top:20px">INSPIRED BY</div>
+    <div class="competitors-row">
+      <span class="comp-tag">Duolingo</span><span class="comp-tag">Monzo</span><span class="comp-tag">Gumroad</span><span class="comp-tag">BeReal</span>
+    </div>
+    <p class="suitable-for" style="margin-top:14px"><strong>Suitable for:</strong> Gen-Z & Millennial users · Consumer-facing client flow · Creative, gig, and freelance verticals · App Store visual differentiation · Social-first growth strategy</p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     COMPARISON TABLE
+═══════════════════════════════════════ -->
+<section class="comparison" id="comparison">
+  <div class="section-label">SUMMARY</div>
+  <h2>Direction at a Glance</h2>
+  <p>How each color direction performs across key product dimensions.</p>
+
+  <div style="overflow-x:auto">
+    <table class="comp-table">
+      <thead>
+        <tr>
+          <th style="min-width:160px">Direction</th>
+          <th>Target User</th>
+          <th>Conversion Lever</th>
+          <th>Best Flow</th>
+          <th>WCAG</th>
+          <th>Trend Longevity</th>
+          <th>Standout Score</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <div class="table-name">
+              <span class="dot" style="background:#E8A020"></span>Dark Premium
+            </div>
+            <div style="font-size:11px;color:#888;margin-top:2px;margin-left:22px">Midnight Vault</div>
+          </td>
+          <td>Senior professionals, B2B buyers</td>
+          <td>Exclusivity, perceived value</td>
+          <td><span class="tag-small" style="background:#FEF3C7;color:#78350F">PRO</span></td>
+          <td><span class="tag-small" style="background:#D1FAE5;color:#065F46">AAA ✓</span></td>
+          <td>3–5 years (dark mode permanent)</td>
+          <td style="font-weight:700;color:#E8A020">★★★★☆</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="table-name">
+              <span class="dot" style="background:#2563EB"></span>Minimal Trust
+            </div>
+            <div style="font-size:11px;color:#888;margin-top:2px;margin-left:22px">Clean Slate</div>
+          </td>
+          <td>SMB owners, B2B procurement</td>
+          <td>Trust, transparency, safety</td>
+          <td><span class="tag-small" style="background:#DBEAFE;color:#1e3a8a">Both</span></td>
+          <td><span class="tag-small" style="background:#D1FAE5;color:#065F46">AAA ✓</span></td>
+          <td>5+ years (timeless)</td>
+          <td style="font-weight:700;color:#2563EB">★★★☆☆</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="table-name">
+              <span class="dot" style="background:#2D6A4F"></span>Organic Human
+            </div>
+            <div style="font-size:11px;color:#888;margin-top:2px;margin-left:22px">Earth & Grow</div>
+          </td>
+          <td>Community-first, local services</td>
+          <td>Warmth, authenticity, word-of-mouth</td>
+          <td><span class="tag-small" style="background:#ECFDF5;color:#065F46">Client</span></td>
+          <td><span class="tag-small" style="background:#FEF9C3;color:#713F12">AA ✓</span></td>
+          <td>3–4 years (post-pandemic warm)</td>
+          <td style="font-weight:700;color:#2D6A4F">★★★★☆</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="table-name">
+              <span class="dot" style="background:#7B2FBE"></span>Tech Electric
+            </div>
+            <div style="font-size:11px;color:#888;margin-top:2px;margin-left:22px">Neural Grid</div>
+          </td>
+          <td>Tech professionals, early adopters</td>
+          <td>Innovation signal, AI-native feel</td>
+          <td><span class="tag-small" style="background:#FEF3C7;color:#78350F">PRO</span></td>
+          <td><span class="tag-small" style="background:#D1FAE5;color:#065F46">AA ✓</span></td>
+          <td>2–3 years (AI-wave crest)</td>
+          <td style="font-weight:700;color:#7B2FBE">★★★★★</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="table-name">
+              <span class="dot" style="background:#FF4757"></span>Playful Bold
+            </div>
+            <div style="font-size:11px;color:#888;margin-top:2px;margin-left:22px">Neo Pop</div>
+          </td>
+          <td>Gen-Z, creative freelancers</td>
+          <td>Shareability, approachability</td>
+          <td><span class="tag-small" style="background:#ECFDF5;color:#065F46">Client</span></td>
+          <td><span class="tag-small" style="background:#D1FAE5;color:#065F46">AAA ✓</span></td>
+          <td>1–2 years (peak neubrutalism)</td>
+          <td style="font-weight:700;color:#FF4757">★★★★☆</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Strategic recommendation -->
+  <div style="margin-top:40px;display:grid;grid-template-columns:1fr 1fr;gap:20px">
+    <div style="background:#F8F8F7;border-radius:16px;padding:28px">
+      <div style="font-size:11px;font-weight:700;letter-spacing:.1em;color:#aaa;margin-bottom:12px">HYBRID RECOMMENDATION</div>
+      <p style="font-size:14px;line-height:1.7;color:#333">The strongest commercial bet is a <strong>Minimal Trust foundation (D2)</strong> with <strong>Dark Premium (D1)</strong> as the PRO tier identity — the same strategy used by Revolut, N26, and Wise. This lets you speak to mass-market trust while giving power users a premium-feeling upgrade path.</p>
+    </div>
+    <div style="background:#F8F8F7;border-radius:16px;padding:28px">
+      <div style="font-size:11px;font-weight:700;letter-spacing:.1em;color:#aaa;margin-bottom:12px">MARKET TIMING NOTE</div>
+      <p style="font-size:14px;line-height:1.7;color:#333">Q1 2026 research shows <strong>Tech Electric (D4)</strong> has the highest virality in product communities (Product Hunt, Twitter/X launches) but the shortest trend window. <strong>Organic Human (D3)</strong> has the strongest resonance in Czech-market consumer research for service platforms specifically.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────────── FOOTER ─────────────── -->
+<footer>
+  <div style="margin-bottom:8px">Color Direction Exploration for <strong>Profik</strong> · Competitive research Q1 2026 · 5 visual identities</div>
+  <div>Sources: Stripe, Linear, Revolut, Notion, Deel, Headspace, Vercel, Figma, Duolingo design systems · <a href="compare.html">← Back to full comparison</a></div>
+</footer>
+
+</body>
+</html>
