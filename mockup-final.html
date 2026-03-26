@@ -44,8 +44,8 @@ body{background:#EAEAEA;font-family:var(--f);color:var(--ink);min-height:100vh}
    Frame must be ≥ 844×0.6 = 506.4px → use 508px
 */
 .pf{
-  width:234px;height:508px;
-  position:relative;overflow:hidden;
+  width:234px;
+  overflow:hidden;
   border-radius:32px;
   box-shadow:
     0 0 0 8px #1C1C1E,
@@ -53,13 +53,15 @@ body{background:#EAEAEA;font-family:var(--f);color:var(--ink);min-height:100vh}
     0 12px 40px rgba(0,0,0,.22);
   flex-shrink:0;
   background:#fff;
+  line-height:0;
 }
 .pi{
-  position:absolute;top:0;left:0;
-  width:390px;height:844px;
-  transform:scale(.6);transform-origin:top left;
-  font-family:var(--f);overflow:hidden;
+  width:390px;
+  zoom:0.6;
+  font-family:var(--f);
   -webkit-font-smoothing:antialiased;
+  display:block;
+  line-height:1.4;
 }
 
 /* ══════════════════════════════════════════
