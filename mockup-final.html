@@ -8,7 +8,7 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --o:#ED7D31;--od:#C8621A;--op:#FEF4EC;
+  --o:#FF6C00;--od:#CC5500;--op:#FFF3EB;
   --ink:#0C0C0C;--mid:#6B6B6B;--subtle:#9CA3AF;
   --border:#E8E8E8;--surf:#F5F5F5;--white:#fff;
   --green:#16A34A;--gp:#DCFCE7;--gtext:#15803D;
@@ -40,7 +40,7 @@ body{background:#EAEAEA;font-family:var(--f);color:var(--ink);min-height:100vh}
 
 /* ── PHONE FRAME ── */
 .pf{
-  width:234px;height:508px;
+  width:234px;height:510px;
   position:relative;overflow:hidden;
   border-radius:32px;
   box-shadow:
@@ -50,16 +50,17 @@ body{background:#EAEAEA;font-family:var(--f);color:var(--ink);min-height:100vh}
   flex-shrink:0;
   background:#fff;
 }
+/* Dynamic Island pill — sits at top center of the frame */
 .pf::before{
   content:'';
-  position:absolute;top:0;left:50%;transform:translateX(-50%);
-  width:100px;height:24px;
-  background:#1C1C1E;border-radius:0 0 14px 14px;
+  position:absolute;top:10px;left:50%;transform:translateX(-50%);
+  width:88px;height:22px;
+  background:#1C1C1E;border-radius:11px;
   z-index:100;
 }
 .pi{
   position:absolute;top:0;left:0;
-  width:390px;height:844px;
+  width:390px;height:876px;
   transform:scale(.6);transform-origin:top left;
   font-family:var(--f);overflow:hidden;
   -webkit-font-smoothing:antialiased;
@@ -68,17 +69,17 @@ body{background:#EAEAEA;font-family:var(--f);color:var(--ink);min-height:100vh}
 /* ══════════════════════════════════════════
    SCREEN ATOMS
 ══════════════════════════════════════════ */
-/* Status bar */
+/* Status bar — top padding clears Dynamic Island (32px frame ÷ 0.6 scale = 54px inner) */
 .sb{
-  height:50px;display:flex;align-items:flex-end;justify-content:space-between;
-  padding:0 28px 8px;font-size:15px;font-weight:600;
+  height:68px;display:flex;align-items:flex-end;justify-content:space-between;
+  padding:0 28px 10px;font-size:15px;font-weight:600;flex-shrink:0;
 }
 .sb-i{display:flex;align-items:center;gap:5px}
 .sb-w{color:#fff}
 .sb-d{color:var(--ink)}
 
 /* Generic screen wrapper */
-.scr{width:390px;min-height:844px;background:#fff;display:flex;flex-direction:column;overflow:hidden}
+.scr{width:390px;min-height:876px;background:#fff;display:flex;flex-direction:column;overflow:hidden}
 
 /* Input */
 .inp{
@@ -111,7 +112,7 @@ body{background:#EAEAEA;font-family:var(--f);color:var(--ink);min-height:100vh}
    C1 — SPLASH
 ══════════════════════════════════════════ */
 .s-splash{
-  width:390px;height:844px;background:var(--o);
+  width:390px;height:876px;background:var(--o);
   display:flex;flex-direction:column;align-items:center;position:relative;
   padding:0 28px;
 }
@@ -131,7 +132,7 @@ body{background:#EAEAEA;font-family:var(--f);color:var(--ink);min-height:100vh}
 /* ══════════════════════════════════════════
    C2 — LOGIN
 ══════════════════════════════════════════ */
-.s-login{width:390px;height:844px;background:#fff;display:flex;flex-direction:column}
+.s-login{width:390px;height:876px;background:#fff;display:flex;flex-direction:column}
 .login-body{padding:12px 28px 40px;flex:1}
 .login-logo{
   width:44px;height:44px;background:var(--op);border-radius:12px;
@@ -145,7 +146,7 @@ body{background:#EAEAEA;font-family:var(--f);color:var(--ink);min-height:100vh}
 /* ══════════════════════════════════════════
    C3 — ONBOARDING: VALUE
 ══════════════════════════════════════════ */
-.s-ob{width:390px;height:844px;background:#fff;display:flex;flex-direction:column}
+.s-ob{width:390px;height:876px;background:#fff;display:flex;flex-direction:column}
 .ob-nav{padding:0 28px;display:flex;align-items:center;justify-content:space-between;height:60px}
 .ob-back{
   width:38px;height:38px;border-radius:50%;border:1.5px solid var(--border);
@@ -208,7 +209,7 @@ body{background:#EAEAEA;font-family:var(--f);color:var(--ink);min-height:100vh}
 /* ══════════════════════════════════════════
    C5 — REGISTER
 ══════════════════════════════════════════ */
-.s-reg{width:390px;height:844px;background:#fff;display:flex;flex-direction:column}
+.s-reg{width:390px;height:876px;background:#fff;display:flex;flex-direction:column}
 .reg-body{padding:16px 28px 40px;flex:1}
 .reg-h1{font-size:28px;font-weight:800;letter-spacing:-.04em;margin-bottom:4px}
 .reg-sub{font-size:15px;color:var(--mid);margin-bottom:28px}
@@ -218,7 +219,7 @@ body{background:#EAEAEA;font-family:var(--f);color:var(--ink);min-height:100vh}
 /* ══════════════════════════════════════════
    APP: JOBS LIST
 ══════════════════════════════════════════ */
-.s-jobs{width:390px;height:844px;background:var(--surf);display:flex;flex-direction:column;position:relative}
+.s-jobs{width:390px;height:876px;background:var(--surf);display:flex;flex-direction:column;position:relative}
 .jobs-hdr{
   padding:0 20px 16px;
   display:flex;align-items:center;justify-content:space-between;
@@ -257,7 +258,7 @@ body{background:#EAEAEA;font-family:var(--f);color:var(--ink);min-height:100vh}
 /* ══════════════════════════════════════════
    APP: JOB DETAILS
 ══════════════════════════════════════════ */
-.s-detail{width:390px;height:844px;background:#fff;display:flex;flex-direction:column}
+.s-detail{width:390px;height:876px;background:#fff;display:flex;flex-direction:column}
 .detail-hdr{
   display:flex;align-items:center;justify-content:center;
   padding:16px 24px;border-bottom:1px solid var(--border);position:relative;
@@ -291,7 +292,7 @@ body{background:#EAEAEA;font-family:var(--f);color:var(--ink);min-height:100vh}
 /* ══════════════════════════════════════════
    APP: NEW JOB POST
 ══════════════════════════════════════════ */
-.s-newjob{width:390px;height:844px;background:#fff;display:flex;flex-direction:column}
+.s-newjob{width:390px;height:876px;background:#fff;display:flex;flex-direction:column}
 .nj-hdr{
   display:flex;align-items:center;justify-content:space-between;
   padding:20px 24px 16px;
@@ -344,7 +345,7 @@ body{background:#EAEAEA;font-family:var(--f);color:var(--ink);min-height:100vh}
       <div class="pf">
         <div class="pi">
           <div class="s-splash">
-            <div class="sb sb-w" style="width:390px;position:absolute;top:0;left:0;z-index:10;background:transparent">
+            <div class="sb sb-w" style="width:390px;position:absolute;top:0;left:0;z-index:10;background:transparent;height:68px;padding:0 28px 10px">
               <span>9:41</span>
               <div class="sb-i">
                 <svg width="17" height="11" fill="none"><rect x="0" y="3" width="3" height="8" rx="1" fill="white"/><rect x="4.5" y="1.5" width="3" height="9.5" rx="1" fill="white"/><rect x="9" y="0" width="3" height="11" rx="1" fill="white"/><rect x="13.5" y="0" width="3" height="11" rx="1" fill="white" opacity=".3"/></svg>
@@ -577,7 +578,7 @@ body{background:#EAEAEA;font-family:var(--f);color:var(--ink);min-height:100vh}
       <div class="pf">
         <div class="pi">
           <div class="s-jobs">
-            <div class="sb sb-d" style="padding:0 20px 8px"><span>9:41</span></div>
+            <div class="sb sb-d" style="padding:0 20px 10px"><span>9:41</span></div>
             <div class="jobs-hdr">
               <div class="jobs-hdr-t">My Jobs</div>
               <div class="prof-btn">
